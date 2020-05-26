@@ -7,12 +7,9 @@
 
 import Foundation
 import ArgumentParser
-import Assist
-import TSCBasic
+import Core
 
 public final class ASC: ParsableCommand {
-
-    static let session = URLSession.shared
 
     // Customize your command's help and subcommands by implementing the
     // `configuration` property.
@@ -32,31 +29,24 @@ public final class ASC: ParsableCommand {
         // subcommand is not given on the command line.
         defaultSubcommand: Groups.self)
 
-    static func request(token: String, path: String) -> URLRequest {
-
-        let baseUrl = URL(string: "https://api.appstoreconnect.apple.com/v1")!
-        var req = URLRequest(url: baseUrl.appendingPathComponent(path),
-                             cachePolicy: .useProtocolCachePolicy,
-                             timeoutInterval: 5)
-        req.allHTTPHeaderFields = [
-            "Content-Type": "application/json",
-            "Authorization": token
-        ]
-        return req
-    }
-
-    public init() { }
+    public init() {}
 }
 
 struct Options: ParsableArguments {
 
-    @Option(name: .shortAndLong, help: "The ASC authorization token.")
+    static var token: String?
+
+    @Option(name: .shortAndLong, help: "The ASC authorization token.", transform: { (string) in
+        AscResource.token = string
+        return string
+    })
     var token: String
 }
 
 extension ASC {
 
     struct Groups: ParsableCommand {
+
         static var configuration = CommandConfiguration(abstract: "Access ASC beta groups.")
 
         // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
@@ -67,27 +57,26 @@ extension ASC {
         @Option(name: .shortAndLong, help: "The name of the group to use. If nil, all groups found are used.")
         var group: String?
 
+        static let network = Network()
+
         func run() throws {
 
-            let request = ASC.request(token: options.token, path: "betaGroups")
+            let result: RequestResult<[Group]> = Self.network.syncRequest(resource: AscResource.readBetaGroups)
 
-            let json = try await { (completion: @escaping (Result<JSON, Error>) -> Void) in
-                ASC.session.dataTask(with: request) { (data, response, error) in
-                    if let error = error { completion(.failure(error)); return }
-                    guard let data = data else { completion(.failure(NSError())); return }
-                    let json = try! JSON(data: data)
-                    completion(.success(json))
-                }.resume()
+            switch result {
+            case let .success(groups):
+                let filteredGroups: [Group]
+                if let group = group {
+                    filteredGroups = groups.filter { $0.attributes.name == group }
+                } else {
+                    filteredGroups = groups
+                }
+                let ids = filteredGroups.map { $0.id }.joined(separator: " ")
+                print(ids)
+
+            case let .failure(error):
+                print(error)
             }
-            let allGroups: [JSON] = try json.getArray("data")
-            let filteredGroups: [JSON]
-            if let group = group {
-                filteredGroups = try allGroups.filter { try $0.getJSON("attributes").get("name") == group }
-            } else {
-                filteredGroups = allGroups
-            }
-            let ids: [String] = try filteredGroups.map { try $0.get("id") }
-            ids.forEach { print($0) }
         }
     }
 }
