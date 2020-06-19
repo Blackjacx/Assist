@@ -11,6 +11,8 @@ import Foundation
 /// an enum to it to implement multiple endpoints using the enum's cases.
 public protocol Resource {
 
+    static var service: Service { get }
+
     var baseURL: URL { get }
     var path: String { get }
     var method: HTTPMethod { get }

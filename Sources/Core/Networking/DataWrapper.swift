@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct DataWrapper<T: Decodable>: Decodable {
+public struct DataWrapper<T: Decodable>: Decodable {
 
     enum CodingKeys: String, CodingKey {
         case object = "data"
     }
 
-    let object: T
+    public let object: T
 }

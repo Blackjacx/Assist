@@ -9,26 +9,33 @@ import Foundation
 import Core
 
 enum AscResource {
+    case read(url: URL)
+    case readApps
     case readBetaGroups
 }
 
 extension AscResource: Resource {
 
     static var token: String?
+    static let service: Service = ASCService()
+    static let apiVersion: String = "v1"
 
     var baseURL: URL {
-        URL(string: "https://api.appstoreconnect.apple.com/v1")!
+        URL(string: "https://api.appstoreconnect.apple.com")!
     }
 
     var path: String {
         switch self {
-        case .readBetaGroups: return "betaGroups"
+        case .read(let url): return url.path
+        case .readApps: return "\(Self.apiVersion)/apps"
+        case .readBetaGroups: return "\(Self.apiVersion)/betaGroups"
         }
     }
 
     var method: HTTPMethod {
         switch self {
-        case .readBetaGroups: return .get
+        case .read, .readBetaGroups, .readApps:
+            return .get
         }
     }
 
@@ -42,8 +49,8 @@ extension AscResource: Resource {
             "Content-Type": "application/json",
         ]
 
-        if let token = Self.token, shouldAuthorize {
-            headers["Authorization"] = token
+        if let token = JWT.token, shouldAuthorize {
+            headers["Authorization"] = "Bearer \(token)"
         }
 
         return headers

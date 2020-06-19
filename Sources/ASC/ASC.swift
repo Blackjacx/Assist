@@ -23,7 +23,7 @@ public final class ASC: ParsableCommand {
         // Pass an array to `subcommands` to set up a nested tree of subcommands.
         // With language support for type-level introspection, this could be
         // provided by automatically finding nested `ParsableCommand` types.
-        subcommands: [Groups.self],
+        subcommands: [Groups.self, Apps.self],
 
         // A default subcommand, when provided, is automatically selected if a
         // subcommand is not given on the command line.
@@ -34,16 +34,35 @@ public final class ASC: ParsableCommand {
 
 struct Options: ParsableArguments {
 
-    static var token: String?
-
-    @Option(name: .shortAndLong, help: "The ASC authorization token.", transform: { (string) in
-        AscResource.token = string
-        return string
-    })
-    var token: String
+    // Deprecated - token is specified using environment variables - see JWT.swift
+//    static var token: String?
+//
+//    @Option(name: .shortAndLong, help: "The ASC authorization token.", transform: { (string) in
+//        AscResource.token = string
+//        return string
+//    })
+//    var token: String?
 }
 
 extension ASC {
+
+    struct Apps: ParsableCommand {
+
+        static var configuration = CommandConfiguration(abstract: "Access ASC apps.")
+
+        // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
+        // `ParsableArguments` type.
+        @OptionGroup()
+        var options: Options
+
+        @Argument(help: "The attribute you want to get. [name | bundleId | locale | attributes] (default: id).")
+        var attribute: String?
+
+        func run() throws {
+            let apps = try ASCService.readApps()
+            apps.out(attribute)
+        }
+    }
 
     struct Groups: ParsableCommand {
 
@@ -55,28 +74,14 @@ extension ASC {
         var options: Options
 
         @Option(name: .shortAndLong, help: "The name of the group to use. If nil, all groups found are used.")
-        var group: String?
+        var groupName: String?
 
-        static let network = Network()
+        @Argument(help: "The attribute you are interested in. [name | attributes] (default: id).")
+        var attribute: String?
 
         func run() throws {
-
-            let result: RequestResult<[Group]> = Self.network.syncRequest(resource: AscResource.readBetaGroups)
-
-            switch result {
-            case let .success(groups):
-                let filteredGroups: [Group]
-                if let group = group {
-                    filteredGroups = groups.filter { $0.attributes.name == group }
-                } else {
-                    filteredGroups = groups
-                }
-                let ids = filteredGroups.map { $0.id }.joined(separator: " ")
-                print(ids)
-
-            case let .failure(error):
-                print(error)
-            }
+            let groups = try ASCService.readBetaGroups()
+            groups.out(attribute, groupName: groupName)
         }
     }
 }

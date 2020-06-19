@@ -10,6 +10,8 @@ import Foundation
 public typealias RequestClosure<T: Decodable> = (RequestResult<T>) -> Void
 public typealias RequestResult<T: Decodable> = Result<T, NetworkError>
 
+private let isDebugLogActive = false
+
 public struct Network {
 
     private static let session = URLSession.shared
@@ -53,7 +55,12 @@ public struct Network {
             }
 
             do {
-                let decodable = try Json.decoder.decode(DataWrapper<T>.self, from: data).object
+                if isDebugLogActive {
+                    let str = String(data: data, encoding: .utf8)!
+                    print(str)
+                }
+
+                let decodable = try type(of: resource).service.jsonDecode(T.self, from: data)
                 completion(.success(decodable))
             } catch {
                 completion(.failure(.decodingFailed(error: error)))
