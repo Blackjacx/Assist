@@ -9,6 +9,7 @@ import Foundation
 import ArgumentParser
 import Core
 
+/// The main class for this for the App Store Connect command line tool.
 public final class ASC: ParsableCommand {
 
     // Customize your command's help and subcommands by implementing the
@@ -32,6 +33,7 @@ public final class ASC: ParsableCommand {
     public init() {}
 }
 
+/// Here you can specify parameters valid for all sub commands.
 struct Options: ParsableArguments {
 
     // Deprecated - token is specified using environment variables - see JWT.swift
