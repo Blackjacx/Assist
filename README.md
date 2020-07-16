@@ -21,11 +21,9 @@ ASC_AUTH_KEY=""
 ASC_AUTH_KEY_ID=""
 # The issuer ID obtained from App Store Connect
 ASC_AUTH_KEY_ISSUER_ID=""
-# The path to my ruby script (or any script) that generates the JWT token based on the other environment variables
-ASC_AUTH_JWT_SCRIPT_PATH="~/dev/scripts/jwt.rb"
 ```
 
-You can just download my [JWT ruby script](https://github.com/Blackjacx/Scripts/blob/master/jwt.rb), put it somewhere on your disk and specify it's path in the respective environment variable.
+The tool uses the [Swift-JWT](https://github.com/IBM-Swift/Swift-JWT) package to generate and sign the access token.
 
 ## Tools
 

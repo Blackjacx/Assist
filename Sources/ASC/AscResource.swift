@@ -49,10 +49,14 @@ extension AscResource: Resource {
             "Content-Type": "application/json",
         ]
 
-        if let token = JWT.token, shouldAuthorize {
-            headers["Authorization"] = "Bearer \(token)"
+        if shouldAuthorize {
+            do {
+                let token = try JSONWebToken.token()
+                headers["Authorization"] = "Bearer \(token)"
+            } catch {
+                print(error)
+            }
         }
-
         return headers
     }
 }

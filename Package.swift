@@ -12,16 +12,17 @@ let package = Package(
 //        .tvOS(.v11)
     ],
     products: [
-        .executable(name: "asc", targets: ["ASC"]),
+        .executable(name: "asc", targets: ["ASC"])
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "0.0.1"),
+        .package(name: "SwiftJWT", url: "https://github.com/IBM-Swift/Swift-JWT.git", from: "3.6.1")
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
-            name: "Core"
+            name: "Core", dependencies: [.product(name: "SwiftJWT", package: "SwiftJWT") ]
         ),
         .target(
             name: "ASC",
