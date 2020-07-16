@@ -18,12 +18,12 @@ public struct Network {
 
     public init() {}
 
-    public func syncRequest<T: Decodable>(resource: Resource) -> RequestResult<T> {
+    public func syncRequest<T: Decodable>(resource: Resource) throws -> RequestResult<T> {
 
         let semaphore = DispatchSemaphore(value: 0)
         var result: RequestResult<T>!
 
-        request(resource: resource) { (receivedResult: RequestResult<T>) in
+        try request(resource: resource) { (receivedResult: RequestResult<T>) in
             result = receivedResult
             semaphore.signal()
         }
@@ -31,11 +31,15 @@ public struct Network {
         return result
     }
 
-    public func request<T: Decodable>(resource: Resource, completion: @escaping RequestClosure<T>) {
+    public func request<T: Decodable>(resource: Resource, completion: @escaping RequestClosure<T>) throws {
 
         var request = URLRequest(url: resource.url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 5)
         request.httpMethod = resource.method.rawValue
         request.allHTTPHeaderFields = resource.headers
+
+        if let parameters = resource.parameters {
+            request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: [])
+        }
 
         Self.session.dataTask(with: request) { (data, response, error) in
 
@@ -45,7 +49,12 @@ public struct Network {
             }
 
             guard (200..<400).contains(response.statusCode) else {
-                completion(.failure(.invalidStatusCode(code: response.statusCode, error: error)))
+
+                var loggedError: Error? = error
+                if let data = data, let failureMessage = String(data: data, encoding: .utf8) {
+                    loggedError = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: failureMessage])
+                }
+                completion(.failure(.invalidStatusCode(code: response.statusCode, error: loggedError)))
                 return
             }
 

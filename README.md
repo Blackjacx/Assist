@@ -57,8 +57,22 @@ By calling `asc groups [id | attributes | name | bundleId | locale]` you can li
 $ asc apps
 ```
 
-#### Users
+#### BetaTesters
 
-The following is currently under construction:
-- adding beta testers
-- removing beta testers
+##### Add beta tester to one or more groups
+
+```shell
+$ asc asc beta-testers add -f "John" -l "Doe" -e "john@doe.com" -g <"gid1" "gid2" "gid3">
+```
+
+##### Remove beta tester from one or more groups
+
+coming soon...
+
+##### Add App Store Connect User to one or more groups
+
+coming soon...
+
+##### Remove App Store Connect User from one or more groups
+
+coming soon...

@@ -25,8 +25,8 @@ struct ASCService {
         var finishedRequests = 0
         var error: Error?
 
-        betaGroupLinks.forEach {
-            network.request(resource: AscResource.read(url: $0)) { (result: RequestResult<[Group]>) in
+        for url in betaGroupLinks {
+            try network.request(resource: AscResource.read(url: url)) { (result: RequestResult<[Group]>) in
                 switch result {
                 case let .success(result):
                     groups += result
@@ -54,7 +54,25 @@ struct ASCService {
 
     static func readApps() throws -> [App] {
 
-        let result: RequestResult<[App]> = Self.network.syncRequest(resource: AscResource.readApps)
+        let result: RequestResult<[App]> = try Self.network.syncRequest(resource: AscResource.readApps)
+
+        switch result {
+        case let .success(result): return result
+        case let .failure(error): throw error
+        }
+    }
+
+    // MARK: - BetaTester
+
+    static func addBetaTester(email: String,
+                              firstName: String,
+                              lastName: String,
+                              groupId: String) throws -> BetaTester {
+
+        let result: RequestResult<BetaTester> = try Self.network.syncRequest(resource: AscResource.addBetaTester(email: email,
+                                                                                                                 firstName: firstName,
+                                                                                                                 lastName: lastName,
+                                                                                                                 groupId: groupId))
 
         switch result {
         case let .success(result): return result

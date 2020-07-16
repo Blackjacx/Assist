@@ -12,6 +12,7 @@ enum AscResource {
     case read(url: URL)
     case readApps
     case readBetaGroups
+    case addBetaTester(email: String, firstName: String, lastName: String, groupId: String)
 }
 
 extension AscResource: Resource {
@@ -29,6 +30,7 @@ extension AscResource: Resource {
         case .read(let url): return url.path
         case .readApps: return "\(Self.apiVersion)/apps"
         case .readBetaGroups: return "\(Self.apiVersion)/betaGroups"
+        case .addBetaTester: return "\(Self.apiVersion)/betaTesters"
         }
     }
 
@@ -36,6 +38,8 @@ extension AscResource: Resource {
         switch self {
         case .read, .readBetaGroups, .readApps:
             return .get
+        case .addBetaTester:
+            return .post
         }
     }
 
@@ -58,5 +62,30 @@ extension AscResource: Resource {
             }
         }
         return headers
+    }
+
+    var parameters: [String : Any]? {
+        switch self {
+        case .read, .readBetaGroups, .readApps:
+            return nil
+        case let .addBetaTester(email, firstName, lastName, groupId):
+            return [
+                "data": [
+                    "type": "betaTesters",
+                    "attributes": [
+                        "email": email,
+                        "firstName": firstName,
+                        "lastName": lastName,
+                    ],
+                    "relationships": [
+                        "betaGroups": [
+                            "data": [
+                                [ "type": "betaGroups", "id": groupId ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        }
     }
 }

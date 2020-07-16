@@ -24,7 +24,7 @@ public final class ASC: ParsableCommand {
         // Pass an array to `subcommands` to set up a nested tree of subcommands.
         // With language support for type-level introspection, this could be
         // provided by automatically finding nested `ParsableCommand` types.
-        subcommands: [Groups.self, Apps.self],
+        subcommands: [Groups.self, Apps.self, BetaTesters.self],
 
         // A default subcommand, when provided, is automatically selected if a
         // subcommand is not given on the command line.
@@ -84,6 +84,46 @@ extension ASC {
         func run() throws {
             let groups = try ASCService.readBetaGroups()
             groups.out(attribute, groupName: groupName)
+        }
+    }
+
+    struct BetaTesters: ParsableCommand {
+
+        static var configuration = CommandConfiguration(
+                 abstract: "Manage people who can install and test prerelease builds.",
+                 subcommands: [Add.self],
+                 defaultSubcommand: Add.self)
+    }
+}
+
+extension ASC.BetaTesters {
+
+    struct Add: ParsableCommand {
+        static var configuration = CommandConfiguration(abstract: "Adds a new beta tester.")
+
+        @Option(name: .shortAndLong, help: "The first name of the user.")
+        var firstName: String
+
+        @Option(name: .shortAndLong, help: "The last name of the user.")
+        var lastName: String
+
+        @Option(name: .shortAndLong, help: "The email of the user.")
+        var email: String
+
+        @Option(name: .shortAndLong, parsing: .upToNextOption, help: "The groups to add the new beta tester to.")
+        var groupIds: [String]
+
+        @Argument(help: "The attribute you are interested in. [firstName | lastName | email | attributes] (default: id).")
+        var attribute: String?
+
+        func run() throws {
+            for group in groupIds {
+                let result = try ASCService.addBetaTester(email: email,
+                                                          firstName: firstName,
+                                                          lastName: lastName,
+                                                          groupId: group)
+                result.out(attribute)
+            }
         }
     }
 }
