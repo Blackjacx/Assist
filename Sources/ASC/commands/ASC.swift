@@ -36,13 +36,12 @@ public final class ASC: ParsableCommand {
 /// Here you can specify parameters valid for all sub commands.
 struct Options: ParsableArguments {
 
-    // Deprecated - token is specified using environment variables - see JWT.swift
-//    static var token: String?
-//
-//    @Option(name: .shortAndLong, help: "The ASC authorization token.", transform: { (string) in
-//        AscResource.token = string
-//        return string
-//    })
-//    var token: String?
+    @Flag(name: .shortAndLong, help: "Activate verbose logging. Prints e.g. the API response.")
+    var verbose: Int
+
+    mutating func validate() throws {
+        // Misusing validate to set the received flag globally
+        Network.verbosityLevel = verbose
+    }
 }
 

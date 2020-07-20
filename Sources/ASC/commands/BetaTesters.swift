@@ -75,11 +75,14 @@ extension ASC.BetaTesters {
     }
 
     struct Delete: ParsableCommand {
-        static var configuration = CommandConfiguration(abstract: "Remove a beta tester's ability to test all apps.")
+        static var configuration = CommandConfiguration(abstract: "Remove a beta tester's ability to test all or specific apps.")
 
         @Option(name: .shortAndLong, help: "The email of the user.")
         var email: String
 
+        #warning("make group optional:if not specifies the user will be kicked from everywhere. If specified he is kicked only from the specified groups.")
+        // Code to delete user in specific groups:
+        //  curl -g -s -X DELETE "$url/betaTesters/$uid/relationships/betaGroups" -H  "$json_content_type" -H "Authorization: $ASC_AUTH_HEADER" -d '{"data": [{ "id": "'$gid'", "type": "betaGroups" }] }'
         @Option(name: .shortAndLong, parsing: .upToNextOption, help: "The groups to add the new beta tester to.")
         var groupIds: [String]
 

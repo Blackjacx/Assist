@@ -10,10 +10,9 @@ import Foundation
 public typealias RequestClosure<T: Decodable> = (RequestResult<T>) -> Void
 public typealias RequestResult<T: Decodable> = Result<T, NetworkError>
 
-private let isDebugLogActive = false
-
 public struct Network {
 
+    public static var verbosityLevel = 0
     private static let session = URLSession.shared
 
     public init() {}
@@ -64,7 +63,7 @@ public struct Network {
             }
 
             do {
-                if isDebugLogActive {
+                if Self.verbosityLevel > 0 {
                     let str = String(data: data, encoding: .utf8)!
                     print(str)
                 }
