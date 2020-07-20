@@ -24,12 +24,12 @@ extension App {
     }
 
     struct Relationships: Codable {
-        var betaGroups: BetaGroups
-        var preReleaseVersions: PreReleaseVersions
-        var betaAppLocalizations: BetaAppLocalizations
-        var builds: Builds
-        var betaLicenseAgreement: BetaLicenseAgreement
-        var betaAppReviewDetail: BetaAppReviewDetail
+        var betaGroups: Relation
+        var preReleaseVersions: Relation
+        var betaAppLocalizations: Relation
+        var builds: Relation
+        var betaLicenseAgreement: Relation
+        var betaAppReviewDetail: Relation
     }
 }
 
@@ -48,35 +48,4 @@ extension Array where Element == App {
 
 extension App: Model {
     var name: String { attributes.name }
-}
-
-extension App.Relationships {
-
-    struct BetaTesters: Codable {
-        var links: Links
-    }
-
-    struct BetaGroups: Codable {
-        var links: Links
-    }
-
-    struct PreReleaseVersions: Codable {
-        var links: Links
-    }
-
-    struct BetaAppLocalizations: Codable {
-        var links: Links
-    }
-
-    struct Builds: Codable {
-        var links: Links
-    }
-
-    struct BetaLicenseAgreement: Codable {
-        var links: Links
-    }
-
-    struct BetaAppReviewDetail: Codable {
-        var links: Links
-    }
 }

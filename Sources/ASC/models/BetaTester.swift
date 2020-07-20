@@ -24,9 +24,23 @@ extension BetaTester {
     }
 
     struct Relationships: Codable {
-        var apps: Apps
-        var betaGroups: BetaGroups
-        var builds: Builds
+        var apps: Relation
+        var betaGroups: Relation
+        var builds: Relation
+    }
+}
+
+extension Array where Element == BetaTester {
+
+    func out(_ attribute: String?) {
+        switch attribute {
+        case "name": out(\.name)
+        case "attributes": out(\.attributes)
+        case "firstName": out(\.attributes.firstName)
+        case "lastName": out(\.attributes.lastName)
+        case "email": out(\.attributes.email)
+        default: out(\.id)
+        }
     }
 }
 
@@ -52,19 +66,3 @@ extension BetaTester: Model {
         return PersonNameComponentsFormatter().string(from: comps)
     }
 }
-
-extension BetaTester.Relationships {
-
-    struct Apps: Codable {
-        var links: Links
-    }
-
-    struct BetaGroups: Codable {
-        var links: Links
-    }
-
-    struct Builds: Codable {
-        var links: Links
-    }
-}
-

@@ -64,6 +64,20 @@ struct ASCService {
 
     // MARK: - BetaTester
 
+    static func listBetaTester(email: String?,
+                              firstName: String?,
+                              lastName: String?) throws -> [BetaTester] {
+
+        let result: RequestResult<[BetaTester]> = try Self.network.syncRequest(resource: AscResource.listBetaTester(email: email,
+                                                                                                                    firstName: firstName,
+                                                                                                                    lastName: lastName))
+
+        switch result {
+        case let .success(result): return result
+        case let .failure(error): throw error
+        }
+    }
+
     static func addBetaTester(email: String,
                               firstName: String,
                               lastName: String,
@@ -76,6 +90,20 @@ struct ASCService {
 
         switch result {
         case let .success(result): return result
+        case let .failure(error): throw error
+        }
+    }
+
+    static func deleteBetaTester(email: String, groupId: String) throws {
+
+        guard let foundTester = try listBetaTester(email: email, firstName: nil, lastName: nil).first else {
+            return
+        }
+
+        let result: RequestResult<EmptyResponse> = try Self.network.syncRequest(resource: AscResource.deleteBetaTester(id: foundTester.id))
+
+        switch result {
+        case .success: break
         case let .failure(error): throw error
         }
     }

@@ -12,9 +12,10 @@ import Foundation
 public protocol Resource {
 
     static var service: Service { get }
+    static var host: String { get }
 
-    var baseURL: URL { get }
     var path: String { get }
+    var queryItems: [URLQueryItem] { get }
     var method: HTTPMethod { get }
     var headers: [String: String]? { get }
     var parameters: [String: Any]? { get }
@@ -24,6 +25,11 @@ public protocol Resource {
 extension Resource {
 
     var url: URL {
-        baseURL.appendingPathComponent(path)
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = Self.host
+        components.path = path
+        components.queryItems = queryItems
+        return components.url!
     }
 }

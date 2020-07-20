@@ -21,9 +21,9 @@ extension Group {
     }
 
     struct Relationships: Codable {
-        var app: App
-        var builds: Builds
-        var betaTesters: BetaTesters
+        var app: Relation
+        var builds: Relation
+        var betaTesters: Relation
     }
 }
 
@@ -46,19 +46,4 @@ extension Array where Element == Group {
 
 extension Group: Model {
     var name: String { attributes.name }
-}
-
-extension Group.Relationships {
-
-    struct App: Codable {
-        var links: Links
-    }
-
-    struct Builds: Codable {
-        var links: Links
-    }
-
-    struct BetaTesters: Codable {
-        var links: Links
-    }
 }

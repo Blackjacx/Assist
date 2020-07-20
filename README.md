@@ -59,15 +59,23 @@ $ asc apps
 
 #### BetaTesters
 
+##### List beta testers by firstName, lastName and/or email
+
+```shell
+$ asc asc beta-testers list [-f "John"] [-l "Doe"] [-e "john@doe.com"]
+```
+
 ##### Add beta tester to one or more groups
 
 ```shell
 $ asc asc beta-testers add -f "John" -l "Doe" -e "john@doe.com" -g <"gid1" "gid2" "gid3">
 ```
 
-##### Remove beta tester from one or more groups
+##### Delete beta tester from one or more groups
 
-coming soon...
+```shell
+$ asc asc beta-testers delete -e "john@doe.com" -g <"gid1" "gid2" "gid3">
+```
 
 ##### Add App Store Connect User to one or more groups
 
