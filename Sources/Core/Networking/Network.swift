@@ -36,6 +36,11 @@ public struct Network {
         request.httpMethod = resource.method.rawValue
         request.allHTTPHeaderFields = resource.headers
 
+        if Self.verbosityLevel > 0 {
+          print("Request: [\(resource.method)] \(resource.url)")
+          print("Header Fields: \(resource.headers ?? [:])")
+        }
+
         if let parameters = resource.parameters {
             request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: [])
         }
@@ -65,7 +70,13 @@ public struct Network {
             do {
                 if Self.verbosityLevel > 0 {
                     let str = String(data: data, encoding: .utf8)!
-                    print(str)
+                    print("Response: \"\(str)\"")
+                }
+
+                // Prevents decoding error when there is no data in the response
+                if T.self == EmptyResponse.self {
+                  completion(.success(EmptyResponse() as! T))  
+                  return
                 }
 
                 let decodable = try type(of: resource).service.jsonDecode(T.self, from: data)

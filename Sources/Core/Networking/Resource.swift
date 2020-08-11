@@ -12,8 +12,8 @@ import Foundation
 public protocol Resource {
 
     static var service: Service { get }
-    static var host: String { get }
-
+    var host: String { get }
+    var port: Int? { get }
     var path: String { get }
     var queryItems: [URLQueryItem] { get }
     var method: HTTPMethod { get }
@@ -27,9 +27,13 @@ extension Resource {
     var url: URL {
         var components = URLComponents()
         components.scheme = "https"
-        components.host = Self.host
+        components.host = host
+        components.port = port
         components.path = path
-        components.queryItems = queryItems
+        
+        if !queryItems.isEmpty {
+          components.queryItems = queryItems
+        }
         return components.url!
     }
 }

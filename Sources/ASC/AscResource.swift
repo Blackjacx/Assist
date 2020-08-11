@@ -22,7 +22,10 @@ extension AscResource: Resource {
     static var token: String?
     static let service: Service = ASCService()
     static let apiVersion: String = "v1"
-    static var host: String { "api.appstoreconnect.apple.com" }
+    
+    var host: String { "api.appstoreconnect.apple.com" }
+
+    var port: Int? { nil } 
 
     var path: String {
         switch self {
@@ -70,7 +73,7 @@ extension AscResource: Resource {
 
         if shouldAuthorize {
             do {
-                let token = try JSONWebToken.token()
+                let token = try JSONWebToken.token(useCase: .asc)
                 headers["Authorization"] = "Bearer \(token)"
             } catch {
                 print(error)

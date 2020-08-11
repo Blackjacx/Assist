@@ -12,7 +12,8 @@ let package = Package(
 //        .tvOS(.v11)
     ],
     products: [
-        .executable(name: "asc", targets: ["ASC"])
+        .executable(name: "asc", targets: ["ASC"]),
+        .executable(name: "push", targets: ["Push"])
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "0.0.1"),
@@ -34,6 +35,17 @@ let package = Package(
         .testTarget(
             name: "ASCTests",
             dependencies: ["ASC"]
+        ),
+        .target(
+            name: "Push",
+            dependencies: [
+                "Core",
+                .product(name: "ArgumentParser", package: "swift-argument-parser")
+            ]
+        ),
+        .testTarget(
+            name: "PushTests",
+            dependencies: ["Push"]
         ),
     ]
 )

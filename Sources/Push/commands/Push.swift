@@ -1,22 +1,22 @@
 //
-//  ASC.swift
-//  ASC
+//  Push.swift
+//  Push
 //
-//  Created by Stefan Herold on 24.05.20.
+//  Created by Stefan Herold on 11.08.20.
 //
 
 import Foundation
 import ArgumentParser
 import Core
 
-/// The main class for the App Store Connect command line tool.
-public final class ASC: ParsableCommand {
+/// The main class for the Push command line tool.
+public final class Push: ParsableCommand {
 
     // Customize your command's help and subcommands by implementing the
     // `configuration` property.
     public static var configuration = CommandConfiguration(
         // Optional abstracts and discussions are used for help output.
-        abstract: "A utility for accessing the App Store Connect API.",
+        abstract: "A utility for sending and testing push notifications to Apple Push Notification Service (APNS) and via Firebase.",
 
         // Commands can define a version for automatic '--version' support.
         version: "0.0.1",
@@ -24,11 +24,11 @@ public final class ASC: ParsableCommand {
         // Pass an array to `subcommands` to set up a nested tree of subcommands.
         // With language support for type-level introspection, this could be
         // provided by automatically finding nested `ParsableCommand` types.
-        subcommands: [Groups.self, Apps.self, BetaTesters.self],
+        subcommands: [Apns.self],
 
         // A default subcommand, when provided, is automatically selected if a
         // subcommand is not given on the command line.
-        defaultSubcommand: Groups.self)
+        defaultSubcommand: Apns.self)
 
     public init() {}
 }
@@ -38,6 +38,12 @@ struct Options: ParsableArguments {
 
     @Flag(name: .shortAndLong, help: "Activate verbose logging. Prints e.g. the API response.")
     var verbose: Int
+
+    @Option(name: .shortAndLong, help: "The token of the device you want to push to.")
+    var deviceToken: String
+
+    @Option(name: .shortAndLong, help: "The message you want to send.")
+    var message: String
 
     mutating func validate() throws {
         // Misusing validate to set the received flag globally
