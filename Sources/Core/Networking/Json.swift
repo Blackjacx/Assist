@@ -1,3 +1,10 @@
+//
+//  Json.swift
+//  Core
+//
+//  Created by Stefan Herold on 19.06.20.
+//
+
 import Foundation
 
 public struct Json {

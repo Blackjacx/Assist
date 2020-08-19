@@ -1,6 +1,6 @@
 //
 //  JWT.swift
-//  ASC
+//  Core
 //
 //  Created by Stefan Herold on 19.06.20.
 //
@@ -10,25 +10,7 @@ import SwiftJWT
 
 public struct JSONWebToken {
 
-    public enum UseCase {
-      /// App Store Connect
-      case asc
-      /// Apple Push Notification Service
-      case apns
-    }
-
-    public static func token(useCase: UseCase, credentials: JSONWebTokenCredentials? = nil) throws -> String {
-      switch useCase {
-        case .asc: return try tokenAsc()
-        case .apns: 
-          guard let credentials = credentials else {
-              throw JSONWebToken.Error.credentialsNotSet
-          }
-          return try tokenApns(credentials: credentials)
-      }
-    }
-
-    private static func tokenAsc() throws -> String {
+    public static func tokenAsc() throws -> String {
 
         let env = ProcessInfo.processInfo.environment
 
@@ -61,10 +43,10 @@ public struct JSONWebToken {
         return signedJwt
     }
 
-    private static func tokenApns(credentials: JSONWebTokenCredentials) throws -> String {
+    public static func tokenApns(credentials: JWTApnsCredentials) throws -> String {
 
         let header = Header(kid: credentials.keyId)
-        let claims = JWTClaimsApns(iss: credentials.issuerId, iat: Date(), alg: "ES256")
+        let claims = JWTClaimsApns(iss: credentials.issuerId)
 
         var jwt =  JWT(header: header, claims: claims)
 
@@ -80,16 +62,78 @@ public struct JSONWebToken {
         let signedJwt = try jwt.sign(using: signer).trimmingCharacters(in: .whitespacesAndNewlines)
         return signedJwt
     }
+
+    /// https://github.com/googleapis/google-auth-library-swift/blob/f3c652646735e27885e81e710d4147f33eb6c26f/Sources/OAuth2/ServiceAccountTokenProvider/ServiceAccountTokenProvider.swift
+    /// https://medium.com/rocket-fuel/getting-started-with-firebase-for-server-side-swift-93c11098702a
+    /// https://stackoverflow.com/questions/46396224/how-do-i-generate-an-auth-token-using-jwt-for-google-firebase
+    public static func tokenFcm(credentials: JWTFcmCredentials) throws -> String {
+
+        let header = Header()
+        let scope = "https://www.googleapis.com/auth/firebase.messaging"
+        let claims = JWTClaimsFcm(clientEmail: credentials.clientEmail, tokenUrl: credentials.tokenUrl, scope: scope)
+
+        var jwt = JWT(header: header, claims: claims)
+
+        guard let privateKeyData = credentials.privateKey.data(using: .utf8) else {
+            throw JSONWebToken.Error.privateKeyInvalid
+        }
+
+        guard privateKeyData.count > 0 else {
+            throw JSONWebToken.Error.privateKeyEmpty
+        }
+
+        let signer = JWTSigner.rs256(privateKey: privateKeyData)
+        let signedJwt = try jwt.sign(using: signer)
+
+        //
+        // With the signed JWT we have to make another sync request to 
+        // Google which gives us the token we use to send the push.
+        //
+
+        let jsonData = try JSONSerialization.data(withJSONObject: [
+            "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+            "assertion": signedJwt
+          ]
+        )
+  
+        var urlRequest = URLRequest(url: URL(string: credentials.tokenUrl)!)
+        urlRequest.httpMethod = "POST"
+        urlRequest.httpBody = jsonData
+        urlRequest.setValue("application/json", forHTTPHeaderField:"Content-Type")
+    
+        let session = URLSession(configuration: .default)
+        let semaphore = DispatchSemaphore(value: 0)
+        var result: Result<String, Swift.Error>!
+        session.dataTask(with:urlRequest) {(data, response, error) -> Void in
+          if let response = response as? HTTPURLResponse, response.statusCode == 200, let data = data {
+            do {
+              let token = try Json.decoder.decode(JWTFcmCredentials.Token.self, from: data).accessToken
+              result = .success(token)
+            } catch {
+              result = .failure(error)
+            }
+          } else {
+            result = .failure(error!)
+          }
+          semaphore.signal()
+        }.resume()
+        
+        semaphore.wait()
+        return try result.get()
+    }
 }
 
-extension JSONWebToken {
+public extension JSONWebToken {
 
     enum Error: Swift.Error {
         case credentialsNotSet
         case environmentVariableNotAvailable(String)
         case unableToConstructJWT
         case fileNotFound(String)
+        case privateKeyInvalid
+        case privateKeyEmpty
         case keyContainsNoData(String)
+        case googleServiceAccountJsonNotFound(path: String)
     }
 }
 
@@ -100,8 +144,72 @@ private struct JWTClaimsAsc: Claims {
     let alg: String
 }
 
+public struct JWTApnsCredentials {
+
+    public var keyPath: String
+    public var keyId: String
+    public var issuerId: String
+
+    public init(keyPath: String, keyId: String, issuerId: String) {
+      self.keyPath = keyPath
+      self.keyId = keyId
+      self.issuerId = issuerId
+    }
+}
+
 private struct JWTClaimsApns: Claims {
     let iss: String
+    let iat: Date? = Date()
+    let alg: String = "ES256"
+}
+
+public struct JWTFcmCredentials: Codable {
+
+    public var privateKey: String
+    public var clientEmail: String
+    public var tokenUrl: String
+    public var projectId: String
+
+    public init(privateKey: String, clientEmail: String, tokenUrl: String, projectId: String) {
+      self.privateKey = privateKey
+      self.clientEmail = clientEmail
+      self.tokenUrl = tokenUrl
+      self.projectId = projectId
+    }
+
+    enum CodingKeys: String, CodingKey {
+      case privateKey = "private_key"
+      case clientEmail = "client_email"
+      case tokenUrl = "token_uri"
+      case projectId = "project_id"
+    }
+
+    struct Token: Codable {
+      var accessToken: String
+
+      enum CodingKeys: String, CodingKey {
+        case accessToken = "access_token"
+      }
+    }
+}
+
+private struct JWTClaimsFcm: Claims {
+
+    let iss: String
+    let sub: String
     let iat: Date?
-    let alg: String
+    let exp: Date?
+    let aud: String?
+    let scope: String?
+
+    init(clientEmail: String, tokenUrl: String, scope: String) {
+      self.iss = clientEmail
+      self.sub = clientEmail
+      self.aud = tokenUrl
+      self.scope = scope
+
+      let now: Date = Date()
+      iat = now
+      exp = now.addingTimeInterval(3600)
+    }
 }

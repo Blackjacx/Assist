@@ -24,7 +24,7 @@ public final class Push: ParsableCommand {
         // Pass an array to `subcommands` to set up a nested tree of subcommands.
         // With language support for type-level introspection, this could be
         // provided by automatically finding nested `ParsableCommand` types.
-        subcommands: [Apns.self],
+        subcommands: [Apns.self, Fcm.self],
 
         // A default subcommand, when provided, is automatically selected if a
         // subcommand is not given on the command line.

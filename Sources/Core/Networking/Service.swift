@@ -1,6 +1,6 @@
 //
 //  Service.swift
-//  ASC
+//  Core
 //
 //  Created by Stefan Herold on 19.06.20.
 //

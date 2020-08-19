@@ -1,8 +1,8 @@
 //
-//  File.swift
-//  ASC
+//  Network.swift
+//  Core
 //
-//  Created by Stefan Herold on 26.05.20.
+//  Created by Stefan Herold on 19.06.20.
 //
 
 import Foundation

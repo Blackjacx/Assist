@@ -50,7 +50,7 @@ extension Push {
       var topic: String
 
       func run() throws {
-        try PushService.pushViaApns(credentials: JSONWebTokenCredentials(keyPath: keyPath, keyId: keyId, issuerId: issuerId),
+        try PushService.pushViaApns(credentials: JWTApnsCredentials(keyPath: keyPath, keyId: keyId, issuerId: issuerId),
                                     endpoint: endpoint, 
                                     deviceToken: options.deviceToken, 
                                     topic: topic,

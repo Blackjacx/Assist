@@ -16,17 +16,39 @@ struct PushService {
     // MARK: - APNS
 
     @discardableResult
-    static func pushViaApns(credentials: JSONWebTokenCredentials,
+    static func pushViaApns(credentials: JWTApnsCredentials,
                             endpoint: Push.Apns.Endpoint, 
                             deviceToken: String, 
                             topic: String, 
                             message: String) throws -> EmptyResponse {
 
-        let result: RequestResult<EmptyResponse> = try Self.network.syncRequest(resource: PushResource.pushViaApns(credentials: credentials,
-                                                                                                                   endpoint: endpoint, 
-                                                                                                                   deviceToken: deviceToken, 
-                                                                                                                   topic: topic, 
-                                                                                                                   message: message))
+        let result: RequestResult<EmptyResponse> = 
+          try Self.network.syncRequest(resource: PushResource.pushViaApns(credentials: credentials,
+                                                                          endpoint: endpoint, 
+                                                                          deviceToken: deviceToken, 
+                                                                          topic: topic, 
+                                                                          message: message))
+        switch result {
+        case let .success(result): return result
+        case let .failure(error): throw error
+        }
+    }
+
+    // MARK: - FCM
+
+    @discardableResult
+    static func pushViaFcm(deviceToken: String,
+                           message: String, 
+                           serviceAccountJsonPath: String) throws -> EmptyResponse {
+
+        guard let data = FileManager.default.contents(atPath: serviceAccountJsonPath) else {
+          throw JSONWebToken.Error.googleServiceAccountJsonNotFound(path: serviceAccountJsonPath)
+        }
+        let credentials = try Json.decoder.decode(JWTFcmCredentials.self, from: data)
+        let result: RequestResult<EmptyResponse> = 
+          try Self.network.syncRequest(resource: PushResource.pushViaFcm(deviceToken: deviceToken,
+                                                                         message: message,
+                                                                         credentials: credentials))
         switch result {
         case let .success(result): return result
         case let .failure(error): throw error

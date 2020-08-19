@@ -73,7 +73,7 @@ extension AscResource: Resource {
 
         if shouldAuthorize {
             do {
-                let token = try JSONWebToken.token(useCase: .asc)
+                let token = try JSONWebToken.tokenAsc()
                 headers["Authorization"] = "Bearer \(token)"
             } catch {
                 print(error)
