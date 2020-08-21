@@ -24,6 +24,11 @@ extension ASC.BetaTesters {
     struct List: ParsableCommand {
         static var configuration = CommandConfiguration(abstract: "Find and list beta testers for all apps, builds, and beta groups.")
 
+        // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
+        // `ParsableArguments` type.
+        @OptionGroup()
+        var options: Options
+
         @Option(name: .shortAndLong, help: "The first name of the user.")
         var firstName: String?
 
@@ -47,6 +52,11 @@ extension ASC.BetaTesters {
     struct Add: ParsableCommand {
         #warning("implement adding tester to build && app")
         static var configuration = CommandConfiguration(abstract: "Create a beta tester assigned to a group, a build, or an app.")
+
+        // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
+        // `ParsableArguments` type.
+        @OptionGroup()
+        var options: Options
 
         @Option(name: .shortAndLong, help: "The first name of the user.")
         var firstName: String
@@ -77,6 +87,11 @@ extension ASC.BetaTesters {
     struct Delete: ParsableCommand {
         static var configuration = CommandConfiguration(abstract: "Remove a beta tester's ability to test all or specific apps.")
 
+        // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
+        // `ParsableArguments` type.
+        @OptionGroup()
+        var options: Options
+        
         @Option(name: .shortAndLong, help: "The email of the user.")
         var email: String
 

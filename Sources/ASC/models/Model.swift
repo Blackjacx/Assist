@@ -15,9 +15,9 @@ protocol Model {
 extension Array where Self.Element: Model {
 
     func out<T>(_ keyPath: KeyPath<Element, T>) {
-        map { $0[keyPath: keyPath] }.forEach { print( $0 ) }
-//        let joined = map { "\($0[keyPath: keyPath])" }.joined(separator: " ")
-//        print(joined)
+//        map { $0[keyPath: keyPath] }.forEach { print( $0 ) }
+        let joined = map { "\($0[keyPath: keyPath])" }.joined(separator: " ")
+        print(joined)
     }
 
     var allIds: [String] {
