@@ -16,7 +16,7 @@ let package = Package(
         .executable(name: "push", targets: ["Push"])
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-argument-parser", from: "0.0.1"),
+        .package(url: "https://github.com/apple/swift-argument-parser", from: "0.3.1"),
         .package(name: "SwiftJWT", url: "https://github.com/IBM-Swift/Swift-JWT.git", from: "3.6.1")
     ],
     targets: [
