@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SwiftJWT
+import JWTKit
 
 public struct JSONWebToken {
 
@@ -26,29 +26,27 @@ public struct JSONWebToken {
             throw Error.environmentVariableNotAvailable("ASC_AUTH_KEY_ISSUER_ID")
         }
 
-        let header = Header(kid: kid)
         let claims = JWTClaimsAsc(iss: iss,
                                   exp: Date(timeIntervalSinceNow: 20 * 60),
                                   aud: "appstoreconnect-v1",
                                   alg: "ES256")
 
-        var jwt =  JWT(header: header, claims: claims)
+        let signers = JWTSigners()
 
         guard let keyData = FileManager.default.contents(atPath: keyFile) else {
             throw Error.fileNotFound(keyFile)
         }
 
-        let signer = JWTSigner.es256(privateKey: keyData)
-        let signedJwt = try jwt.sign(using: signer).trimmingCharacters(in: .whitespacesAndNewlines)
-        return signedJwt
+        try signers.use(.es256(key: .private(pem: keyData)))
+
+        let jwt = try signers.sign(claims, kid: JWKIdentifier(string: kid)).trimmingCharacters(in: .whitespacesAndNewlines)
+        return jwt
     }
 
     public static func tokenApns(credentials: JWTApnsCredentials) throws -> String {
 
-        let header = Header(kid: credentials.keyId)
         let claims = JWTClaimsApns(iss: credentials.issuerId)
-
-        var jwt =  JWT(header: header, claims: claims)
+        let signers = JWTSigners()
 
         guard let keyData = FileManager.default.contents(atPath: credentials.keyPath) else {
             throw JSONWebToken.Error.fileNotFound(credentials.keyPath)
@@ -58,9 +56,9 @@ public struct JSONWebToken {
             throw JSONWebToken.Error.keyContainsNoData(credentials.keyPath)
         }
 
-        let signer = JWTSigner.es256(privateKey: keyData)
-        let signedJwt = try jwt.sign(using: signer).trimmingCharacters(in: .whitespacesAndNewlines)
-        return signedJwt
+        try signers.use(.es256(key: .private(pem: keyData)))
+        let jwt = try signers.sign(claims, kid: JWKIdentifier(string: credentials.keyId)).trimmingCharacters(in: .whitespacesAndNewlines)
+        return jwt
     }
 
     /// https://github.com/googleapis/google-auth-library-swift/blob/f3c652646735e27885e81e710d4147f33eb6c26f/Sources/OAuth2/ServiceAccountTokenProvider/ServiceAccountTokenProvider.swift
@@ -68,56 +66,53 @@ public struct JSONWebToken {
     /// https://stackoverflow.com/questions/46396224/how-do-i-generate-an-auth-token-using-jwt-for-google-firebase
     public static func tokenFcm(credentials: JWTFcmCredentials) throws -> String {
 
-        let header = Header()
         let scope = "https://www.googleapis.com/auth/firebase.messaging"
         let claims = JWTClaimsFcm(clientEmail: credentials.clientEmail, tokenUrl: credentials.tokenUrl, scope: scope)
 
-        var jwt = JWT(header: header, claims: claims)
-
-        guard let privateKeyData = credentials.privateKey.data(using: .utf8) else {
+        guard let keyData = credentials.privateKey.data(using: .utf8) else {
             throw JSONWebToken.Error.privateKeyInvalid
         }
 
-        guard privateKeyData.count > 0 else {
+        guard keyData.count > 0 else {
             throw JSONWebToken.Error.privateKeyEmpty
         }
 
-        let signer = JWTSigner.rs256(privateKey: privateKeyData)
-        let signedJwt = try jwt.sign(using: signer)
+        let signer = try JWTSigner.rs256(key: .private(pem: keyData))
+        let jwt = try signer.sign(claims)
 
         //
-        // With the signed JWT we have to make another sync request to 
+        // With the signed JWT we have to make another sync request to
         // Google which gives us the token we use to send the push.
         //
 
         let jsonData = try JSONSerialization.data(withJSONObject: [
             "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
-            "assertion": signedJwt
-          ]
+            "assertion": jwt
+            ]
         )
-  
+
         var urlRequest = URLRequest(url: URL(string: credentials.tokenUrl)!)
         urlRequest.httpMethod = "POST"
         urlRequest.httpBody = jsonData
         urlRequest.setValue("application/json", forHTTPHeaderField:"Content-Type")
-    
+
         let session = URLSession(configuration: .default)
         let semaphore = DispatchSemaphore(value: 0)
         var result: Result<String, Swift.Error>!
         session.dataTask(with:urlRequest) {(data, response, error) -> Void in
-          if let response = response as? HTTPURLResponse, response.statusCode == 200, let data = data {
-            do {
-              let token = try Json.decoder.decode(JWTFcmCredentials.Token.self, from: data).accessToken
-              result = .success(token)
-            } catch {
-              result = .failure(error)
+            if let response = response as? HTTPURLResponse, response.statusCode == 200, let data = data {
+                do {
+                    let token = try Json.decoder.decode(JWTFcmCredentials.Token.self, from: data).accessToken
+                    result = .success(token)
+                } catch {
+                    result = .failure(error)
+                }
+            } else {
+                result = .failure(error!)
             }
-          } else {
-            result = .failure(error!)
-          }
-          semaphore.signal()
+            semaphore.signal()
         }.resume()
-        
+
         semaphore.wait()
         return try result.get()
     }
@@ -137,11 +132,14 @@ public extension JSONWebToken {
     }
 }
 
-private struct JWTClaimsAsc: Claims {
+private struct JWTClaimsAsc: JWTPayload {
+
     let iss: String
     let exp: Date?
     let aud: String
     let alg: String
+
+    func verify(using signer: JWTSigner) throws {}
 }
 
 public struct JWTApnsCredentials {
@@ -151,49 +149,54 @@ public struct JWTApnsCredentials {
     public var issuerId: String
 
     public init(keyPath: String, keyId: String, issuerId: String) {
-      self.keyPath = keyPath
-      self.keyId = keyId
-      self.issuerId = issuerId
+        self.keyPath = keyPath
+        self.keyId = keyId
+        self.issuerId = issuerId
     }
 }
 
-private struct JWTClaimsApns: Claims {
+private struct JWTClaimsApns: JWTPayload {
     let iss: String
     let iat: Date? = Date()
     let alg: String = "ES256"
+
+    func verify(using signer: JWTSigner) throws {}
 }
 
 public struct JWTFcmCredentials: Codable {
 
     public var privateKey: String
+    public var privateKeyId: String
     public var clientEmail: String
     public var tokenUrl: String
     public var projectId: String
 
-    public init(privateKey: String, clientEmail: String, tokenUrl: String, projectId: String) {
-      self.privateKey = privateKey
-      self.clientEmail = clientEmail
-      self.tokenUrl = tokenUrl
-      self.projectId = projectId
+    public init(privateKey: String, privateKeyId: String, clientEmail: String, tokenUrl: String, projectId: String) {
+        self.privateKey = privateKey
+        self.privateKeyId = privateKeyId
+        self.clientEmail = clientEmail
+        self.tokenUrl = tokenUrl
+        self.projectId = projectId
     }
 
     enum CodingKeys: String, CodingKey {
-      case privateKey = "private_key"
-      case clientEmail = "client_email"
-      case tokenUrl = "token_uri"
-      case projectId = "project_id"
+        case privateKey = "private_key"
+        case privateKeyId = "private_key_id"
+        case clientEmail = "client_email"
+        case tokenUrl = "token_uri"
+        case projectId = "project_id"
     }
 
     struct Token: Codable {
-      var accessToken: String
+        var accessToken: String
 
-      enum CodingKeys: String, CodingKey {
-        case accessToken = "access_token"
-      }
+        enum CodingKeys: String, CodingKey {
+            case accessToken = "access_token"
+        }
     }
 }
 
-private struct JWTClaimsFcm: Claims {
+private struct JWTClaimsFcm: JWTPayload {
 
     let iss: String
     let sub: String
@@ -203,13 +206,15 @@ private struct JWTClaimsFcm: Claims {
     let scope: String?
 
     init(clientEmail: String, tokenUrl: String, scope: String) {
-      self.iss = clientEmail
-      self.sub = clientEmail
-      self.aud = tokenUrl
-      self.scope = scope
+        self.iss = clientEmail
+        self.sub = clientEmail
+        self.aud = tokenUrl
+        self.scope = scope
 
-      let now: Date = Date()
-      iat = now
-      exp = now.addingTimeInterval(3600)
+        let now: Date = Date()
+        iat = now
+        exp = now.addingTimeInterval(3600)
     }
+
+    func verify(using signer: JWTSigner) throws {}
 }
