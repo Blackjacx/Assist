@@ -11,7 +11,6 @@ import ArgumentParser
 extension ASC {
 
     struct BetaTesters: ParsableCommand {
-
         static var configuration = CommandConfiguration(
             abstract: "Manage people who can install and test prerelease builds.",
             subcommands: [List.self, Add.self, Delete.self],
@@ -21,6 +20,8 @@ extension ASC {
 
 extension ASC.BetaTesters {
 
+    /// Find and list beta testers for all apps, builds, and beta groups.
+    /// https://developer.apple.com/documentation/appstoreconnectapi/list_beta_testers
     struct List: ParsableCommand {
         static var configuration = CommandConfiguration(abstract: "Find and list beta testers for all apps, builds, and beta groups.")
 
@@ -29,26 +30,17 @@ extension ASC.BetaTesters {
         @OptionGroup()
         var options: Options
 
-        @Option(name: .shortAndLong, help: "The first name of the user.")
-        var firstName: String?
-
-        @Option(name: .shortAndLong, help: "The last name of the user.")
-        var lastName: String?
-
-        @Option(name: .shortAndLong, help: "The email of the user.")
-        var email: String?
-
         @Argument(help: "The attribute you are interested in. [firstName | lastName | email | attributes] (default: id).")
         var attribute: String?
 
         func run() throws {
-            let result = try ASCService.listBetaTester(email: email,
-                                                       firstName: firstName,
-                                                       lastName: lastName)
+            let result = try ASCService.listBetaTester(filters: options.filters)
             result.out(attribute)
         }
     }
 
+    /// Create a beta tester assigned to a group, a build, or an app.
+    /// https://developer.apple.com/documentation/appstoreconnectapi/create_a_beta_tester
     struct Add: ParsableCommand {
         #warning("implement adding tester to build && app")
         static var configuration = CommandConfiguration(abstract: "Create a beta tester assigned to a group, a build, or an app.")
@@ -84,6 +76,8 @@ extension ASC.BetaTesters {
         }
     }
 
+    /// Remove a beta tester's ability to test all or specific apps.
+    /// https://developer.apple.com/documentation/appstoreconnectapi/delete_a_beta_tester
     struct Delete: ParsableCommand {
         static var configuration = CommandConfiguration(abstract: "Remove a beta tester's ability to test all or specific apps.")
 
@@ -95,7 +89,7 @@ extension ASC.BetaTesters {
         @Option(name: .shortAndLong, help: "The email of the user.")
         var email: String
 
-        #warning("make group optional:if not specifies the user will be kicked from everywhere. If specified he is kicked only from the specified groups.")
+        #warning("make group optional:if not specified the user will be kicked from everywhere. If specified he is kicked only from the specified groups.")
         // Code to delete user in specific groups:
         //  curl -g -s -X DELETE "$url/betaTesters/$uid/relationships/betaGroups" -H  "$json_content_type" -H "Authorization: $ASC_AUTH_HEADER" -d '{"data": [{ "id": "'$gid'", "type": "betaGroups" }] }'
         @Option(name: .shortAndLong, parsing: .upToNextOption, help: "The groups to add the new beta tester to.")

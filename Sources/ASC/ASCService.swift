@@ -14,22 +14,46 @@ struct ASCService {
 
     // MARK: - BetaGroups
 
-    static func readBetaGroups() throws -> [Group] {
+    static func listBetaGroups(filters: [Filter] = []) throws -> [Group] {
 
-        let apps = try readApps()
-        var groups: [Group] = []
+        let result: RequestResult<[Group]> = try Self.network.syncRequest(resource: AscResource.listBetaGroups(filters: filters))
+
+        switch result {
+        case let .success(result): return result
+        case let .failure(error): throw error
+        }
+    }
+
+    // MARK: - Apps
+
+    static func listApps(filters: [Filter] = []) throws -> [App] {
+
+        let result: RequestResult<[App]> = try Self.network.syncRequest(resource: AscResource.listApps(filters: filters))
+
+        switch result {
+        case let .success(result): return result
+        case let .failure(error): throw error
+        }
+    }
+
+    static func listAppStoreVersions(appIds: [String], filters: [Filter] = []) throws -> [(app: App, versions: [AppStoreVersion])] {
+
+        let apps = try listApps()
+        let iterableAppIds = appIds.count > 0 ? appIds : apps.map({ $0.id })
+        var functionResult: [(app: App, versions: [AppStoreVersion])] = []
 
         let semaphore = DispatchSemaphore(value: 0)
-        let betaGroupLinks = apps.map { $0[keyPath: \App.relationships.betaGroups.links.related] }
-        let scheduledRequests = betaGroupLinks.count
+        let scheduledRequests = iterableAppIds.count
         var finishedRequests = 0
         var error: Error?
 
-        for url in betaGroupLinks {
-            try network.request(resource: AscResource.read(url: url)) { (result: RequestResult<[Group]>) in
-                switch result {
-                case let .success(result):
-                    groups += result
+        for id in iterableAppIds {
+            let resource = AscResource.listAppStoreVersions(appId: id, filters: filters)
+            try network.request(resource: resource) { (networkResult: RequestResult<[AppStoreVersion]>) in
+                switch networkResult {
+                case let .success(versions):
+                    let app = apps.first(where: { $0.id == id })!
+                    functionResult.append((app: app, versions: versions))
                 case let .failure(err):
                     error = err
                     semaphore.signal()
@@ -47,30 +71,14 @@ struct ASCService {
         if let error = error {
             throw error
         }
-        return groups
-    }
-
-    // MARK: - Apps
-
-    static func readApps() throws -> [App] {
-
-        let result: RequestResult<[App]> = try Self.network.syncRequest(resource: AscResource.readApps)
-
-        switch result {
-        case let .success(result): return result
-        case let .failure(error): throw error
-        }
+        return functionResult
     }
 
     // MARK: - BetaTester
 
-    static func listBetaTester(email: String?,
-                              firstName: String?,
-                              lastName: String?) throws -> [BetaTester] {
+    static func listBetaTester(filters: [Filter] = []) throws -> [BetaTester] {
 
-        let result: RequestResult<[BetaTester]> = try Self.network.syncRequest(resource: AscResource.listBetaTester(email: email,
-                                                                                                                    firstName: firstName,
-                                                                                                                    lastName: lastName))
+        let result: RequestResult<[BetaTester]> = try Self.network.syncRequest(resource: AscResource.listBetaTester(filters: filters))
 
         switch result {
         case let .success(result): return result
@@ -96,7 +104,7 @@ struct ASCService {
 
     static func deleteBetaTester(email: String, groupId: String) throws {
 
-        guard let foundTester = try listBetaTester(email: email, firstName: nil, lastName: nil).first else {
+        guard let foundTester = try listBetaTester(filters: [Filter(key: BetaTester.FilterKey.email, value: email)]).first else {
             return
         }
 
@@ -112,19 +120,6 @@ struct ASCService {
 extension ASCService: Service {
 
     func jsonDecode<T: Decodable>(_ type: T.Type, from data: Data) throws -> T {
-
-        let dataResult = Result {
-            try Json.decoder.decode(DataWrapper<T>.self, from: data)
-        }.map {
-            $0.object
-        }
-
-        guard (try? dataResult.get()) != nil else {
-            // Decode model directly
-            return try Json.decoder.decode(T.self, from: data)
-        }
-
-        // Extract data wrapped model OR throw the error from decoding it
-        return try dataResult.get()
+        try Json.decoder.decode(DataWrapper<T>.self, from: data).object
     }
 }

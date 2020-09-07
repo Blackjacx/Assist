@@ -25,21 +25,25 @@ extension Group {
         var builds: Relation
         var betaTesters: Relation
     }
+
+    enum FilterKey: String, Codable {
+        case apps
+        case builds
+        case id
+        case isInternalGroup
+        case name
+        case publicLinkEnabled
+        case publicLink
+    }
 }
 
 extension Array where Element == Group {
 
-    func out(_ attribute: String?, groupName: String?) {
-
-        var filtered = self
-        if let groupName = groupName {
-            filtered = filter { $0.name.nbspFiltered() == groupName.nbspFiltered() }
-        }
-
+    func out(_ attribute: String?) {
         switch attribute {
-        case "name": filtered.out(\.attributes.name)
-        case "attributes": filtered.out(\.attributes)
-        default: filtered.out(\.id)
+        case "name": out(\.attributes.name)
+        case "attributes": out(\.attributes)
+        default: out(\.id)
         }
     }
 }

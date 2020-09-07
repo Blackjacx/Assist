@@ -17,9 +17,9 @@ struct BetaTester: Codable {
 extension BetaTester {
 
     struct Attributes: Codable {
-        var firstName: String
-        var lastName: String
-        var email: String
+        var firstName: String? = ""
+        var lastName: String? = ""
+        var email: String? = ""
         var inviteType: InviteType
     }
 
@@ -27,6 +27,17 @@ extension BetaTester {
         var apps: Relation
         var betaGroups: Relation
         var builds: Relation
+    }
+
+    enum FilterKey: String, Codable {
+        case apps
+        case betaGroups
+        case builds
+        case email
+        case firstName
+        /// Possible values: EMAIL, PUBLIC_LINK
+        case inviteType
+        case lastName
     }
 }
 
@@ -49,9 +60,9 @@ extension BetaTester {
     func out(_ attribute: String?) {
         switch attribute {
         case "attributes": print( attributes )
-        case "firstName": print( attributes.firstName )
-        case "lastName": print( attributes.lastName )
-        case "email": print( attributes.email )
+        case "firstName": print( attributes.firstName ?? "" )
+        case "lastName": print( attributes.lastName ?? "" )
+        case "email": print( attributes.email ?? "" )
         default: print( id )
         }
     }

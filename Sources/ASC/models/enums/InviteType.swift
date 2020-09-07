@@ -9,4 +9,5 @@ import Foundation
 
 enum InviteType: String, Codable {
     case email = "EMAIL"
+    case publicLink = "PUBLIC_LINK"
 }
