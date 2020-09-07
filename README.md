@@ -94,3 +94,17 @@ coming soon...
 ##### Remove App Store Connect User from one or more groups
 
 coming soon...
+
+## Contribution
+
+- If you found a **bug**, please open an **issue**.
+- If you have a **feature request**, please open an **issue**.
+- If you want to **contribute**, please submit a **pull request**.
+
+## Author
+
+[Stefan Herold](mailto:stefan.herold@gmail.com) • 🐦 [@Blackjacxxx](https://twitter.com/Blackjacxxx)
+
+## License
+
+Source is available under the MIT license. See the [LICENSE](LICENSE) file for more info.
