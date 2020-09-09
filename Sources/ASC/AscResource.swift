@@ -112,6 +112,8 @@ extension AscResource: Resource {
 extension AscResource {
 
     private func queryItems(from filters: [Filter]) -> [URLQueryItem] {
-        filters.map { URLQueryItem(name: "filter[\($0.key)]", value: $0.value) }
+        var items: [URLQueryItem] = [URLQueryItem(name: "limit", value: "200")]
+        items += filters.map { URLQueryItem(name: "filter[\($0.key)]", value: $0.value) }
+        return items
     }
 }
