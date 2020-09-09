@@ -86,22 +86,19 @@ extension ASC.BetaTesters {
         @OptionGroup()
         var options: Options
         
-        @Option(name: .shortAndLong, help: "The email of the user.")
-        var email: String
+        @Option(name: .shortAndLong, help: "A list of comma-separated emails you of users you want to remove.")
+        var emails: String
 
-        #warning("make group optional:if not specified the user will be kicked from everywhere. If specified he is kicked only from the specified groups.")
         // Code to delete user in specific groups:
         //  curl -g -s -X DELETE "$url/betaTesters/$uid/relationships/betaGroups" -H  "$json_content_type" -H "Authorization: $ASC_AUTH_HEADER" -d '{"data": [{ "id": "'$gid'", "type": "betaGroups" }] }'
         @Option(name: .shortAndLong, parsing: .upToNextOption, help: "The groups to add the new beta tester to.")
-        var groupIds: [String]
+        var groupIds: [String] = []
 
         @Argument(help: "The attribute you are interested in. [firstName | lastName | email | attributes] (default: id).")
         var attribute: String?
 
         func run() throws {
-            for group in groupIds {
-                try ASCService.deleteBetaTester(email: email, groupId: group)
-            }
+            try ASCService.deleteBetaTester(emails: emails, groupIds: groupIds)
         }
     }
 }

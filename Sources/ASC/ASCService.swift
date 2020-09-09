@@ -102,17 +102,36 @@ struct ASCService {
         }
     }
 
-    static func deleteBetaTester(email: String, groupId: String) throws {
+    static func deleteBetaTester(emails: String, groupIds: [String]) throws {
 
-        guard let foundTester = try listBetaTester(filters: [Filter(key: BetaTester.FilterKey.email, value: email)]).first else {
-            return
+        guard emails.count > 0 else { throw AscError.noDataProvided("email") }
+
+        let filter = Filter(key: BetaTester.FilterKey.email, value: emails)
+        let foundTesters = try listBetaTester(filters: [filter]) // sync
+
+        guard foundTesters.count > 0 else { return }
+
+        let semaphore = DispatchSemaphore(value: 0)
+        let scheduledRequests = foundTesters.count
+        var receivedObjects: [EmptyResponse] = []
+        var errors: [Error] = []
+
+        for tester in foundTesters {
+            let resource = AscResource.deleteBetaTester(id: tester.id)
+            try network.request(resource: resource) { (networkResult: RequestResult<EmptyResponse>) in
+                switch networkResult {
+                case let .success(unwrappedResult):
+                    receivedObjects.append(unwrappedResult)
+                    print("Removed \(tester.name) (\(String(describing: tester.attributes.email)).")
+                case let .failure(error): errors.append(error)
+                }
+                if receivedObjects.count + errors.count == scheduledRequests { semaphore.signal() }
+            }
         }
+        semaphore.wait()
 
-        let result: RequestResult<EmptyResponse> = try Self.network.syncRequest(resource: AscResource.deleteBetaTester(id: foundTester.id))
-
-        switch result {
-        case .success: break
-        case let .failure(error): throw error
+        if errors.count > 0 {
+            throw AscError.requestFailed(underlyingErrors: errors)
         }
     }
 }
