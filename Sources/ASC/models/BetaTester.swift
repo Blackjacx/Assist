@@ -45,25 +45,12 @@ extension Array where Element == BetaTester {
 
     func out(_ attribute: String?) {
         switch attribute {
-        case "name": out(\.name)
-        case "attributes": out(\.attributes)
-        case "firstName": out(\.attributes.firstName)
-        case "lastName": out(\.attributes.lastName)
-        case "email": out(\.attributes.email)
-        default: out(\.id)
-        }
-    }
-}
-
-extension BetaTester {
-
-    func out(_ attribute: String?) {
-        switch attribute {
-        case "attributes": print( attributes )
-        case "firstName": print( attributes.firstName ?? "" )
-        case "lastName": print( attributes.lastName ?? "" )
-        case "email": print( attributes.email ?? "" )
-        default: print( id )
+        case "name": out(\.name, attribute: attribute)
+        case "attributes": out(\.attributes, attribute: attribute)
+        case "firstName": out(\.attributes.firstName, attribute: attribute)
+        case "lastName": out(\.attributes.lastName, attribute: attribute)
+        case "email": out(\.attributes.email, attribute: attribute)
+        default: out()
         }
     }
 }

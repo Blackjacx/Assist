@@ -56,7 +56,7 @@ extension Array where Element == App {
         case "attributes": out(\.attributes)
         case "bundleId": out(\.attributes.bundleId)
         case "locale": out(\.attributes.primaryLocale)
-        default: out(\.id)
+        default: out()
         }
     }
 }

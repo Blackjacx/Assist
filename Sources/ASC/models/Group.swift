@@ -43,7 +43,7 @@ extension Array where Element == Group {
         switch attribute {
         case "name": out(\.attributes.name)
         case "attributes": out(\.attributes)
-        default: out(\.id)
+        default: out()
         }
     }
 }

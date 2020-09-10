@@ -59,7 +59,7 @@ extension Array where Element == AppStoreVersion {
     func out(_ attribute: String?) {
         switch attribute {
         case "attributes": out(\.attributes)
-        default: out(\.id)
+        default: out()
         }
     }
 }
