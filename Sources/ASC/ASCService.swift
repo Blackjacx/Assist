@@ -87,19 +87,35 @@ struct ASCService {
     }
 
     static func addBetaTester(email: String,
-                              firstName: String,
-                              lastName: String,
-                              groupId: String) throws -> BetaTester {
+                              first: String,
+                              last: String,
+                              groupIDs: [String]) throws -> [BetaTester] {
 
-        let result: RequestResult<BetaTester> = try Self.network.syncRequest(resource: AscResource.addBetaTester(email: email,
-                                                                                                                 firstName: firstName,
-                                                                                                                 lastName: lastName,
-                                                                                                                 groupId: groupId))
+        let betaGroups = try listBetaGroups()
+        let iterableGroupIds = groupIDs.count > 0 ? groupIDs : betaGroups.map { $0.id }
 
-        switch result {
-        case let .success(result): return result
-        case let .failure(error): throw error
+        guard iterableGroupIds.count > 0 else { throw AscError.noDataProvided("group_ids") }
+
+        var receivedObjects: [BetaTester] = []
+        var errors: [Error] = []
+
+        for id in iterableGroupIds {
+            let resource = AscResource.addBetaTester(email: email, firstName: first, lastName: last, groupId: id)
+            let result: RequestResult<BetaTester> = try network.syncRequest(resource: resource)
+
+            switch result {
+            case let .success(result):
+                receivedObjects.append(result)
+                let betaGroup = betaGroups.filter { id == $0.id }[0]
+                print("Added tester \(result.name) (\(email)) to group \(String(describing: betaGroup.name)) (\(id))")
+            case let .failure(error): errors.append(error)
+            }
         }
+
+        if errors.count > 0 {
+            throw AscError.requestFailed(underlyingErrors: errors)
+        }
+        return receivedObjects
     }
 
     static func deleteBetaTester(emails: String, groupIds: [String]) throws {

@@ -50,7 +50,7 @@ extension ASC.BetaTesters {
         @OptionGroup()
         var options: Options
 
-        @Option(name: .shortAndLong, help: "The first name of the user.")
+        @Option(name: [.long, .customShort("n")], help: "The first name of the user.")
         var firstName: String
 
         @Option(name: .shortAndLong, help: "The last name of the user.")
@@ -60,19 +60,17 @@ extension ASC.BetaTesters {
         var email: String
 
         @Option(name: .shortAndLong, parsing: .upToNextOption, help: "The groups to add the new beta tester to.")
-        var groupIds: [String]
+        var groupIDs: [String]
 
         @Argument(help: "The attribute you are interested in. [firstName | lastName | email | attributes] (default: id).")
         var attribute: String?
 
         func run() throws {
-            for group in groupIds {
-                let result = try ASCService.addBetaTester(email: email,
-                                                          firstName: firstName,
-                                                          lastName: lastName,
-                                                          groupId: group)
-                result.out(attribute)
-            }
+            let result = try ASCService.addBetaTester(email: email,
+                                                      first: firstName,
+                                                      last: lastName,
+                                                      groupIDs: groupIDs)
+            result.out(attribute)
         }
     }
 
