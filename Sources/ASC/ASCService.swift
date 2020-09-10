@@ -127,24 +127,23 @@ struct ASCService {
 
         guard foundTesters.count > 0 else { return }
 
-        let semaphore = DispatchSemaphore(value: 0)
-        let scheduledRequests = foundTesters.count
         var receivedObjects: [EmptyResponse] = []
         var errors: [Error] = []
 
         for tester in foundTesters {
             let resource = AscResource.deleteBetaTester(id: tester.id)
-            try network.request(resource: resource) { (networkResult: RequestResult<EmptyResponse>) in
-                switch networkResult {
-                case let .success(unwrappedResult):
-                    receivedObjects.append(unwrappedResult)
-                    print("Removed \(tester.name) (\(String(describing: tester.attributes.email)).")
-                case let .failure(error): errors.append(error)
-                }
-                if receivedObjects.count + errors.count == scheduledRequests { semaphore.signal() }
+            let result: RequestResult<EmptyResponse> = try network.syncRequest(resource: resource)
+
+            switch result {
+            case let .success(result):
+                receivedObjects.append(result)
+                #warning("Add \"from <group/app name>\".")
+                var messages = ["Removed \(tester.name)"]
+                if let email = tester.attributes.email { messages.append("(\(email))")}
+                print(messages.joined(separator: " "))
+            case let .failure(error): errors.append(error)
             }
         }
-        semaphore.wait()
 
         if errors.count > 0 {
             throw AscError.requestFailed(underlyingErrors: errors)
