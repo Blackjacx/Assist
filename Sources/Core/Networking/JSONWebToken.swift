@@ -66,8 +66,10 @@ public struct JSONWebToken {
     /// https://stackoverflow.com/questions/46396224/how-do-i-generate-an-auth-token-using-jwt-for-google-firebase
     public static func tokenFcm(credentials: JWTFcmCredentials) throws -> String {
 
-        let scope = "https://www.googleapis.com/auth/firebase.messaging"
-        let claims = JWTClaimsFcm(clientEmail: credentials.clientEmail, tokenUrl: credentials.tokenUrl, scope: scope)
+        let claims = JWTClaimsFcm(iss: credentials.clientEmail,
+                                  sub: credentials.clientEmail,
+                                  scope: "https://www.googleapis.com/auth/cloud-platform",
+                                  aud: credentials.tokenUrl)
 
         guard let keyData = credentials.privateKey.data(using: .utf8) else {
             throw JSONWebToken.Error.privateKeyInvalid
@@ -198,23 +200,25 @@ public struct JWTFcmCredentials: Codable {
 
 private struct JWTClaimsFcm: JWTPayload {
 
-    let iss: String
-    let sub: String
-    let iat: Date?
-    let exp: Date?
-    let aud: String?
-    let scope: String?
+    var exp: ExpirationClaim
+    var iat: IssuedAtClaim
+    var iss: IssuerClaim
+    var sub: SubjectClaim
+    var scope: String
+    var aud: AudienceClaim
 
-    init(clientEmail: String, tokenUrl: String, scope: String) {
-        self.iss = clientEmail
-        self.sub = clientEmail
-        self.aud = tokenUrl
-        self.scope = scope
-
+    init(iss: String, sub: String, scope: String, aud: String) {
         let now: Date = Date()
-        iat = now
-        exp = now.addingTimeInterval(3600)
+
+        self.exp = ExpirationClaim(value: now.addingTimeInterval(3600))
+        self.iat = IssuedAtClaim(value: now)
+        self.iss = IssuerClaim(value: iss)
+        self.sub = SubjectClaim(value: sub)
+        self.scope = scope
+        self.aud = AudienceClaim(value: aud)
     }
 
-    func verify(using signer: JWTSigner) throws {}
+    func verify(using signer: JWTSigner) throws {
+        // not used
+    }
 }
