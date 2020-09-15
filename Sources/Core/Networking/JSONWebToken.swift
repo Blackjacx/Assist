@@ -68,7 +68,7 @@ public struct JSONWebToken {
 
         let claims = JWTClaimsFcm(iss: credentials.clientEmail,
                                   sub: credentials.clientEmail,
-                                  scope: "https://www.googleapis.com/auth/cloud-platform",
+                                  scope: "https://www.googleapis.com/auth/firebase.messaging",
                                   aud: credentials.tokenUrl)
 
         guard let keyData = credentials.privateKey.data(using: .utf8) else {
@@ -199,6 +199,7 @@ public struct JWTFcmCredentials: Codable {
 }
 
 private struct JWTClaimsFcm: JWTPayload {
+    let uid: String = UUID().uuidString
 
     var exp: ExpirationClaim
     var iat: IssuedAtClaim
