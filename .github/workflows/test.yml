@@ -5,16 +5,17 @@ on: [push]
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
-        os: [macos-latest]
+        os: [macos-latest, ubuntu-latest]
 
     runs-on: ${{ matrix.os }}
 
     steps:
-      - name: Get swift version
-        run: swift --version
       - uses: actions/checkout@v2
       - name: Build
-        run: swift build -v --enable-test-discovery
+        run: |
+          swift --version
+          swift build -v --enable-test-discovery
       - name: Test
-        run: swift test -v --enable-test-discovery
+        run: swift test -v --enable-test-discovery --parallel

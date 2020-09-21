@@ -1,20 +1,20 @@
 //
-//  Push.swift
-//  Push
+//  Snap.swift
+//  
 //
-//  Created by Stefan Herold on 11.08.20.
+//  Created by Stefan Herold on 21.09.20.
 //
 
 import Foundation
 import ArgumentParser
 import Core
 
-/// The main class for the Push command line tool.
-public final class Push: ParsableCommand {
+/// The main class for the screen-shotting tool
+public final class Snap: ParsableCommand {
 
     public static var configuration = CommandConfiguration(
         // Optional abstracts and discussions are used for help output.
-        abstract: "A utility for sending and testing push notifications to Apple Push Notification Service (APNS) and via Firebase.",
+        abstract: "Make your mobile screenshot automation a breeze and blazingly fast.",
 
         // Commands can define a version for automatic '--version' support.
         version: "0.0.1",
@@ -22,11 +22,12 @@ public final class Push: ParsableCommand {
         // Pass an array to `subcommands` to set up a nested tree of subcommands.
         // With language support for type-level introspection, this could be
         // provided by automatically finding nested `ParsableCommand` types.
-        subcommands: [Apns.self, Fcm.self],
+        subcommands: [Run.self],
 
         // A default subcommand, when provided, is automatically selected if a
         // subcommand is not given on the command line.
-        defaultSubcommand: Apns.self)
+        defaultSubcommand: Run.self
+    )
 
     public init() {}
 }
@@ -37,15 +38,8 @@ struct Options: ParsableArguments {
     @Flag(name: .shortAndLong, help: "Activate verbose logging.")
     var verbose: Int
 
-    @Option(name: .shortAndLong, help: "The token of the device you want to push to.")
-    var deviceToken: String
-
-    @Option(name: .shortAndLong, help: "The message you want to send.")
-    var message: String
-
     mutating func validate() throws {
         // Misusing validate to set the received flag globally
         Network.verbosityLevel = verbose
     }
 }
-
