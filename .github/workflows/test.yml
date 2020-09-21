@@ -1,14 +1,15 @@
 name: Test
-
-on:
-  push:
-    branches: [ develop ]
-  pull_request:
-    branches: [ develop ]
+      
+on: [push]
 
 jobs:
-  macos:
-    runs-on: macos-latest
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+
     steps:
     - uses: actions/checkout@v2
     - name: Build
