@@ -11,8 +11,12 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Build
-      run: swift build -v
-    - name: Test
-      run: swift test -v
+      - uses: fwal/setup-swift@v1
+        with: swift-version: "5.3.0"
+      - name: Get swift version
+        run: swift --version # Swift 5.1.0
+      - uses: actions/checkout@v2
+      - name: Build
+        run: swift build -v
+      - name: Test
+        run: swift test -v
