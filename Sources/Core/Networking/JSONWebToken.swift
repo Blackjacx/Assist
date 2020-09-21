@@ -8,6 +8,10 @@
 import Foundation
 import JWTKit
 
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+
 public struct JSONWebToken {
 
     public static func tokenAsc() throws -> String {
