@@ -9,10 +9,9 @@ jobs:
         os: [macos-latest]
 
     runs-on: ${{ matrix.os }}
-    env: 
-       DEVELOPER_DIR: /Applications/Xcode_12.app/Contents/Developer
 
     steps:
+      - uses: fwal/setup-swift@v1
       - name: Get swift version
         run: swift --version
       - uses: actions/checkout@v2
