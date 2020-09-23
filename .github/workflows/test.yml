@@ -15,6 +15,6 @@ jobs:
         run: swift --version
       - uses: actions/checkout@v2
       - name: Build
-        run: swift build -v
+        run: swift build -v --enable-test-discovery
       - name: Test
-        run: swift test -v
+        run: swift test -v --enable-test-discovery
