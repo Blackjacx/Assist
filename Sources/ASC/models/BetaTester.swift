@@ -61,6 +61,6 @@ extension BetaTester: Model {
         var comps = PersonNameComponents()
         comps.givenName = attributes.firstName
         comps.familyName = attributes.lastName
-        return PersonNameComponentsFormatter().string(from: comps)
+        return PersonNameComponentsFormatter.localizedString(from: comps, style: .default, options: [])
     }
 }
