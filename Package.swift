@@ -18,7 +18,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "0.3.1"),
         .package(url: "https://github.com/vapor/jwt-kit.git", from: "4.1.0"),
-        .package(url: "https://github.com/kareman/SwiftShell", from: "5.0.1")
+        .package(url: "https://github.com/kareman/SwiftShell", from: "5.1.0")
     ],
     targets: [
         .target(
