@@ -110,7 +110,7 @@ extension Snap {
                 print("✅  Find your screens in \(outURL.path)")
 
             } catch {
-//                try FileManager.default.removeItem(at: outURL)
+                try FileManager.default.removeItem(at: outURL)
                 throw error
             }
         }
