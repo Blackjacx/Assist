@@ -12,8 +12,6 @@ import Core
 /// The main class for the App Store Connect command line tool.
 public final class ASC: ParsableCommand {
 
-    // Customize your command's help and subcommands by implementing the
-    // `configuration` property.
     public static var configuration = CommandConfiguration(
         // Optional abstracts and discussions are used for help output.
         abstract: "A utility for accessing the App Store Connect API.",
@@ -36,7 +34,7 @@ public final class ASC: ParsableCommand {
 /// Here you can specify parameters valid for all sub commands.
 struct Options: ParsableArguments {
 
-    @Flag(name: .shortAndLong, help: "Activate verbose logging. Prints e.g. the API response.")
+    @Flag(name: .shortAndLong, help: "Activate verbose logging.")
     var verbose: Int
 
     @Option(name: .shortAndLong, help: "Filter which is set as part of the request. See https://developer.apple.com/documentation/appstoreconnectapi for possible values.")
