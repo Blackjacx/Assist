@@ -167,27 +167,27 @@ public extension Simctl {
     }
 
     enum DataNetwork: String {
-        case wifi
+        case wifi, three_g = "3g", four_g = "4g", lte, lte_a = "lte-a", ltePlus = "lte+"
     }
 
     enum WifiMode: String {
-        case active
+        case active, searching, failed
     }
 
     enum WifiBars: Int {
-        case one = 1, two = 2, three = 3
+        case zero, one, two, three
     }
 
     enum CellularMode: String {
-        case active
+        case notSupported, active, searching, failed
     }
 
     enum CellularBars: Int {
-        case one = 1, two = 2, three = 3, four = 4
+        case zero, one, two, three, four
     }
 
     enum BatteryState: String {
-        case charged
+        case charged, charging, discharging
     }
 
     enum BatteryLevel: Int {
