@@ -56,6 +56,9 @@ extension Snap {
         var mode: ExecutionMode
 
         @Option(help: "An optional platform to be used. Omit to use the latest. Currently only iOS is supported.")
+        var destinationDir: String?
+
+        @Option(help: "An optional platform to be used. Omit to use the latest. Currently only iOS is supported.")
         var platform: Simctl.Platform?
 
         func validate() throws {
@@ -67,6 +70,13 @@ extension Snap {
                 throw ValidationError("No target specified.")
             }
 
+            if let destinationDir = self.destinationDir {
+                var isDir: ObjCBool = false
+                guard FileManager.default.fileExists(atPath: destinationDir, isDirectory: &isDir), isDir.boolValue else {
+                    throw ValidationError("\(destinationDir) does not exist or is no directory.")
+                }
+            }
+
             if let platform = self.platform {
                 guard try Simctl.isPlatformValid(platform.rawValue) else {
                     throw ValidationError("\(platform) not installed on your system. Run `xcrun simctl list` to find available ones.")
@@ -75,7 +85,13 @@ extension Snap {
         }
 
         func run() throws {
-            let outURL = try FileManager.createTemporaryDirectory()
+            let outURL: URL
+
+            if let destinationDir = destinationDir {
+                outURL = URL(fileURLWithPath: destinationDir, isDirectory: true)
+            } else {
+                outURL = try FileManager.createTemporaryDirectory()
+            }
 
             do {
                 let platform = try self.platform?.rawValue ?? Simctl.latestAvailableIOS()
@@ -110,7 +126,11 @@ extension Snap {
                 print("✅  Find your screens in \(outURL.path)")
 
             } catch {
-                try FileManager.default.removeItem(at: outURL)
+                // Do not remove the destination directory when it came from outside.
+                // The responsibility of removal lies there.
+                if self.destinationDir == nil {
+                    try FileManager.default.removeItem(at: outURL)
+                }
                 throw error
             }
         }
