@@ -14,6 +14,7 @@ enum AscResource {
     case listAppStoreVersions(appId: String, filters: [Filter])
     case listBetaGroups(filters: [Filter])
     case listBetaTester(filters: [Filter])
+    case inviteBetaTester(testerId: String, appId: String)
     case addBetaTester(email: String, firstName: String, lastName: String, groupId: String)
     case deleteBetaTester(id: String)
 }
@@ -35,6 +36,7 @@ extension AscResource: Resource {
         case .listAppStoreVersions(let appId, _): return "/\(Self.apiVersion)/apps/\(appId)/appStoreVersions"
         case .listBetaGroups: return "/\(Self.apiVersion)/betaGroups"
         case .listBetaTester: return "/\(Self.apiVersion)/betaTesters"
+        case .inviteBetaTester: return "/\(Self.apiVersion)/betaTesterInvitations"
         case .addBetaTester: return "/\(Self.apiVersion)/betaTesters"
         case .deleteBetaTester(let id): return "/\(Self.apiVersion)/betaTesters/\(id)"
         }
@@ -55,7 +57,7 @@ extension AscResource: Resource {
         switch self {
         case .read, .listBetaGroups, .listApps, .listAppStoreVersions, .listBetaTester:
             return .get
-        case .addBetaTester:
+        case .addBetaTester, .inviteBetaTester:
             return .post
         case .deleteBetaTester:
             return .delete
@@ -100,6 +102,26 @@ extension AscResource: Resource {
                         "betaGroups": [
                             "data": [
                                 [ "type": "betaGroups", "id": groupId ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        case let .inviteBetaTester(testerId, appId):
+            return [
+                "data": [
+                    "type": "betaTesterInvitations",
+                    "relationships": [
+                        "app": [
+                            "data": [
+                                "type": "apps",
+                                "id": appId,
+                            ]
+                        ],
+                        "betaTester": [
+                            "data": [
+                                "type": "betaTesters",
+                                "id": testerId,
                             ]
                         ]
                     ]
