@@ -22,7 +22,7 @@ public final class ASC: ParsableCommand {
         // Pass an array to `subcommands` to set up a nested tree of subcommands.
         // With language support for type-level introspection, this could be
         // provided by automatically finding nested `ParsableCommand` types.
-        subcommands: [Groups.self, Apps.self, AppStoreVersions.self, BetaTesters.self],
+        subcommands: [ApiKeys.self, Groups.self, Apps.self, AppStoreVersions.self, BetaTesters.self],
 
         // A default subcommand, when provided, is automatically selected if a
         // subcommand is not given on the command line.
@@ -36,9 +36,6 @@ struct Options: ParsableArguments {
 
     @Flag(name: .shortAndLong, help: "Activate verbose logging.")
     var verbose: Int
-
-    @Option(name: .shortAndLong, help: "Filter which is set as part of the request. See https://developer.apple.com/documentation/appstoreconnectapi for possible values.")
-    var filters: [Filter] = []
 
     mutating func validate() throws {
         // Misusing validate to set the received flag globally

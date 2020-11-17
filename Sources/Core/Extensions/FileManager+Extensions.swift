@@ -10,7 +10,7 @@ import Foundation
 public extension FileManager {
 
     static func createTemporaryDirectory() throws -> URL {
-        let uuid = "com.stherold.\(ProcessInfo.processInfo.processName).\(NSUUID().uuidString)"
+        let uuid = "\(ProcessInfo.processId).\(NSUUID().uuidString)"
         let tmpDirectoryURL = FileManager.default.temporaryDirectory.appendingPathComponent(uuid)
         try FileManager.default.createDirectory(at: tmpDirectoryURL, withIntermediateDirectories: true, attributes: nil)
         return tmpDirectoryURL

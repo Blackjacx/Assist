@@ -12,6 +12,26 @@ struct ASCService {
 
     static let network = Network()
 
+    // MARK: - API Keys
+
+    @UserDefault("\(ProcessInfo.processId).apiKeys", defaultValue: []) static var apiKeys: [ApiKey]
+
+    static func listApiKeys() throws -> [ApiKey] {
+        return apiKeys
+    }
+
+    static func registerApiKey(_ key: ApiKey) throws {
+        apiKeys.append(key)
+    }
+
+    static func deleteApiKey(keyId: String) throws -> ApiKey {
+        guard let key = apiKeys.first(where: { keyId == $0.keyId }) else {
+            throw AscError.apiKeyNotFound(keyId)
+        }
+        apiKeys = apiKeys.filter { $0.keyId != keyId }
+        return key
+    }
+
     // MARK: - BetaGroups
 
     static func listBetaGroups(filters: [Filter] = []) throws -> [Group] {

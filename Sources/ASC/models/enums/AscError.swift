@@ -10,5 +10,6 @@ import Foundation
 enum AscError: Error {
     case noDataProvided(_ type: String)
     case noUserFound(_ email: String)
+    case apiKeyNotFound(_ keyId: String)
     case requestFailed(underlyingErrors: [Error])
 }
