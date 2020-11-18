@@ -12,6 +12,7 @@ extension ASC {
 
     /// Lists, registers and deletes App Store Connect API keys locally.
     struct ApiKeys: ParsableCommand {
+
         static var configuration = CommandConfiguration(
             abstract: "Lists, registers and deletes App Store Connect API keys on your Mac.",
             subcommands: [List.self, Register.self, Delete.self],
@@ -31,8 +32,9 @@ extension ASC.ApiKeys {
         var options: Options
 
         func run() throws {
-            let apiKeys = try ASCService.listApiKeys()
-            apiKeys.forEach { print($0) }
+            let op = ApiKeysOperation(.list)
+            ASC.queue.addOperations([op], waitUntilFinished: true)
+            print(try op.result.get())
         }
     }
 
@@ -55,7 +57,10 @@ extension ASC.ApiKeys {
         var issuerId: String
 
         func run() throws {
-            try ASCService.registerApiKey(ApiKey(path: path, keyId: keyId, issuerId: issuerId))
+            let key = ApiKey(path: path, keyId: keyId, issuerId: issuerId)
+            let op = ApiKeysOperation(.register(key: key))
+            ASC.queue.addOperations([op], waitUntilFinished: true)
+            print(try op.result.get())
         }
     }
 
@@ -72,8 +77,9 @@ extension ASC.ApiKeys {
         var keyId: String
 
         func run() throws {
-            let apiKey = try ASCService.deleteApiKey(keyId: keyId)
-            print(apiKey)
+            let op = ApiKeysOperation(.delete(keyId: keyId))
+            ASC.queue.addOperations([op], waitUntilFinished: true)
+            print(try op.result.get())
         }
     }
 }

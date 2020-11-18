@@ -12,6 +12,9 @@ import Core
 /// The main class for the App Store Connect command line tool.
 public final class ASC: ParsableCommand {
 
+    /// Concurrent operation queue
+    public static let queue = OperationQueue()
+
     public static var configuration = CommandConfiguration(
         // Optional abstracts and discussions are used for help output.
         abstract: "A utility for accessing the App Store Connect API.",
