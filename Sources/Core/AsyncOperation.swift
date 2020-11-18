@@ -26,6 +26,10 @@ open class AsyncOperation: Operation {
         }
     }
 
+    public override var isAsynchronous: Bool { true }
+    public override var isExecuting: Bool { state == .executing }
+    public override var isFinished: Bool { state == .finished }
+
     private let stateQueue = DispatchQueue(label: "AsyncOperation State Queue", attributes: .concurrent)
 
     /// Non thread-safe state storage, use only with locks
@@ -47,13 +51,6 @@ open class AsyncOperation: Operation {
             didChangeValue(forKey: oldValue.keyPath)
         }
     }
-}
-
-extension AsyncOperation {
-
-    public override var isAsynchronous: Bool { true }
-    public override var isExecuting: Bool { state == .executing }
-    public override var isFinished: Bool { state == .finished }
 
     public override func start() {
 

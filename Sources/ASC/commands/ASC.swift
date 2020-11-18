@@ -13,7 +13,9 @@ import Core
 public final class ASC: ParsableCommand {
 
     /// Concurrent operation queue
-    public static let queue = OperationQueue()
+    static let queue = OperationQueue()
+    /// The API key chosen by the user. If only one key is registered this one is automatically used.
+    static var apiKey: ApiKey?
 
     public static var configuration = CommandConfiguration(
         // Optional abstracts and discussions are used for help output.

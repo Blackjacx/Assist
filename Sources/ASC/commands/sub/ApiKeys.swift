@@ -34,7 +34,7 @@ extension ASC.ApiKeys {
         func run() throws {
             let op = ApiKeysOperation(.list)
             ASC.queue.addOperations([op], waitUntilFinished: true)
-            print(try op.result.get())
+            try op.result.get().forEach { print($0) }
         }
     }
 
@@ -47,6 +47,9 @@ extension ASC.ApiKeys {
         @OptionGroup()
         var options: Options
 
+        @Option(name: .shortAndLong, help: "The name of the key.")
+        var name: String
+
         @Option(name: .shortAndLong, help: "The absolute path to the p8 key file.")
         var path: String
 
@@ -57,10 +60,10 @@ extension ASC.ApiKeys {
         var issuerId: String
 
         func run() throws {
-            let key = ApiKey(path: path, keyId: keyId, issuerId: issuerId)
+            let key = ApiKey(name: name, path: path, keyId: keyId, issuerId: issuerId)
             let op = ApiKeysOperation(.register(key: key))
             ASC.queue.addOperations([op], waitUntilFinished: true)
-            print(try op.result.get())
+            try op.result.get().forEach { print($0) }
         }
     }
 
@@ -79,7 +82,7 @@ extension ASC.ApiKeys {
         func run() throws {
             let op = ApiKeysOperation(.delete(keyId: keyId))
             ASC.queue.addOperations([op], waitUntilFinished: true)
-            print(try op.result.get())
+            try op.result.get().forEach { print($0) }
         }
     }
 }

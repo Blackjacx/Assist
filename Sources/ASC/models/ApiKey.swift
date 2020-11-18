@@ -8,6 +8,7 @@
 import Foundation
 
 struct ApiKey: Codable {
+    var name: String
     var path: String
     var keyId: String
     var issuerId: String
