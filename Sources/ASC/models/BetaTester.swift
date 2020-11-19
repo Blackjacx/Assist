@@ -58,9 +58,8 @@ extension Array where Element == BetaTester {
 extension BetaTester: Model {
 
     var name: String {
-        var comps = PersonNameComponents()
-        comps.givenName = attributes.firstName
-        comps.familyName = attributes.lastName
-        return PersonNameComponentsFormatter().string(from: comps)
+        [attributes.firstName, attributes.lastName]
+            .compactMap { $0 }
+            .joined(separator: " ")
     }
 }

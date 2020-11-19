@@ -13,7 +13,7 @@ extension ASC {
     struct BetaTesters: ParsableCommand {
         static var configuration = CommandConfiguration(
             abstract: "Manage people who can install and test prerelease builds.",
-            subcommands: [List.self, Add.self, Delete.self],
+            subcommands: [List.self, Invite.self, Add.self, Delete.self],
             defaultSubcommand: List.self)
     }
 }
@@ -30,19 +30,42 @@ extension ASC.BetaTesters {
         @OptionGroup()
         var options: Options
 
+        @Option(name: .shortAndLong, help: "Filter which is set as part of the request. See https://developer.apple.com/documentation/appstoreconnectapi/list_beta_testers for possible values.")
+        var filters: [Filter] = []
+
         @Argument(help: "The attribute you are interested in. [firstName | lastName | email | attributes] (default: id).")
         var attribute: String?
 
         func run() throws {
-            let result = try ASCService.listBetaTester(filters: options.filters)
+            let result = try ASCService.listBetaTester(filters: filters)
             result.out(attribute)
+        }
+    }
+
+    /// Send or resend an invitation to a beta tester to test a specified app.
+    /// https://developer.apple.com/documentation/appstoreconnectapi/send_an_invitation_to_a_beta_tester
+    struct Invite: ParsableCommand {
+        static var configuration = CommandConfiguration(abstract: "Send or resend an invitation to a beta tester to test specified apps.")
+
+        // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
+        // `ParsableArguments` type.
+        @OptionGroup()
+        var options: Options
+
+        @Option(name: .shortAndLong, parsing: .upToNextOption, help: "The opaque resource IDs that uniquely identifiy the resources.")
+        var appIds: [String] = []
+
+        @Option(name: .shortAndLong, help: "The unique email of the tester to send the invite to.")
+        var email: String
+
+        func run() throws {
+            try ASCService.inviteBetaTester(email: email, appIds: appIds)
         }
     }
 
     /// Create a beta tester assigned to a group, a build, or an app.
     /// https://developer.apple.com/documentation/appstoreconnectapi/create_a_beta_tester
     struct Add: ParsableCommand {
-        #warning("implement adding tester to build && app")
         static var configuration = CommandConfiguration(abstract: "Create a beta tester assigned to a group, a build, or an app.")
 
         // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another

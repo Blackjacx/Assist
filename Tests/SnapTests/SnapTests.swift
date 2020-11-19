@@ -1,8 +1,8 @@
 import XCTest
 import class Foundation.Bundle
 
-final class ASCTests: XCTestCase {
-    
+final class SnapTests: XCTestCase {
+
     func testExample() throws {
     }
 }

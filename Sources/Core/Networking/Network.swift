@@ -7,6 +7,10 @@
 
 import Foundation
 
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+
 public typealias RequestClosure<T: Decodable> = (RequestResult<T>) -> Void
 public typealias RequestResult<T: Decodable> = Result<T, NetworkError>
 

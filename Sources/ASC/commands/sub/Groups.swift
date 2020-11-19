@@ -30,11 +30,14 @@ extension ASC.Groups {
         @OptionGroup()
         var options: Options
 
+        @Option(name: .shortAndLong, help: "Filter which is set as part of the request. See https://developer.apple.com/documentation/appstoreconnectapi/list_beta_groups for possible values.")
+        var filters: [Filter] = []
+
         @Argument(help: "The attribute you are interested in. [firstName | lastName | email | attributes] (default: id).")
         var attribute: String?
 
         func run() throws {
-            let groups = try ASCService.listBetaGroups(filters: options.filters)
+            let groups = try ASCService.listBetaGroups(filters: filters)
             groups.out(attribute)
         }
     }

@@ -14,16 +14,40 @@ enum AscResource {
     case listAppStoreVersions(appId: String, filters: [Filter])
     case listBetaGroups(filters: [Filter])
     case listBetaTester(filters: [Filter])
+    case inviteBetaTester(testerId: String, appId: String)
     case addBetaTester(email: String, firstName: String, lastName: String, groupId: String)
     case deleteBetaTester(id: String)
 }
 
 extension AscResource: Resource {
 
-    static var token: String?
     static let service: Service = ASCService()
-    static let apiVersion: String = "v1"
-    
+
+    private static let apiVersion: String = "v1"
+    private static var apiKey: ApiKey?
+    private static func determineToken() throws -> String {
+
+        if apiKey == nil {
+            let op = ApiKeysOperation(.list)
+            ASC.queue.addOperations([op], waitUntilFinished: true)
+            let apiKeys = try op.result.get()
+
+            switch apiKeys.count {
+            case 0: throw AscError.noApiKeysSpecified
+            case 1: apiKey = apiKeys[0]
+            default:
+                print("Please choose one of the registered API keys:")
+                apiKeys.enumerated().forEach { print("\t \($0). \($1.name) (\($1.keyId))") }
+
+                guard let input = readLine(), let index = Int(input), (0..<apiKeys.count).contains(index) else {
+                    throw AscError.invalidInput("Please enter the specified number of the key.")
+                }
+                apiKey = apiKeys[index]
+            }
+        }
+        return try JSONWebToken.tokenAsc(keyFile: apiKey!.path, kid: apiKey!.keyId, iss: apiKey!.issuerId)
+    }
+
     var host: String { "api.appstoreconnect.apple.com" }
 
     var port: Int? { nil } 
@@ -35,6 +59,7 @@ extension AscResource: Resource {
         case .listAppStoreVersions(let appId, _): return "/\(Self.apiVersion)/apps/\(appId)/appStoreVersions"
         case .listBetaGroups: return "/\(Self.apiVersion)/betaGroups"
         case .listBetaTester: return "/\(Self.apiVersion)/betaTesters"
+        case .inviteBetaTester: return "/\(Self.apiVersion)/betaTesterInvitations"
         case .addBetaTester: return "/\(Self.apiVersion)/betaTesters"
         case .deleteBetaTester(let id): return "/\(Self.apiVersion)/betaTesters/\(id)"
         }
@@ -55,7 +80,7 @@ extension AscResource: Resource {
         switch self {
         case .read, .listBetaGroups, .listApps, .listAppStoreVersions, .listBetaTester:
             return .get
-        case .addBetaTester:
+        case .addBetaTester, .inviteBetaTester:
             return .post
         case .deleteBetaTester:
             return .delete
@@ -74,7 +99,7 @@ extension AscResource: Resource {
 
         if shouldAuthorize {
             do {
-                let token = try JSONWebToken.tokenAsc()
+                let token = try Self.determineToken()
                 headers["Authorization"] = "Bearer \(token)"
             } catch {
                 print(error)
@@ -100,6 +125,26 @@ extension AscResource: Resource {
                         "betaGroups": [
                             "data": [
                                 [ "type": "betaGroups", "id": groupId ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        case let .inviteBetaTester(testerId, appId):
+            return [
+                "data": [
+                    "type": "betaTesterInvitations",
+                    "relationships": [
+                        "app": [
+                            "data": [
+                                "type": "apps",
+                                "id": appId,
+                            ]
+                        ],
+                        "betaTester": [
+                            "data": [
+                                "type": "betaTesters",
+                                "id": testerId,
                             ]
                         ]
                     ]
