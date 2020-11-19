@@ -29,7 +29,7 @@ extension AscResource: Resource {
 
         if apiKey == nil {
             let op = ApiKeysOperation(.list)
-            ASC.queue.addOperations([op], waitUntilFinished: true)
+            op.executeSync()
             let apiKeys = try op.result.get()
 
             switch apiKeys.count {
