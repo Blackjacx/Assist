@@ -14,21 +14,7 @@ import FoundationNetworking
 
 public struct JSONWebToken {
 
-    public static func tokenAsc() throws -> String {
-
-        let env = ProcessInfo.processInfo.environment
-
-        guard let keyFile = env["ASC_AUTH_KEY"], !keyFile.isEmpty else {
-            throw Error.environmentVariableNotAvailable("ASC_AUTH_KEY")
-        }
-
-        guard let kid = env["ASC_AUTH_KEY_ID"], !kid.isEmpty else {
-            throw Error.environmentVariableNotAvailable("ASC_AUTH_KEY_ID")
-        }
-
-        guard let iss = env["ASC_AUTH_KEY_ISSUER_ID"], !iss.isEmpty else {
-            throw Error.environmentVariableNotAvailable("ASC_AUTH_KEY_ISSUER_ID")
-        }
+    public static func tokenAsc(keyFile: String, kid: String, iss: String) throws -> String {
 
         let claims = JWTClaimsAsc(iss: iss,
                                   exp: Date(timeIntervalSinceNow: 20 * 60),
@@ -128,7 +114,6 @@ public extension JSONWebToken {
 
     enum Error: Swift.Error {
         case credentialsNotSet
-        case environmentVariableNotAvailable(String)
         case unableToConstructJWT
         case fileNotFound(String)
         case privateKeyInvalid

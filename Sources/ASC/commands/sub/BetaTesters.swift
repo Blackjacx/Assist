@@ -30,11 +30,14 @@ extension ASC.BetaTesters {
         @OptionGroup()
         var options: Options
 
+        @Option(name: .shortAndLong, help: "Filter which is set as part of the request. See https://developer.apple.com/documentation/appstoreconnectapi/list_beta_testers for possible values.")
+        var filters: [Filter] = []
+
         @Argument(help: "The attribute you are interested in. [firstName | lastName | email | attributes] (default: id).")
         var attribute: String?
 
         func run() throws {
-            let result = try ASCService.listBetaTester(filters: options.filters)
+            let result = try ASCService.listBetaTester(filters: filters)
             result.out(attribute)
         }
     }

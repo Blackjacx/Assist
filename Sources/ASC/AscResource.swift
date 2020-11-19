@@ -21,10 +21,33 @@ enum AscResource {
 
 extension AscResource: Resource {
 
-    static var token: String?
     static let service: Service = ASCService()
-    static let apiVersion: String = "v1"
-    
+
+    private static let apiVersion: String = "v1"
+    private static var apiKey: ApiKey?
+    private static func determineToken() throws -> String {
+
+        if apiKey == nil {
+            let op = ApiKeysOperation(.list)
+            ASC.queue.addOperations([op], waitUntilFinished: true)
+            let apiKeys = try op.result.get()
+
+            switch apiKeys.count {
+            case 0: throw AscError.noApiKeysSpecified
+            case 1: apiKey = apiKeys[0]
+            default:
+                print("Please choose one of the registered API keys:")
+                apiKeys.enumerated().forEach { print("\t \($0). \($1.name) (\($1.keyId))") }
+
+                guard let input = readLine(), let index = Int(input), (0..<apiKeys.count).contains(index) else {
+                    throw AscError.invalidInput("Please enter the specified number of the key.")
+                }
+                apiKey = apiKeys[index]
+            }
+        }
+        return try JSONWebToken.tokenAsc(keyFile: apiKey!.path, kid: apiKey!.keyId, iss: apiKey!.issuerId)
+    }
+
     var host: String { "api.appstoreconnect.apple.com" }
 
     var port: Int? { nil } 
@@ -76,7 +99,7 @@ extension AscResource: Resource {
 
         if shouldAuthorize {
             do {
-                let token = try JSONWebToken.tokenAsc()
+                let token = try Self.determineToken()
                 headers["Authorization"] = "Bearer \(token)"
             } catch {
                 print(error)
