@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.0.2] - 2020-09-25
 * [#17](https://github.com/blackjacx/assist/pull/8): Implementing Screenshot Tool - [@blackjacx](https://github.com/blackjacx).
 
 ## [0.0.1] - 2020-09-16
