@@ -1,6 +1,7 @@
 # Changelog
 
 ## [Unreleased]
+* [#25](https://github.com/blackjacx/assist/pull/25): Use group name parameter instead of group id's - [@blackjacx](https://github.com/blackjacx).
 * [#21](https://github.com/blackjacx/assist/pull/21): Implement command pattern for asc api-keys - [@blackjacx](https://github.com/blackjacx).
 
 ## [0.0.3] - 2020-11-19
