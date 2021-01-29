@@ -120,7 +120,7 @@ struct ASCService {
             case let .success(result):
                 receivedObjects.append(result)
                 let betaGroup = betaGroups.filter { id == $0.id }[0]
-                print("Added tester \(result.name) (\(email)) to group \(String(describing: betaGroup.name)) (\(id))")
+                print("Added tester: \(result.name), email: \(email), id: \(result.id) to group: \(betaGroup.name), id: \(id)")
             case let .failure(error): errors.append(error)
             }
         }
