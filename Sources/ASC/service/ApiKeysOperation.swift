@@ -8,7 +8,7 @@
 import Foundation
 import Core
 
-final class ApiKeysOperation: AsyncOperation {
+final class ApiKeysOperation: AsyncOperation, Command {
 
     enum SubCommand {
         case list
