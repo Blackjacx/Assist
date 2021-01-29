@@ -34,7 +34,7 @@ struct ASCService {
 
         let apps = try listApps()
         let iterableAppIds = appIds.count > 0 ? appIds : apps.map({ $0.id })
-        var functionResult: [(app: App, versions: [AppStoreVersion])] = []
+        var appVersionTuple: [(app: App, versions: [AppStoreVersion])] = []
         var errors: [Error] = []
 
         for id in iterableAppIds {
@@ -44,7 +44,7 @@ struct ASCService {
             switch result {
             case let .success(versions):
                 let app = apps.first(where: { $0.id == id })!
-                functionResult.append((app: app, versions: versions))
+                appVersionTuple.append((app: app, versions: versions))
             case let .failure(error):
                 errors.append(error)
             }
@@ -54,7 +54,7 @@ struct ASCService {
             throw AscError.requestFailed(underlyingErrors: errors)
         }
 
-        return functionResult
+        return appVersionTuple
     }
 
     // MARK: - BetaTester
