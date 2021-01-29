@@ -101,7 +101,7 @@ struct ASCService {
         }
     }
 
-    static func addBetaTester(email: String, first: String, last: String, groupNames: [String]) throws -> [BetaTester] {
+    static func addBetaTester(email: String, first: String, last: String, groupNames: [String]) throws {
 
         let betaGroups: Set<Group> = try groupNames
             // create filters for group names
@@ -128,7 +128,6 @@ struct ASCService {
         if !errors.isEmpty {
             throw AscError.requestFailed(underlyingErrors: errors)
         }
-        return receivedObjects
     }
 
     static func deleteBetaTester(emails: String, groupIds: [String]) throws {
