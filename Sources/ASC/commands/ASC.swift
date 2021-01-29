@@ -12,8 +12,6 @@ import Core
 /// The main class for the App Store Connect command line tool.
 public final class ASC: ParsableCommand {
 
-    /// Concurrent operation queue
-    static let queue = OperationQueue()
     /// The API key chosen by the user. If only one key is registered this one is automatically used.
     static var apiKey: ApiKey?
 

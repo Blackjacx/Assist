@@ -7,6 +7,7 @@
 
 import Foundation
 import ArgumentParser
+import Core
 
 extension ASC {
 
@@ -33,7 +34,7 @@ extension ASC.ApiKeys {
 
         func run() throws {
             let op = ApiKeysOperation(.list)
-            ASC.queue.addOperations([op], waitUntilFinished: true)
+            op.executeSync()
             try op.result.get().forEach { print($0) }
         }
     }
@@ -61,9 +62,11 @@ extension ASC.ApiKeys {
 
         func run() throws {
             let key = ApiKey(name: name, path: path, keyId: keyId, issuerId: issuerId)
-            let op = ApiKeysOperation(.register(key: key))
-            ASC.queue.addOperations([op], waitUntilFinished: true)
-            try op.result.get().forEach { print($0) }
+            let ops = [
+                ApiKeysOperation(.register(key: key)),
+                ApiKeysOperation(.list)
+            ]
+            (ops as [Command]).executeSync()
         }
     }
 
@@ -80,9 +83,11 @@ extension ASC.ApiKeys {
         var keyId: String
 
         func run() throws {
-            let op = ApiKeysOperation(.delete(keyId: keyId))
-            ASC.queue.addOperations([op], waitUntilFinished: true)
-            try op.result.get().forEach { print($0) }
+            let ops = [
+                ApiKeysOperation(.delete(keyId: keyId)),
+                ApiKeysOperation(.list)
+            ]
+            (ops as [Command]).executeSync()
         }
     }
 }

@@ -34,7 +34,7 @@ struct ASCService {
 
         let apps = try listApps()
         let iterableAppIds = appIds.count > 0 ? appIds : apps.map({ $0.id })
-        var functionResult: [(app: App, versions: [AppStoreVersion])] = []
+        var appVersionTuple: [(app: App, versions: [AppStoreVersion])] = []
         var errors: [Error] = []
 
         for id in iterableAppIds {
@@ -44,17 +44,17 @@ struct ASCService {
             switch result {
             case let .success(versions):
                 let app = apps.first(where: { $0.id == id })!
-                functionResult.append((app: app, versions: versions))
+                appVersionTuple.append((app: app, versions: versions))
             case let .failure(error):
                 errors.append(error)
             }
         }
 
-        if errors.count > 0 {
+        if !errors.isEmpty {
             throw AscError.requestFailed(underlyingErrors: errors)
         }
 
-        return functionResult
+        return appVersionTuple
     }
 
     // MARK: - BetaTester
@@ -96,23 +96,23 @@ struct ASCService {
             }
         }
 
-        if errors.count > 0 {
+        if !errors.isEmpty {
             throw AscError.requestFailed(underlyingErrors: errors)
         }
     }
 
-    static func addBetaTester(email: String,
-                              first: String,
-                              last: String,
-                              groupIDs: [String]) throws -> [BetaTester] {
+    static func addBetaTester(email: String, first: String, last: String, groupNames: [String]) throws {
 
-        let betaGroups = try listBetaGroups()
-        guard groupIDs.count > 0 else { throw AscError.noDataProvided("group_ids") }
+        let betaGroups: Set<Group> = try groupNames
+            // create filters for group names
+            .map({ Filter(key: Group.FilterKey.name, value: $0) })
+            // union of groups of different names
+            .reduce([], { $0.union(try listBetaGroups(filters: [$1])) })
 
         var receivedObjects: [BetaTester] = []
         var errors: [Error] = []
 
-        for id in groupIDs {
+        for id in betaGroups.map(\.id) {
             let resource = AscResource.addBetaTester(email: email, firstName: first, lastName: last, groupId: id)
             let result: RequestResult<BetaTester> = try network.syncRequest(resource: resource)
 
@@ -120,25 +120,28 @@ struct ASCService {
             case let .success(result):
                 receivedObjects.append(result)
                 let betaGroup = betaGroups.filter { id == $0.id }[0]
-                print("Added tester \(result.name) (\(email)) to group \(String(describing: betaGroup.name)) (\(id))")
+                print("Added tester: \(result.name), email: \(email), id: \(result.id) to group: \(betaGroup.name), id: \(id)")
             case let .failure(error): errors.append(error)
             }
         }
 
-        if errors.count > 0 {
+        if !errors.isEmpty {
             throw AscError.requestFailed(underlyingErrors: errors)
         }
-        return receivedObjects
     }
 
-    static func deleteBetaTester(emails: String, groupIds: [String]) throws {
+    static func deleteBetaTester(emails: [String]) throws {
 
-        guard emails.count > 0 else { throw AscError.noDataProvided("email") }
+        guard !emails.isEmpty else { throw AscError.noDataProvided("emails") }
 
-        let filter = Filter(key: BetaTester.FilterKey.email, value: emails)
-        let foundTesters = try listBetaTester(filters: [filter]) // sync
+        let filter = Filter(key: BetaTester.FilterKey.email, value: emails.joined(separator: ","))
+        let foundTesters = try listBetaTester(filters: [filter])
 
-        guard foundTesters.count > 0 else { return }
+        // Don't throw, just return to print nothing
+        guard !foundTesters.isEmpty else {
+            print("No testers found.")
+            return
+        }
 
         var receivedObjects: [EmptyResponse] = []
         var errors: [Error] = []
@@ -150,14 +153,14 @@ struct ASCService {
             switch result {
             case let .success(result):
                 receivedObjects.append(result)
-                var messages = ["Removed \(tester.name)"]
+                var messages = ["Removed \(tester.name) from all groups."]
                 if let email = tester.attributes.email { messages.append("(\(email))")}
                 print(messages.joined(separator: " "))
             case let .failure(error): errors.append(error)
             }
         }
 
-        if errors.count > 0 {
+        if !errors.isEmpty {
             throw AscError.requestFailed(underlyingErrors: errors)
         }
     }
