@@ -5,17 +5,19 @@
 # Assist
 
 [![Twitter](https://img.shields.io/twitter/follow/blackjacxxx?label=%40Blackjacxxx)](https://twitter.com/blackjacx)
-[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FBlackjacx%2FAssist%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/Blackjacx/Assist)
-[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FBlackjacx%2FAssist%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/Blackjacx/Assist)
-<img alt="Xcode 11.0+" src="https://img.shields.io/badge/Xcode-11.0%2B-blue.svg"/>
-<a href="https://github.com/Blackjacx/SHSearchBar/blob/develop/LICENSE?raw=true"><img alt="License" src="https://img.shields.io/cocoapods/l/SHSearchBar.svg?style=flat"/></a>
+[![Swift Package Index](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FBlackjacx%2FAssist%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/Blackjacx/Assist)
+[![Platform](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FBlackjacx%2FAssist%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/Blackjacx/Assist)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/Blackjacx/Assist/blob/develop/LICENSE?raw=true)
+<img alt="Xcode 12.0+" src="https://img.shields.io/badge/Xcode-12.0%2B-blue.svg"/>
 <a href="https://www.paypal.me/STHEROLD"><img alt="Donate" src="https://img.shields.io/badge/Donate-PayPal-blue.svg"/></a>
 
-Assistive command line tools (listed below), implemented in Swift.
+App Store Connect API access using your private API key. The tool is in an early stage but already quite versatile 🥳
+
+> ⚠️ Currently this repository contains a collection of command line tools. This is the reason why it is called "Assist". But in future I want to focus on the App Store Connect API here.
 
 ## General
 
-You can quickly try each tool using [Mint](https://github.com/yonaskolb/Mint). Just install it with [Homebrew](https://brew.sh/) via `brew install mint`. Then you can run each command by letting mint automatically clone and install it. Just prefix each command below with `mint run git@github.com:Blackjacx/Assist.git`, e.g.:
+You can quickly try it out by using [Mint](https://github.com/yonaskolb/Mint). Just install it with [Homebrew](https://brew.sh/) via `brew install mint`. Then you can run each command by letting mint automatically clone and install it. Just prefix each command below with `mint run git@github.com:Blackjacx/Assist.git`, e.g.:
 
 ```shell
 $ mint run git@github.com:Blackjacx/Assist.git asc groups -g <group_name>
@@ -23,78 +25,157 @@ $ mint run git@github.com:Blackjacx/Assist.git asc groups -g <group_name>
 
 ## Authentication
 
-Generate a private key on your [App Store Connect account](https://appstoreconnect.apple.com/access/api). Then make sure to specify the following environment variables which the script uses:
+Authentication is handled by the tool itself. The only thing needed is your private API key. Generate one at [App Store Connect account](https://appstoreconnect.apple.com/access/api) and execute the following command which will just store the exact parameters you provide in the user defaults. 
 
 ```shell
-# The absolute path to your Key file with the ending .p8
-ASC_AUTH_KEY=""
-# The key ID obtained from App Store Connect
-ASC_AUTH_KEY_ID=""
-# The issuer ID obtained from App Store Connect
-ASC_AUTH_KEY_ISSUER_ID=""
+asc api-keys register -n "name" -k "key-id" -i "issuer-id" -p "path-to-private-key-file"
 ```
 
-The tool uses the [Swift-JWT](https://github.com/IBM-Swift/Swift-JWT) package to generate and sign the access token.
+> ⚠️ No key generation performed here. The JWT is just generated on demand when using this tool. If you have multiple keys registered the tool will ask you which one you want to use.
 
-## Tools
+## Sub Commands
 
-### ASC - App Store Connect CLI
-
-Access the App Store Connect API using just the JWT generated from the private API key. The tool is capable of the following functionality:
-
-#### Beta Groups
-
-By calling `asc groups [id | attributes | name]` you can list the respective properties of the found groups.
-
-##### List all beta group IDs
+Executing one of the following sub commands is as easy as appending it with its parameters to the base command:
 
 ```shell
-$ asc groups
+# list all registered API keys
+asc api-keys list
+
+# register API key for specific team
+asc api-keys register -n "name" -k "key-id" -i "issuer-id" -p "path-to-private-key-file"
+
+# delete API key for specific team
+asc api-keys delete -k "key-id"
+
+
+
+# list is the default 
+asc groups                                
+
+# list only groups with a specific name
+asc groups -g "group-name"
+
+
+
+# list apps of your team
+asc apps
+
+
+
+# add beta tester to all groups matching `group-name`
+asc beta-testers add -e "john@doe.com" -n "John" -l "Doe" -g "group-name"
+
+# add beta tester to all groups matching all specified group names
+asc beta-testers add -e "john@doe.com" -n "John" -l "Doe" -g "group-name-1" -g "group-name-2"
+
+
+
+# delete beta tester from all groups found
+asc beta-testers delete -e "john@doe.com"
+
+
+
+# lists all your teams apps with their live version or if not live with their current status
+asc app-store-versions
 ```
 
-##### List beta group IDs by name
+### `api-keys`
 
-```shell
-$ asc groups -g <group_name>
+```
+OVERVIEW: Lists, registers and deletes App Store Connect API keys on your Mac.
+
+USAGE: asc api-keys <subcommand>
+
+OPTIONS:
+  --version               Show the version.
+  -h, --help              Show help information.
+
+SUBCOMMANDS:
+  list (default)          List locally stored App Store Connect API keys keys.
+  register                Registers App Store Connect API keys locally.
+  delete                  Delete locally stored App Store Connect API keys.
+
+  See 'asc help api-keys <subcommand>' for detailed help.
 ```
 
-#### Apps
+### `beta-testers`
 
-By calling `asc groups [id | attributes | name | bundleId | locale]` you can list the respective properties of the found apps.
+```
+OVERVIEW: Manage people who can install and test prerelease builds.
 
-##### List all app IDs
+USAGE: asc beta-testers <subcommand>
 
-```shell
-$ asc apps
+OPTIONS:
+  --version               Show the version.
+  -h, --help              Show help information.
+
+SUBCOMMANDS:
+  list (default)          Find and list beta testers for all apps, builds, and
+                          beta groups.
+  invite                  Send or resend an invitation to a beta tester to test
+                          specified apps.
+  add                     Create a beta tester assigned to a group, a build, or
+                          an app.
+  delete                  Remove a beta tester's ability to test all or
+                          specific apps.
+
+  See 'asc help beta-testers <subcommand>' for detailed help.
+
 ```
 
-#### BetaTesters
+### `groups`
 
-##### List beta testers by firstName, lastName and/or email
+```
+OVERVIEW: Manage groups of beta testers that have access to one or more builds.
 
-```shell
-$ asc asc beta-testers list [-f "John"] [-l "Doe"] [-e "john@doe.com"]
+USAGE: asc groups <subcommand>
+
+OPTIONS:
+  --version               Show the version.
+  -h, --help              Show help information.
+
+SUBCOMMANDS:
+  list (default)          Find and list beta testers for all apps, builds, and beta groups.
+
+  See 'asc help groups <subcommand>' for detailed help.
 ```
 
-##### Add beta tester to one or more groups
+### `apps`
 
-```shell
-$ asc asc beta-testers add -f "John" -l "Doe" -e "john@doe.com" -g <"gid1" "gid2" "gid3">
+```
+OVERVIEW: Manage your apps in App Store Connect.
+
+USAGE: asc apps <subcommand>
+
+OPTIONS:
+  --version               Show the version.
+  -h, --help              Show help information.
+
+SUBCOMMANDS:
+  list (default)          Find and list apps added in App Store Connect.
+
+  See 'asc help apps <subcommand>' for detailed help.
+
 ```
 
-##### Delete beta tester from one or more groups
+### `app-store-versions`
 
-```shell
-$ asc asc beta-testers delete -e "john@doe.com" -g <"gid1" "gid2" "gid3">
 ```
+OVERVIEW: Manage versions of your app that are available in App Store.
 
-##### Add App Store Connect User to one or more groups
+USAGE: asc app-store-versions <subcommand>
 
-coming soon...
+OPTIONS:
+  --version               Show the version.
+  -h, --help              Show help information.
 
-##### Remove App Store Connect User from one or more groups
+SUBCOMMANDS:
+  list (default)          Get a list of all App Store versions of an app across
+                          all platforms.
 
-coming soon...
+  See 'asc help app-store-versions <subcommand>' for detailed help.
+
+```
 
 ## Contribution
 
@@ -108,4 +189,4 @@ coming soon...
 
 ## License
 
-Source is available under the MIT license. See the [LICENSE](LICENSE) file for more info.
+ASC is available under the MIT license. See the [LICENSE](LICENSE) file for more info.
