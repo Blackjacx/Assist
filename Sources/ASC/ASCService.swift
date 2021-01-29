@@ -130,14 +130,18 @@ struct ASCService {
         }
     }
 
-    static func deleteBetaTester(emails: String, groupIds: [String]) throws {
+    static func deleteBetaTester(emails: [String]) throws {
 
-        guard emails.count > 0 else { throw AscError.noDataProvided("email") }
+        guard !emails.isEmpty else { throw AscError.noDataProvided("emails") }
 
-        let filter = Filter(key: BetaTester.FilterKey.email, value: emails)
-        let foundTesters = try listBetaTester(filters: [filter]) // sync
+        let filter = Filter(key: BetaTester.FilterKey.email, value: emails.joined(separator: ","))
+        let foundTesters = try listBetaTester(filters: [filter])
 
-        guard foundTesters.count > 0 else { return }
+        // Don't throw, just return to print nothing
+        guard !foundTesters.isEmpty else {
+            print("No testers found.")
+            return
+        }
 
         var receivedObjects: [EmptyResponse] = []
         var errors: [Error] = []
@@ -149,7 +153,7 @@ struct ASCService {
             switch result {
             case let .success(result):
                 receivedObjects.append(result)
-                var messages = ["Removed \(tester.name)"]
+                var messages = ["Removed \(tester.name) from all groups."]
                 if let email = tester.attributes.email { messages.append("(\(email))")}
                 print(messages.joined(separator: " "))
             case let .failure(error): errors.append(error)
