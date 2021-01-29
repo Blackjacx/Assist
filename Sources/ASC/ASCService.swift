@@ -50,7 +50,7 @@ struct ASCService {
             }
         }
 
-        if errors.count > 0 {
+        if !errors.isEmpty {
             throw AscError.requestFailed(underlyingErrors: errors)
         }
 
@@ -96,23 +96,23 @@ struct ASCService {
             }
         }
 
-        if errors.count > 0 {
+        if !errors.isEmpty {
             throw AscError.requestFailed(underlyingErrors: errors)
         }
     }
 
-    static func addBetaTester(email: String,
-                              first: String,
-                              last: String,
-                              groupIDs: [String]) throws -> [BetaTester] {
+    static func addBetaTester(email: String, first: String, last: String, groupNames: [String]) throws -> [BetaTester] {
 
-        let betaGroups = try listBetaGroups()
-        guard groupIDs.count > 0 else { throw AscError.noDataProvided("group_ids") }
+        let betaGroups: Set<Group> = try groupNames
+            // create filters for group names
+            .map({ Filter(key: Group.FilterKey.name, value: $0) })
+            // union of groups of different names
+            .reduce([], { $0.union(try listBetaGroups(filters: [$1])) })
 
         var receivedObjects: [BetaTester] = []
         var errors: [Error] = []
 
-        for id in groupIDs {
+        for id in betaGroups.map(\.id) {
             let resource = AscResource.addBetaTester(email: email, firstName: first, lastName: last, groupId: id)
             let result: RequestResult<BetaTester> = try network.syncRequest(resource: resource)
 
@@ -125,7 +125,7 @@ struct ASCService {
             }
         }
 
-        if errors.count > 0 {
+        if !errors.isEmpty {
             throw AscError.requestFailed(underlyingErrors: errors)
         }
         return receivedObjects
@@ -157,7 +157,7 @@ struct ASCService {
             }
         }
 
-        if errors.count > 0 {
+        if !errors.isEmpty {
             throw AscError.requestFailed(underlyingErrors: errors)
         }
     }

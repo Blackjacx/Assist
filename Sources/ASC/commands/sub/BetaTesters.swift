@@ -82,17 +82,14 @@ extension ASC.BetaTesters {
         @Option(name: .shortAndLong, help: "The email of the user.")
         var email: String
 
-        @Option(name: .shortAndLong, parsing: .upToNextOption, help: "The groups to add the new beta tester to.")
-        var groupIDs: [String]
+        @Option(name: .shortAndLong, parsing: .upToNextOption, help: "The group names to add the new beta tester to.")
+        var groupNames: [String]
 
         @Argument(help: "The attribute you are interested in. [firstName | lastName | email | attributes] (default: id).")
         var attribute: String?
 
         func run() throws {
-            let result = try ASCService.addBetaTester(email: email,
-                                                      first: firstName,
-                                                      last: lastName,
-                                                      groupIDs: groupIDs)
+            let result = try ASCService.addBetaTester(email: email, first: firstName, last: lastName, groupNames: groupNames)
             result.out(attribute)
         }
     }

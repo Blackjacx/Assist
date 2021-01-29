@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Group: Codable {
+struct Group: Codable, Hashable, Equatable  {
     var type: String
     var id: String
     var attributes: Attributes
@@ -16,11 +16,11 @@ struct Group: Codable {
 
 extension Group {
 
-    struct Attributes: Codable {
+    struct Attributes: Codable, Hashable, Equatable {
         var name: String
     }
 
-    struct Relationships: Codable {
+    struct Relationships: Codable, Hashable, Equatable {
         var app: Relation
         var builds: Relation
         var betaTesters: Relation
