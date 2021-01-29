@@ -1,6 +1,7 @@
 # Changelog
 
 ## [Unreleased]
+* [#21](https://github.com/blackjacx/assist/pull/21): Implement command pattern for asc api-keys - [@blackjacx](https://github.com/blackjacx).
 
 ## [0.0.3] - 2020-11-19
 * [#20](https://github.com/blackjacx/assist/pull/20): Support for Multiple Teams - [@blackjacx](https://github.com/blackjacx).
