@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import ASCKit
+import Engine
 import ArgumentParser
-import Core
 
 /// The main class for the App Store Connect command line tool.
 public final class ASC: ParsableCommand {
@@ -25,7 +26,7 @@ public final class ASC: ParsableCommand {
         // Pass an array to `subcommands` to set up a nested tree of subcommands.
         // With language support for type-level introspection, this could be
         // provided by automatically finding nested `ParsableCommand` types.
-        subcommands: [ApiKeys.self, Groups.self, Apps.self, AppStoreVersions.self, BetaTesters.self],
+        subcommands: [ApiKeys.self, Groups.self, Apps.self, AppStoreVersions.self, BetaTesters.self, Builds.self],
 
         // A default subcommand, when provided, is automatically selected if a
         // subcommand is not given on the command line.

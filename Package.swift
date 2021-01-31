@@ -4,7 +4,6 @@ import PackageDescription
 let package = Package(
     name: "Assist",
     platforms: [
-        // Add support for all platforms starting from a specific version.
         .macOS(.v10_15),
 //        .iOS(.v11),
 //        .watchOS(.v5),
@@ -16,6 +15,10 @@ let package = Package(
         .executable(name: "snap", targets: ["Snap"])
     ],
     dependencies: [
+//        .package(name: "ASCKit", url: "https://github.com/blackjacx/asckit", .branch("develop")),
+//        .package(name: "Engine", url: "https://github.com/blackjacx/Engine", .branch("develop")),
+        .package(name: "ASCKit", path: "../ASCKit"),
+        .package(name: "Engine", path: "../Engine"),
         .package(url: "https://github.com/apple/swift-argument-parser", from: "0.3.1"),
         .package(url: "https://github.com/vapor/jwt-kit.git", from: "4.1.0"),
         .package(url: "https://github.com/kareman/SwiftShell", from: "5.1.0")
@@ -25,16 +28,16 @@ let package = Package(
             name: "Core", 
             dependencies: [
               .product(name: "JWTKit", package: "jwt-kit"),
-              "SwiftShell"
+              "SwiftShell",
+              "Engine",
             ]
         ),
-
 
         .target(
             name: "ASC",
             dependencies: [
-                "Core",
-                .product(name: "ArgumentParser", package: "swift-argument-parser")
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
+                "ASCKit",
             ]
         ),
         .testTarget(

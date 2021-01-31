@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Engine
 import SwiftShell
 
 public struct Simctl {

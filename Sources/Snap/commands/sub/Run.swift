@@ -8,6 +8,7 @@
 import Foundation
 import ArgumentParser
 import Core
+import Engine
 import SwiftShell
 
 /// This script runs your screenshot UNIT tests with the goal to automatically generate as many screenshot varaints

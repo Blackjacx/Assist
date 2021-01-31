@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Engine
 import Core
 
 struct PushService {
@@ -23,11 +24,11 @@ struct PushService {
                             message: String) throws -> EmptyResponse {
 
         let result: RequestResult<EmptyResponse> = 
-          try Self.network.syncRequest(resource: PushResource.pushViaApns(credentials: credentials,
-                                                                          endpoint: endpoint, 
-                                                                          deviceToken: deviceToken, 
-                                                                          topic: topic, 
-                                                                          message: message))
+            Self.network.syncRequest(resource: PushResource.pushViaApns(credentials: credentials,
+                                                                        endpoint: endpoint,
+                                                                        deviceToken: deviceToken,
+                                                                        topic: topic,
+                                                                        message: message))
         switch result {
         case let .success(result): return result
         case let .failure(error): throw error
@@ -46,9 +47,9 @@ struct PushService {
         }
         let credentials = try Json.decoder.decode(JWTFcmCredentials.self, from: data)
         let result: RequestResult<EmptyResponse> = 
-          try Self.network.syncRequest(resource: PushResource.pushViaFcm(deviceToken: deviceToken,
-                                                                         message: message,
-                                                                         credentials: credentials))
+            Self.network.syncRequest(resource: PushResource.pushViaFcm(deviceToken: deviceToken,
+                                                                       message: message,
+                                                                       credentials: credentials))
         switch result {
         case let .success(result): return result
         case let .failure(error): throw error

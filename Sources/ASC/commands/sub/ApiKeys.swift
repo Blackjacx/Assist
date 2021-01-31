@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import ASCKit
+import Engine
 import ArgumentParser
-import Core
 
 extension ASC {
 
@@ -66,7 +67,7 @@ extension ASC.ApiKeys {
                 ApiKeysOperation(.register(key: key)),
                 ApiKeysOperation(.list)
             ]
-            (ops as [Command]).executeSync()
+            ops.executeSync()
         }
     }
 
@@ -87,7 +88,7 @@ extension ASC.ApiKeys {
                 ApiKeysOperation(.delete(keyId: keyId)),
                 ApiKeysOperation(.list)
             ]
-            (ops as [Command]).executeSync()
+            ops.executeSync()
         }
     }
 }

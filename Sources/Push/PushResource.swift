@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Engine
 import Core
 
 enum PushResource {
