@@ -35,12 +35,16 @@ extension ASC.Apps {
         @Option(name: .shortAndLong, help: "Filter which is set as part of the request. See https://developer.apple.com/documentation/appstoreconnectapi/list_apps for possible values.")
         var filters: [Filter] = []
 
+        @Option(name: .shortAndLong, help: "Number of resources to return.")
+        var limit: UInt = ASCKit.Constants.pagingLimit
+        
         @Argument(help: "The attribute you want to get. [name | bundleId | locale | attributes] (default: id).")
         var attribute: String?
 
         func run() throws {
-            let apps = try ASCService.listApps(filters: filters)
-            apps.out(attribute)
+            let op = ListResourceOperation<App>(filters: filters, limit: limit)
+            op.executeSync()
+            try op.result.get().out(attribute)
         }
     }
 }

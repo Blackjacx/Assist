@@ -41,7 +41,7 @@ extension ASC.Groups {
         var attribute: String?
 
         func run() throws {
-            let op = ListBetaGroupsOperation(filters: filters, limit: limit)
+            let op = ListResourceOperation<Group>(filters: filters, limit: limit)
             op.executeSync()
             try op.result.get().out(attribute)
         }

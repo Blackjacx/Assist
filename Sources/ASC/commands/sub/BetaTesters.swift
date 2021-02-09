@@ -34,12 +34,16 @@ extension ASC.BetaTesters {
         @Option(name: .shortAndLong, help: "Filter which is set as part of the request. See https://developer.apple.com/documentation/appstoreconnectapi/list_beta_testers for possible values.")
         var filters: [Filter] = []
 
+        @Option(name: .shortAndLong, help: "Number of resources to return.")
+        var limit: UInt = ASCKit.Constants.pagingLimit
+        
         @Argument(help: "The attribute you are interested in. [firstName | lastName | email | attributes] (default: id).")
         var attribute: String?
 
         func run() throws {
-            let result = try ASCService.listBetaTester(filters: filters)
-            result.out(attribute)
+            let op = ListResourceOperation<BetaTester>(filters: filters, limit: limit)
+            op.executeSync()
+            try op.result.get().out(attribute)
         }
     }
 
