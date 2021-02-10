@@ -191,6 +191,25 @@ list (default)          Find and list builds for all apps in App Store Connect.
 See 'asc help builds <subcommand>' for detailed help.
 ```
 
+### `bundle-ids`
+```
+OVERVIEW: Manage the bundle IDs that uniquely identify your apps.
+
+USAGE: asc bundle-ids <subcommand>
+
+OPTIONS:
+  --version               Show the version.
+  -h, --help              Show help information.
+
+SUBCOMMANDS:
+  list (default)          Find and list bundle IDs that are registered to your
+                          team.
+  register                Register a new bundle ID for app development.
+
+  See 'asc help bundle-ids <subcommand>' for detailed help.
+
+```
+
 ## Contribution
 
 - If you found a **bug**, please open an **issue**.

@@ -26,7 +26,8 @@ public final class ASC: ParsableCommand {
         // Pass an array to `subcommands` to set up a nested tree of subcommands.
         // With language support for type-level introspection, this could be
         // provided by automatically finding nested `ParsableCommand` types.
-        subcommands: [ApiKeys.self, BetaGroups.self, Apps.self, AppStoreVersions.self, BetaTesters.self, Builds.self],
+        subcommands: [ApiKeys.self, BetaGroups.self, Apps.self, AppStoreVersions.self, BetaTesters.self, Builds.self,
+                      BundleIds.self],
 
         // A default subcommand, when provided, is automatically selected if a
         // subcommand is not given on the command line.

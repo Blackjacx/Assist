@@ -24,7 +24,6 @@ extension ASC.Apps {
     /// Find and list apps added in App Store Connect.
     /// https://developer.apple.com/documentation/appstoreconnectapi/list_apps
     struct List: ParsableCommand {
-
         static var configuration = CommandConfiguration(abstract: "Find and list apps added in App Store Connect.")
 
         // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
@@ -36,7 +35,7 @@ extension ASC.Apps {
         var filters: [Filter] = []
 
         @Option(name: .shortAndLong, help: "Number of resources to return.")
-        var limit: UInt = ASCKit.Constants.pagingLimit
+        var limit: UInt?
         
         @Argument(help: "The attribute you want to get. [name | bundleId | locale | attributes] (default: id).")
         var attribute: String?

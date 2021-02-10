@@ -35,7 +35,7 @@ extension ASC.BetaTesters {
         var filters: [Filter] = []
 
         @Option(name: .shortAndLong, help: "Number of resources to return.")
-        var limit: UInt = ASCKit.Constants.pagingLimit
+        var limit: UInt?
         
         @Argument(help: "The attribute you are interested in. [firstName | lastName | email | attributes] (default: id).")
         var attribute: String?

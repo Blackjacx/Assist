@@ -24,7 +24,6 @@ extension ASC.Builds {
     /// Find and list builds for all apps in App Store Connect.
     /// https://developer.apple.com/documentation/appstoreconnectapi/list_builds
     struct List: ParsableCommand {
-
         static var configuration = CommandConfiguration(abstract: "Find and list builds for all apps in App Store Connect.")
 
         // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
@@ -36,7 +35,7 @@ extension ASC.Builds {
         var filters: [Filter] = []
 
         @Option(name: .shortAndLong, help: "Number of resources to return.")
-        var limit: UInt = ASCKit.Constants.pagingLimit
+        var limit: UInt?
 
         @Argument(help: "The attribute you want to get [expired, minOsVersion, processingState, version, usesNonExemptEncryption, uploadedDate, expirationDate] (default: id).")
         var attribute: String?
