@@ -41,7 +41,7 @@ extension ASC.BetaTesters {
         var attribute: String?
 
         func run() throws {
-            let op = ListResourceOperation<BetaTester>(filters: filters, limit: limit)
+            let op = ListOperation<BetaTester>(filters: filters, limit: limit)
             op.executeSync()
             try op.result.get().out(attribute)
         }

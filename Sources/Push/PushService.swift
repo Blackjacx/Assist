@@ -24,7 +24,7 @@ struct PushService {
                             message: String) throws -> EmptyResponse {
 
         let result: RequestResult<EmptyResponse> = 
-            Self.network.syncRequest(resource: PushResource.pushViaApns(credentials: credentials,
+            Self.network.syncRequest(endpoint: PushEndpoint.pushViaApns(credentials: credentials,
                                                                         endpoint: endpoint,
                                                                         deviceToken: deviceToken,
                                                                         topic: topic,
@@ -47,32 +47,12 @@ struct PushService {
         }
         let credentials = try Json.decoder.decode(JWTFcmCredentials.self, from: data)
         let result: RequestResult<EmptyResponse> = 
-            Self.network.syncRequest(resource: PushResource.pushViaFcm(deviceToken: deviceToken,
+            Self.network.syncRequest(endpoint: PushEndpoint.pushViaFcm(deviceToken: deviceToken,
                                                                        message: message,
                                                                        credentials: credentials))
         switch result {
         case let .success(result): return result
         case let .failure(error): throw error
         }
-    }
-}
-
-extension PushService: Service {
-
-    func jsonDecode<T: Decodable>(_ type: T.Type, from data: Data) throws -> T {
-
-        let dataResult = Result {
-            try Json.decoder.decode(DataWrapper<T>.self, from: data)
-        }.map {
-            $0.object
-        }
-
-        guard (try? dataResult.get()) != nil else {
-            // Decode model directly
-            return try Json.decoder.decode(T.self, from: data)
-        }
-
-        // Extract data wrapped model OR throw the error from decoding it
-        return try dataResult.get()
     }
 }

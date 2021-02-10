@@ -1,5 +1,5 @@
 //
-//  PushResource.swift
+//  PushEndpoint.swift
 //  Push
 //
 //  Created by Stefan Herold on 11.08.20.
@@ -9,15 +9,13 @@ import Foundation
 import Engine
 import Core
 
-enum PushResource {
+enum PushEndpoint {
     case pushViaApns(credentials: JWTApnsCredentials, endpoint: Push.Apns.Endpoint, deviceToken: String, topic: String, message: String)
     case pushViaFcm(deviceToken: String, message: String, credentials: JWTFcmCredentials)
 }
 
-extension PushResource: Resource {
-
+extension PushEndpoint: Endpoint {
     static var token: String?
-    static let service: Service = PushService()
 
     var host: String { 
       switch self {
@@ -99,5 +97,21 @@ extension PushResource: Resource {
         case let .pushViaFcm(deviceToken, message, _):
           return ["message": ["notification": ["title": "Hello FCM", "body": message], "token": deviceToken]]
         }
+    }
+
+    func jsonDecode<T>(_ type: T.Type, from data: Data) throws -> T where T : Decodable {
+        let dataResult = Result {
+            try Json.decoder.decode(DataWrapper<T>.self, from: data)
+        }.map {
+            $0.object
+        }
+
+        guard (try? dataResult.get()) != nil else {
+            // Decode model directly
+            return try Json.decoder.decode(T.self, from: data)
+        }
+
+        // Extract data wrapped model OR throw the error from decoding it
+        return try dataResult.get()
     }
 }

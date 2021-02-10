@@ -42,7 +42,7 @@ extension ASC.Apps {
         var attribute: String?
 
         func run() throws {
-            let op = ListResourceOperation<App>(filters: filters, limit: limit)
+            let op = ListOperation<App>(filters: filters, limit: limit)
             op.executeSync()
             try op.result.get().out(attribute)
         }

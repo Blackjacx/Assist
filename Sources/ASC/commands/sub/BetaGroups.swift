@@ -1,5 +1,5 @@
 //
-//  Groups.swift
+//  BetaGroups.swift
 //  ASC
 //
 //  Created by Stefan Herold on 20.07.20.
@@ -11,7 +11,7 @@ import ArgumentParser
 
 extension ASC {
 
-    struct Groups: ParsableCommand {
+    struct BetaGroups: ParsableCommand {
         static var configuration = CommandConfiguration(
             abstract: "Manage groups of beta testers that have access to one or more builds.",
             subcommands: [List.self],
@@ -19,7 +19,7 @@ extension ASC {
     }
 }
 
-extension ASC.Groups {
+extension ASC.BetaGroups {
 
     /// Find and list beta groups for all apps.
     /// https://developer.apple.com/documentation/appstoreconnectapi/list_beta_groups
@@ -41,7 +41,7 @@ extension ASC.Groups {
         var attribute: String?
 
         func run() throws {
-            let op = ListResourceOperation<Group>(filters: filters, limit: limit)
+            let op = ListOperation<BetaGroup>(filters: filters, limit: limit)
             op.executeSync()
             try op.result.get().out(attribute)
         }

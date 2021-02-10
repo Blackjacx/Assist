@@ -50,10 +50,10 @@ asc api-keys delete -k "key-id"
 
 
 # list is the default 
-asc groups                                
+asc beta-groups                                
 
-# list only groups with a specific name
-asc groups -g "group-name"
+# list only beta groups with a specific name
+asc beta-groups -g "group-name"
 
 
 
@@ -87,15 +87,32 @@ OVERVIEW: Lists, registers and deletes App Store Connect API keys on your Mac.
 USAGE: asc api-keys <subcommand>
 
 OPTIONS:
-  --version               Show the version.
-  -h, --help              Show help information.
+--version               Show the version.
+-h, --help              Show help information.
 
 SUBCOMMANDS:
-  list (default)          List locally stored App Store Connect API keys keys.
-  register                Registers App Store Connect API keys locally.
-  delete                  Delete locally stored App Store Connect API keys.
+list (default)          List locally stored App Store Connect API keys keys.
+register                Registers App Store Connect API keys locally.
+delete                  Delete locally stored App Store Connect API keys.
 
-  See 'asc help api-keys <subcommand>' for detailed help.
+See 'asc help api-keys <subcommand>' for detailed help.
+```
+
+### `beta-groups`
+
+```
+OVERVIEW: Manage groups of beta testers that have access to one or more builds.
+
+USAGE: asc beta-groups <subcommand>
+
+OPTIONS:
+--version               Show the version.
+-h, --help              Show help information.
+
+SUBCOMMANDS:
+list (default)          Find and list beta testers for all apps, builds, and beta groups.
+
+See 'asc help beta-groups <subcommand>' for detailed help.
 ```
 
 ### `beta-testers`
@@ -106,38 +123,20 @@ OVERVIEW: Manage people who can install and test prerelease builds.
 USAGE: asc beta-testers <subcommand>
 
 OPTIONS:
-  --version               Show the version.
-  -h, --help              Show help information.
+--version               Show the version.
+-h, --help              Show help information.
 
 SUBCOMMANDS:
-  list (default)          Find and list beta testers for all apps, builds, and
-                          beta groups.
-  invite                  Send or resend an invitation to a beta tester to test
-                          specified apps.
-  add                     Create a beta tester assigned to a group, a build, or
-                          an app.
-  delete                  Remove a beta tester's ability to test all or
-                          specific apps.
+list (default)          Find and list beta testers for all apps, builds, and
+beta groups.
+invite                  Send or resend an invitation to a beta tester to test
+specified apps.
+add                     Create a beta tester assigned to a group, a build, or
+an app.
+delete                  Remove a beta tester's ability to test all or
+specific apps.
 
-  See 'asc help beta-testers <subcommand>' for detailed help.
-
-```
-
-### `groups`
-
-```
-OVERVIEW: Manage groups of beta testers that have access to one or more builds.
-
-USAGE: asc groups <subcommand>
-
-OPTIONS:
-  --version               Show the version.
-  -h, --help              Show help information.
-
-SUBCOMMANDS:
-  list (default)          Find and list beta testers for all apps, builds, and beta groups.
-
-  See 'asc help groups <subcommand>' for detailed help.
+See 'asc help beta-testers <subcommand>' for detailed help.
 ```
 
 ### `apps`
@@ -148,14 +147,13 @@ OVERVIEW: Manage your apps in App Store Connect.
 USAGE: asc apps <subcommand>
 
 OPTIONS:
-  --version               Show the version.
-  -h, --help              Show help information.
+--version               Show the version.
+-h, --help              Show help information.
 
 SUBCOMMANDS:
-  list (default)          Find and list apps added in App Store Connect.
+list (default)          Find and list apps added in App Store Connect.
 
-  See 'asc help apps <subcommand>' for detailed help.
-
+See 'asc help apps <subcommand>' for detailed help.
 ```
 
 ### `app-store-versions`
@@ -166,15 +164,31 @@ OVERVIEW: Manage versions of your app that are available in App Store.
 USAGE: asc app-store-versions <subcommand>
 
 OPTIONS:
-  --version               Show the version.
-  -h, --help              Show help information.
+--version               Show the version.
+-h, --help              Show help information.
 
 SUBCOMMANDS:
-  list (default)          Get a list of all App Store versions of an app across
-                          all platforms.
+list (default)          Get a list of all App Store versions of an app across
+all platforms.
 
-  See 'asc help app-store-versions <subcommand>' for detailed help.
+See 'asc help app-store-versions <subcommand>' for detailed help.
+```
 
+### `builds`
+
+```
+OVERVIEW: Manage builds for testers and submit builds for review.
+
+USAGE: asc builds <subcommand>
+
+OPTIONS:
+--version               Show the version.
+-h, --help              Show help information.
+
+SUBCOMMANDS:
+list (default)          Find and list builds for all apps in App Store Connect.
+
+See 'asc help builds <subcommand>' for detailed help.
 ```
 
 ## Contribution
