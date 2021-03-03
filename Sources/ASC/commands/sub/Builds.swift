@@ -41,7 +41,7 @@ extension ASC.Builds {
         var attribute: String?
 
         func run() throws {
-            let op = ListOperation<Build>(filters: filters, limit: limit)
+            let op = ListOperation<PagableModel<Build>>(filters: filters, limit: limit)
             op.executeSync()
             try op.result.get().out(attribute)
         }

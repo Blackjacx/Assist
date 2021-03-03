@@ -41,7 +41,7 @@ extension ASC.BundleIds {
         var attribute: String?
 
         func run() throws {
-            let op = ListOperation<BundleId>(filters: filters, limit: limit)
+            let op = ListOperation<PagableModel<BundleId>>(filters: filters, limit: limit)
             op.executeSync()
             try op.result.get().out(attribute)
         }
