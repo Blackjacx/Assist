@@ -103,7 +103,7 @@ extension PushEndpoint: Endpoint {
         let dataResult = Result {
             try Json.decoder.decode(DataWrapper<T>.self, from: data)
         }.map {
-            $0.object
+            $0.data
         }
 
         guard (try? dataResult.get()) != nil else {
