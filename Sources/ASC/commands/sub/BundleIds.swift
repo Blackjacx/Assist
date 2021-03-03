@@ -89,13 +89,19 @@ extension ASC.BundleIds {
         @OptionGroup()
         var options: Options
 
-        @Option(name: .shortAndLong, help: "The id of the bundle id.")
-        var id: String
+        @Option(name: .shortAndLong, help: "A list of bundle ids like \"com.company.app_name\".")
+        var identifiers: [String]
 
         func run() throws {
-            let op = DeleteOperation<BundleId>(id: id)
-            op.executeSync()
-            _ = try op.result.get() // logs error
+            // Get id's
+            let filter = Filter(key: BundleId.FilterKey.identifier, value: identifiers.joined(separator: ","))
+            let list = ListOperation<BundleId>(filters: [filter], limit: nil)
+            list.executeSync()
+
+            // Delete items by id
+            let ops = try list.result.get().map { DeleteOperation<BundleId>(model: $0) }
+            ops.executeSync()
+            try ops.forEach { _ = try $0.result.get() } // logs error
         }
     }
 }
