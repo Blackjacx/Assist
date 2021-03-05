@@ -14,7 +14,7 @@ extension ASC {
     struct Builds: ParsableCommand {
         static var configuration = CommandConfiguration(
             abstract: "Manage builds for testers and submit builds for review.",
-            subcommands: [List.self],
+            subcommands: [List.self, Expire.self],
             defaultSubcommand: List.self)
     }
 }
@@ -41,7 +41,30 @@ extension ASC.Builds {
         var attribute: String?
 
         func run() throws {
-            let op = ListOperation<Build>(filters: filters, limit: limit)
+            let op = BuildsOperation(.list(filters: filters, limit: limit))
+            op.executeSync()
+            try op.result.get().out(attribute)
+        }
+    }
+
+    /// Expire a build.
+    /// https://developer.apple.com/documentation/appstoreconnectapi/modify_a_build
+    struct Expire: ParsableCommand {
+        static var configuration = CommandConfiguration(abstract: "Expire a build.")
+
+        // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
+        // `ParsableArguments` type.
+        @OptionGroup()
+        var options: Options
+
+        @Option(name: .shortAndLong, help: "Ids if the builds you with to expire.")
+        var ids: [String] = []
+
+        @Argument(help: "The attribute you want to get [expired, minOsVersion, processingState, version, usesNonExemptEncryption, uploadedDate, expirationDate] (default: id).")
+        var attribute: String?
+
+        func run() throws {
+            let op = BuildsOperation(.expire(ids: ids))
             op.executeSync()
             try op.result.get().out(attribute)
         }
