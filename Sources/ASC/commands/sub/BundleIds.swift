@@ -29,7 +29,7 @@ extension ASC.BundleIds {
         // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
         // `ParsableArguments` type.
         @OptionGroup()
-        var options: Options
+        var options: ApiKeyOptions
 
         @Option(name: .shortAndLong, help: "Filter which is set as part of the request. See https://developer.apple.com/documentation/appstoreconnectapi/bundle_ids for possible values.")
         var filters: [Filter] = []
@@ -56,7 +56,7 @@ extension ASC.BundleIds {
         // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
         // `ParsableArguments` type.
         @OptionGroup()
-        var options: Options
+        var options: ApiKeyOptions
 
         @Option(name: .shortAndLong, help: "The bundleId itself.")
         var identifier: String
@@ -87,7 +87,7 @@ extension ASC.BundleIds {
         // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
         // `ParsableArguments` type.
         @OptionGroup()
-        var options: Options
+        var options: ApiKeyOptions
 
         @Option(name: .shortAndLong, help: "A list of bundle ids like \"com.company.app_name\".")
         var identifiers: [String]

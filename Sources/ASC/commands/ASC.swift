@@ -23,10 +23,12 @@ public final class ASC: ParsableCommand {
         // Commands can define a version for automatic '--version' support.
         version: "0.0.1",
 
-        // Pass an array to `subcommands` to set up a nested tree of subcommands.
-        // With language support for type-level introspection, this could be
-        // provided by automatically finding nested `ParsableCommand` types.
-        subcommands: [ApiKeys.self, BetaGroups.self, Apps.self, AppStoreVersions.self, BetaTesters.self, Builds.self,
+        subcommands: [Keys.self,
+                      BetaGroups.self,
+                      Apps.self,
+                      AppStoreVersions.self,
+                      BetaTesters.self,
+                      Builds.self,
                       BundleIds.self],
 
         // A default subcommand, when provided, is automatically selected if a
@@ -48,3 +50,21 @@ struct Options: ParsableArguments {
     }
 }
 
+/// Here you can specify parameters valid for all sub commands. Only this one includes the API key since specifying
+/// this key is not suitable for every command, e.g. the Keys command itself.
+struct ApiKeyOptions: ParsableArguments {
+
+    @Flag(name: .shortAndLong, help: "Activate verbose logging.")
+    var verbose: Int
+
+    @Option(name: .shortAndLong, help: "The absolute path to the p8 key file.")
+    var apiKeyId: String?
+
+    mutating func validate() throws {
+        // Misusing validate to set the received flag globally
+        Network.verbosityLevel = verbose
+
+        // Set the api key ID passed as parameter
+        ApiKeysOperation.specifiedKeyId = apiKeyId
+    }
+}

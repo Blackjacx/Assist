@@ -29,7 +29,7 @@ extension ASC.Builds {
         // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
         // `ParsableArguments` type.
         @OptionGroup()
-        var options: Options
+        var options: ApiKeyOptions
 
         @Option(name: .shortAndLong, help: "Filter which is set as part of the request. See https://developer.apple.com/documentation/appstoreconnectapi/list_builds for possible values.")
         var filters: [Filter] = []
@@ -55,7 +55,7 @@ extension ASC.Builds {
         // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
         // `ParsableArguments` type.
         @OptionGroup()
-        var options: Options
+        var options: ApiKeyOptions
 
         @Option(name: .shortAndLong, help: "Ids if the builds you with to expire.")
         var ids: [String] = []
