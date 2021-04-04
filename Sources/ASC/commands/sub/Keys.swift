@@ -81,7 +81,7 @@ extension ASC.Keys {
         var issuerId: String
 
         func run() throws {
-            let key = ApiKey(id: id,name: name, path: path, issuerId: issuerId)
+            let key = ApiKey(id: id, name: name, source: .localFilePath(path: path), issuerId: issuerId)
             let op = ApiKeysOperation(.register(key: key))
             op.executeSync()
             try op.result.get().forEach { print($0) }
