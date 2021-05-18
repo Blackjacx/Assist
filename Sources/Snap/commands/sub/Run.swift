@@ -50,7 +50,7 @@ extension Snap {
         @Option(help: "The workspace used to make the screenshots.")
         var workspace: String
 
-        @Option(help: "A list of schemes to run the screenshot tests on.")
+        @Option(name: [.short, .customLong("scheme")], help: "A scheme to run the screenshot tests on. Can be specified multiple times to generate screenshots for multiple schemes.")
         var schemes: [String]
 
         @Option(help: "The mode the tool should run in.")
@@ -106,6 +106,7 @@ extension Snap {
                     styles: \(mode.styles.map { $0.name })
                     devices: \(mode.devices.map { $0.name })
                     platform: \(platform)
+                    schemes: \(schemes)
                     destination: \(outURL.path.appendPathComponent(zipFileName))
                 """
                 print(configMessage)
