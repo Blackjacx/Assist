@@ -41,9 +41,8 @@ extension ASC.BetaTesters {
         var attribute: String?
 
         func run() throws {
-            let op = ListOperation<BetaTester>(filters: filters, limit: limit)
-            op.executeSync()
-            try op.result.get().out(attribute)
+            let list: [BetaTester] = try ASCService.list(filters: filters, limit: limit)
+            list.out(attribute)
         }
     }
 
@@ -111,11 +110,10 @@ extension ASC.BetaTesters {
         func run() throws {
             // Get id's
             let filter = Filter(key: BetaTester.FilterKey.email, value: emails.joined(separator: ","))
-            let listOp = ListOperation<BetaTester>(filters: [filter], limit: nil)
-            listOp.executeSync()
+            let list: [BetaTester] = try ASCService.list(filters: [filter], limit: nil)
 
             // Delete items by id
-            let ops = try listOp.result.get().map { DeleteOperation<BetaTester>(model: $0) }
+            let ops = list.map { DeleteOperation<BetaTester>(model: $0) }
             ops.executeSync()
             try ops.forEach { _ = try $0.result.get() } // logs error
         }

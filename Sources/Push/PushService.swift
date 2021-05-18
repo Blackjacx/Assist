@@ -11,9 +11,6 @@ import Core
 
 struct PushService {
 
-    static let network = Network()
-
-   
     // MARK: - APNS
 
     @discardableResult
@@ -24,11 +21,11 @@ struct PushService {
                             message: String) throws -> EmptyResponse {
 
         let result: RequestResult<EmptyResponse> = 
-            Self.network.syncRequest(endpoint: PushEndpoint.pushViaApns(credentials: credentials,
-                                                                        endpoint: endpoint,
-                                                                        deviceToken: deviceToken,
-                                                                        topic: topic,
-                                                                        message: message))
+            Network.shared.syncRequest(endpoint: PushEndpoint.pushViaApns(credentials: credentials,
+                                                                          endpoint: endpoint,
+                                                                          deviceToken: deviceToken,
+                                                                          topic: topic,
+                                                                          message: message))
         switch result {
         case let .success(result): return result
         case let .failure(error): throw error
@@ -47,9 +44,9 @@ struct PushService {
         }
         let credentials = try Json.decoder.decode(JWTFcmCredentials.self, from: data)
         let result: RequestResult<EmptyResponse> = 
-            Self.network.syncRequest(endpoint: PushEndpoint.pushViaFcm(deviceToken: deviceToken,
-                                                                       message: message,
-                                                                       credentials: credentials))
+            Network.shared.syncRequest(endpoint: PushEndpoint.pushViaFcm(deviceToken: deviceToken,
+                                                                         message: message,
+                                                                         credentials: credentials))
         switch result {
         case let .success(result): return result
         case let .failure(error): throw error

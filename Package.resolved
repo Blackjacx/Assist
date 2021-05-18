@@ -2,12 +2,30 @@
   "object": {
     "pins": [
       {
+        "package": "ASCKit",
+        "repositoryURL": "https://github.com/blackjacx/asckit",
+        "state": {
+          "branch": "develop",
+          "revision": "853f4d9d28f68267f007cf5e036f280200e1c06d",
+          "version": null
+        }
+      },
+      {
+        "package": "Engine",
+        "repositoryURL": "https://github.com/blackjacx/Engine",
+        "state": {
+          "branch": "develop",
+          "revision": "f189acecf7cafd0dec89a1d8fbe6eecfd4669719",
+          "version": null
+        }
+      },
+      {
         "package": "jwt-kit",
         "repositoryURL": "https://github.com/vapor/jwt-kit.git",
         "state": {
           "branch": null,
-          "revision": "6055fe8439769aa3646a3c797d573ce7305849c8",
-          "version": "4.2.0"
+          "revision": "b50b30b567726b14ac282aa6d3a42a52c1ebc8c0",
+          "version": "4.2.2"
         }
       },
       {
@@ -15,8 +33,8 @@
         "repositoryURL": "https://github.com/apple/swift-argument-parser",
         "state": {
           "branch": null,
-          "revision": "831ed5e860a70e745bc1337830af4786b2576881",
-          "version": "0.4.1"
+          "revision": "986d191f94cec88f6350056da59c2e59e83d1229",
+          "version": "0.4.3"
         }
       },
       {
@@ -24,8 +42,17 @@
         "repositoryURL": "https://github.com/apple/swift-crypto.git",
         "state": {
           "branch": null,
-          "revision": "8f4bfa5bc1951440c15710e9e893721aa4b2765c",
-          "version": "1.1.3"
+          "revision": "3bea268b223651c4ab7b7b9ad62ef9b2d4143eb6",
+          "version": "1.1.6"
+        }
+      },
+      {
+        "package": "SwiftKeychainWrapper",
+        "repositoryURL": "https://github.com/jrendel/SwiftKeychainWrapper",
+        "state": {
+          "branch": null,
+          "revision": "185a3165346a03767101c4f62e9a545a0fe0530f",
+          "version": "4.0.1"
         }
       },
       {

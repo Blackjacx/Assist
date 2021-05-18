@@ -41,9 +41,8 @@ extension ASC.Builds {
         var attribute: String?
 
         func run() throws {
-            let op = BuildsOperation(.list(filters: filters, limit: limit))
-            op.executeSync()
-            try op.result.get().out(attribute)
+            let list: [Build] = try ASCService.list(filters: filters, limit: limit)
+            list.out(attribute)
         }
     }
 

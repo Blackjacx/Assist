@@ -41,9 +41,8 @@ extension ASC.BundleIds {
         var attribute: String?
 
         func run() throws {
-            let op = ListOperation<BundleId>(filters: filters, limit: limit)
-            op.executeSync()
-            try op.result.get().out(attribute)
+            let list: [BundleId] = try ASCService.list(filters: filters, limit: limit)
+            list.out(attribute)
         }
     }
 
@@ -95,11 +94,10 @@ extension ASC.BundleIds {
         func run() throws {
             // Get id's
             let filter = Filter(key: BundleId.FilterKey.identifier, value: identifiers.joined(separator: ","))
-            let list = ListOperation<BundleId>(filters: [filter], limit: nil)
-            list.executeSync()
+            let list: [BundleId] = try ASCService.list(filters: [filter], limit: nil)
 
             // Delete items by id
-            let ops = try list.result.get().map { DeleteOperation<BundleId>(model: $0) }
+            let ops = list.map { DeleteOperation<BundleId>(model: $0) }
             ops.executeSync()
             try ops.forEach { _ = try $0.result.get() } // logs error
         }

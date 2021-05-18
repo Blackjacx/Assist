@@ -81,18 +81,19 @@ public extension Simctl {
         }
     }
 
-    static func snap(styles: [Style], workspace: String, schemes: [String], deviceIds: [String], outURL: URL) throws {
+    static func snap(styles: [Style], workspace: String, schemes: [String], deviceIds: [String], outURL: URL, zipFileName: String) throws {
 
         for style in styles {
             try updateStyle(style, deviceIds: deviceIds)
             try updateStatusBar(deviceIds: deviceIds)
 
             for scheme in schemes {
-                print("   ➡️  Running test plan for scheme '\(scheme)' and style '\(style)'")
-
                 let currentURL = outURL.appendingPathComponent(scheme).appendingPathComponent(style.rawValue)
                 let resultsBundleURL = currentURL.appendingPathComponent("result_bundle.xcresult")
                 let screensURL = currentURL.appendingPathComponent("screens")
+                let testPlanName = "\(scheme)-Screenshots"
+
+                print("   ➡️  Running test plan for scheme '\(scheme)' and style '\(style)'. Test plan name expected: \(testPlanName)")
 
                 // This command just needs the binaries and the path to the xctestrun file created before the actual
                 // testing. There everything can be configured to run the tests without needing the source code,
@@ -102,7 +103,7 @@ public extension Simctl {
                     workspace: workspace,
                     schemes: [scheme],
                     deviceIds: deviceIds,
-                    testPlan: "\(scheme)-Screenshots",
+                    testPlan: testPlanName,
                     resultsBundleURL: resultsBundleURL)
 
                 print("   ➡️  Extracting screenshots from xcresult bundle '\(resultsBundleURL.path)' for scheme '\(scheme)' and style '\(style)'")
@@ -120,7 +121,7 @@ public extension Simctl {
             // Switch into folder to prevent storage of absolute paths
             FileManager.default.changeCurrentDirectoryPath(outURL.path)
 
-            try Zip.zip(outFile: "screens_\(scheme).zip",
+            try Zip.zip(outFile: zipFileName,
                         relativeTargetFolder: scheme,
                         excludePattern: "*.xcresult*")
 

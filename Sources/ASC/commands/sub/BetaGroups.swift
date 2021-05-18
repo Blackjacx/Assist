@@ -41,9 +41,8 @@ extension ASC.BetaGroups {
         var attribute: String?
 
         func run() throws {
-            let op = ListOperation<BetaGroup>(filters: filters, limit: limit)
-            op.executeSync()
-            try op.result.get().out(attribute)
+            let list: [BetaGroup] = try ASCService.list(filters: filters, limit: limit)
+            list.out(attribute)
         }
     }
 }

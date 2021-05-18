@@ -15,8 +15,11 @@ enum PushEndpoint {
 }
 
 extension PushEndpoint: Endpoint {
+
     static var token: String?
 
+    var url: URL? { nil }
+    
     var host: String { 
       switch self {
         case .pushViaApns(_, let endpoint, _, _, _): return endpoint.host

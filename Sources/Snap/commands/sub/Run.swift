@@ -56,8 +56,11 @@ extension Snap {
         @Option(help: "The mode the tool should run in.")
         var mode: ExecutionMode
 
-        @Option(help: "An optional platform to be used. Omit to use the latest. Currently only iOS is supported.")
+        @Option(help: "The destination directory where the screenshots and the zip archive should be stored.")
         var destinationDir: String?
+
+        @Option(help: "The zip file name that should be used.")
+        var zipFileName: String
 
         @Option(help: "An optional platform to be used. Omit to use the latest. Currently only iOS is supported.")
         var platform: Simctl.Platform?
@@ -103,7 +106,7 @@ extension Snap {
                     styles: \(mode.styles.map { $0.name })
                     devices: \(mode.devices.map { $0.name })
                     platform: \(platform)
-                    destination: \(outURL.path)
+                    destination: \(outURL.path.appendPathComponent(zipFileName))
                 """
                 print(configMessage)
 
@@ -119,10 +122,18 @@ extension Snap {
                 print("✅  \(deviceIds)")
 
                 print("➡️  Building all requested schemes for testing")
-                try Xcodebuild.execute(cmd: .buildForTesting, workspace: workspace, schemes: schemes, deviceIds: deviceIds)
+                try Xcodebuild.execute(cmd: .buildForTesting,
+                                       workspace: workspace,
+                                       schemes: schemes,
+                                       deviceIds: deviceIds)
 
                 print("➡️  Taking screenshots for all requested configs")
-                try Simctl.snap(styles: mode.styles, workspace: workspace, schemes: schemes, deviceIds: deviceIds, outURL: outURL)
+                try Simctl.snap(styles: mode.styles,
+                                workspace: workspace,
+                                schemes: schemes,
+                                deviceIds: deviceIds,
+                                outURL: outURL,
+                                zipFileName: zipFileName)
 
                 print("✅  Find your screens in \(outURL.path)")
 
