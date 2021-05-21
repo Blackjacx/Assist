@@ -1,4 +1,4 @@
-// swift-tools-version:5.4
+// swift-tools-version:5.3
 import PackageDescription
 
 let package = Package(
@@ -33,7 +33,7 @@ let package = Package(
             ]
         ),
 
-        .executableTarget(
+        .target(
             name: "ASC",
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
@@ -46,7 +46,7 @@ let package = Package(
         ),
 
 
-        .executableTarget(
+        .target(
             name: "Push",
             dependencies: [
                 "Core",
@@ -59,7 +59,7 @@ let package = Package(
         ),
 
 
-        .executableTarget(
+        .target(
             name: "Snap",
             dependencies: [
                 "Core",

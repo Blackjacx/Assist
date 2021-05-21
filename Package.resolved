@@ -6,7 +6,7 @@
         "repositoryURL": "https://github.com/blackjacx/asckit",
         "state": {
           "branch": "develop",
-          "revision": "853f4d9d28f68267f007cf5e036f280200e1c06d",
+          "revision": "cbe736252cef96f7d1ff7059a0708591293c1002",
           "version": null
         }
       },
@@ -15,7 +15,7 @@
         "repositoryURL": "https://github.com/blackjacx/Engine",
         "state": {
           "branch": "develop",
-          "revision": "f189acecf7cafd0dec89a1d8fbe6eecfd4669719",
+          "revision": "47855b04cf96a56ed6dde6aa555db87f62cfdbcc",
           "version": null
         }
       },

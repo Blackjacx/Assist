@@ -98,7 +98,7 @@ extension Snap {
             }
 
             do {
-                let platform = try platform?.rawValue ?? Simctl.latestAvailableIOS()
+                let platform = try self.platform?.rawValue ?? Simctl.latestAvailableIOS()
 
                 let configMessage = """
                 Using the following config:
