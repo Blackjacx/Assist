@@ -21,7 +21,7 @@ public final class ASC: ParsableCommand {
         abstract: "A utility for accessing the App Store Connect API.",
 
         // Commands can define a version for automatic '--version' support.
-        version: "0.0.1",
+        version: "0.0.6",
 
         subcommands: [Keys.self,
                       BetaGroups.self,
