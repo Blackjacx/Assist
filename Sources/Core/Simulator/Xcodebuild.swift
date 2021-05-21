@@ -42,7 +42,7 @@ public extension Xcodebuild {
             let out = run("xcrun", args)
 
             if let error = out.error {
-                print(out.stderror)
+                Logger.shared.error(out.stderror)
                 throw error
             }
         }

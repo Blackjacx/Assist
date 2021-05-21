@@ -98,7 +98,7 @@ extension Snap {
             }
 
             do {
-                let platform = try self.platform?.rawValue ?? Simctl.latestAvailableIOS()
+                let platform = try platform?.rawValue ?? Simctl.latestAvailableIOS()
 
                 let configMessage = """
                 Using the following config:
@@ -109,26 +109,26 @@ extension Snap {
                     schemes: \(schemes)
                     destination: \(outURL.path.appendPathComponent(zipFileName))
                 """
-                print(configMessage)
+                Logger.shared.info(configMessage)
 
-                print("➡️  Killing all open simulators")
+                Logger.shared.info("Killing all open simulators")
                 SwiftShell.run("killall", ["simulator"])
 
-                print("➡️  Finding runtime for platform \(platform)")
+                Logger.shared.info("Finding runtime for platform \(platform)")
                 let runtime = try Simctl.runtimeForPlatform(platform)
-                print("✅  Runtime found \(runtime)")
+                Logger.shared.info("Runtime found \(runtime)")
 
-                print("➡️  Find IDs of preferred device IDs")
+                Logger.shared.info("Find IDs of preferred device IDs")
                 let deviceIds = try Simctl.deviceIdsFor(deviceTypes: mode.devices, runtime: runtime)
-                print("✅  \(deviceIds)")
+                Logger.shared.info("Device IDs Found: \(deviceIds)")
 
-                print("➡️  Building all requested schemes for testing")
+                Logger.shared.info("Building all requested schemes for testing")
                 try Xcodebuild.execute(cmd: .buildForTesting,
                                        workspace: workspace,
                                        schemes: schemes,
                                        deviceIds: deviceIds)
 
-                print("➡️  Taking screenshots for all requested configs")
+                Logger.shared.info("Taking screenshots for all requested configs")
                 try Simctl.snap(styles: mode.styles,
                                 workspace: workspace,
                                 schemes: schemes,
@@ -136,7 +136,7 @@ extension Snap {
                                 outURL: outURL,
                                 zipFileName: zipFileName)
 
-                print("✅  Find your screens in \(outURL.path)")
+                Logger.shared.info("Find your screens in \(outURL.path)")
 
             } catch {
                 // Do not remove the destination directory when it came from outside.
@@ -175,8 +175,8 @@ extension Snap.Run {
 
         var devices: [Simctl.DeviceType] {
             switch self {
-            case .fast: return [.iPhone11Pro]
-            case .full: return [.iPhoneSE, .iPhone11Pro, .iPhone11ProMax]
+            case .fast: return [.iPhone12]
+            case .full: return [.iPhoneSE, .iPhone12Pro, .iPhone12ProMax]
             }
         }
 

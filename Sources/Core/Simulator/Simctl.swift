@@ -93,7 +93,7 @@ public extension Simctl {
                 let screensURL = currentURL.appendingPathComponent("screens")
                 let testPlanName = "\(scheme)-Screenshots"
 
-                print("   ➡️  Running test plan for scheme '\(scheme)' and style '\(style)'. Test plan name expected: \(testPlanName)")
+                Logger.shared.info("Running test plan for scheme '\(scheme)' and style '\(style)'. Test plan name expected: \(testPlanName)", inset: 1)
 
                 // This command just needs the binaries and the path to the xctestrun file created before the actual
                 // testing. There everything can be configured to run the tests without needing the source code,
@@ -106,7 +106,7 @@ public extension Simctl {
                     testPlan: testPlanName,
                     resultsBundleURL: resultsBundleURL)
 
-                print("   ➡️  Extracting screenshots from xcresult bundle '\(resultsBundleURL.path)' for scheme '\(scheme)' and style '\(style)'")
+                Logger.shared.info("Extracting screenshots from xcresult bundle '\(resultsBundleURL.path)' for scheme '\(scheme)' and style '\(style)'", inset: 1)
 
                 try FileManager.default.createDirectory(at: screensURL, withIntermediateDirectories: true, attributes: nil)
                 try Mint.screenshots(resultsBundleURL: resultsBundleURL, screensURL: screensURL)
@@ -114,7 +114,7 @@ public extension Simctl {
         }
 
         for scheme in schemes {
-            print("   ➡️  Package files into one ZIP for scheme '\(scheme)'")
+            Logger.shared.info("Package files into one ZIP for scheme '\(scheme)'", inset: 1)
 
             let originalDirectoryPath = FileManager.default.currentDirectoryPath
 
@@ -153,8 +153,9 @@ public extension Simctl {
 
     enum DeviceType: String, CaseIterable {
         case iPhoneSE = "iPhone SE (2nd generation)"
-        case iPhone11Pro = "iPhone 11 Pro"
-        case iPhone11ProMax = "iPhone 11 Pro Max"
+        case iPhone12 = "iPhone 12"
+        case iPhone12Pro = "iPhone 12 Pro"
+        case iPhone12ProMax = "iPhone 12 Pro Max"
 
         public var name: String { "\(self)" }
     }
@@ -164,6 +165,7 @@ public extension Simctl {
     enum Platform: String, CaseIterable {
         case ios12_4 = "iOS 12.4"
         case ios13_7 = "iOS 13.6"
+        case ios14_5 = "iOS 14.5"
 
         public var name: String { "\(self)" }
     }
@@ -206,7 +208,7 @@ private extension Simctl {
         let out = run(bash: "xcrun simctl list --json")
 
         if let error = out.error {
-            print(out.stderror)
+            Logger.shared.error(out.stderror)
             throw error
         }
 
@@ -229,7 +231,7 @@ private extension Simctl {
         let out = run(bash: "xcrun simctl boot '\(deviceId)'")
 
         if let error = out.error {
-            print(out.stderror)
+            Logger.shared.error(out.stderror)
             throw error
         }
     }
@@ -239,7 +241,7 @@ private extension Simctl {
         let out = run(bash: "xcrun simctl shutdown '\(deviceId)'")
 
         if let error = out.error {
-            print(out.stderror)
+            Logger.shared.error(out.stderror)
             throw error
         }
     }
@@ -249,7 +251,7 @@ private extension Simctl {
         let out = run(bash: "xcrun simctl ui '\(deviceId)' appearance '\(style.rawValue)'")
 
         if let error = out.error {
-            print(out.stderror)
+            Logger.shared.error(out.stderror)
             throw error
         }
     }
@@ -265,7 +267,7 @@ private extension Simctl {
         let out = run(bash: "xcrun simctl create '\(name)' '\(id)' '\(runtime.identifier)'")
 
         if let error = out.error {
-            print(out.stderror)
+            Logger.shared.error(out.stderror)
             throw error
         }
         return out.stdout
@@ -297,7 +299,7 @@ private extension Simctl {
         let out = run("xcrun", args)
 
         if let error = out.error {
-            print(out.stderror)
+            Logger.shared.error(out.stderror)
             throw error
         }
     }
