@@ -58,13 +58,13 @@ struct ApiKeyOptions: ParsableArguments {
     var verbose: Int
 
     @Option(name: .shortAndLong, help: "The absolute path to the p8 key file.")
-    var apiKeyId: String?
+    var keyId: String?
 
     mutating func validate() throws {
         // Misusing validate to set the received flag globally
         Network.verbosityLevel = verbose
 
         // Set the api key ID passed as parameter
-        ApiKeysOperation.specifiedKeyId = apiKeyId
+        ApiKeysOperation.specifiedKeyId = keyId
     }
 }
