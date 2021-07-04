@@ -13,23 +13,22 @@ extension Push {
 
     struct Fcm: ParsableCommand {
 
-      static var configuration = CommandConfiguration(
-        abstract: "Access FCM, see https://firebase.google.com/docs/cloud-messaging"
-      )
+        static var configuration = CommandConfiguration(
+            abstract: "Access FCM, see https://firebase.google.com/docs/cloud-messaging"
+        )
 
-      // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
-      // `ParsableArguments` type.
-      @OptionGroup()
-      var options: Options
+        // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
+        // `ParsableArguments` type.
+        @OptionGroup()
+        var options: Options
 
-      @Option(name: .long, help: "The path to your service-account json file.")
-      var serviceAccountJsonPath: String
+        @Option(name: .long, help: "The path to your service-account json file.")
+        var serviceAccountJsonPath: String
 
-      func run() throws {
-
-        try PushService.pushViaFcm(deviceToken: options.deviceToken, 
-                                   message: options.message,
-                                   serviceAccountJsonPath: serviceAccountJsonPath)
-      }
+        func run() async throws {
+            try await PushService.pushViaFcm(deviceToken: options.deviceToken,
+                                             message: options.message,
+                                             serviceAccountJsonPath: serviceAccountJsonPath)
+        }
     }
 }
