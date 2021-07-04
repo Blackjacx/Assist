@@ -69,10 +69,12 @@ extension ASC.BundleIds {
         @Option(name: .shortAndLong, help: "A custom prefix for the bundleId")
         var seedId: String?
 
-        func run() throws {
-            let op = RegisterBundleIdOperation(identifier: identifier, name: name, platform: platform, seedId: seedId)
-            op.executeSync()
-            _ = try op.result.get()
+        @Argument(help: "The attribute you want to get. [identifier | name | platform | seedId] (default: id).")
+        var attribute: String?
+
+        func run() async throws {
+            let bundleId: BundleId = try await ASCService.registerBundleId(identifier, name: name, platform: platform, seedId: seedId)
+            [bundleId].out(attribute)
         }
     }
 
@@ -92,14 +94,21 @@ extension ASC.BundleIds {
         var identifiers: [String]
 
         func run() async throws {
-            // Get id's
-            let filter = Filter(key: BundleId.FilterKey.identifier, value: identifiers.joined(separator: ","))
-            let list: [BundleId] = try await ASCService.list(filters: [filter], limit: nil)
 
-            // Delete items by id
-            let ops = list.map { DeleteOperation<BundleId>(model: $0) }
-            ops.executeSync()
-            try ops.forEach { _ = try $0.result.get() } // logs error
+            var errors: [Error] = []
+
+            for id in identifiers {
+                do {
+                    let deletedId = try await ASCService.deleteBundleId(id)
+                    print("Successfully removed \(deletedId)")
+                } catch {
+                    errors.append(error)
+                }
+            }
+
+            if !errors.isEmpty {
+                throw AscError.requestFailed(underlyingErrors: errors)
+            }
         }
     }
 }

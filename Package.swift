@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "Assist",
     platforms: [
-        .macOS("12.0"),
+        .macOS("12"),
 //        .iOS(.v11),
 //        .watchOS(.v5),
 //        .tvOS(.v11)
