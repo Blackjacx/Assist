@@ -11,6 +11,7 @@ import ArgumentParser
 import Core
 
 /// The main class for the Push command line tool.
+@main
 public final class Push: ParsableCommand {
 
     public static var configuration = CommandConfiguration(

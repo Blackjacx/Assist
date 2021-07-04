@@ -11,6 +11,7 @@ import ArgumentParser
 import Core
 
 /// The main class for the screen-shotting tool
+@main
 public final class Snap: ParsableCommand {
 
     public static var configuration = CommandConfiguration(

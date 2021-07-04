@@ -55,6 +55,10 @@ extension PushEndpoint: Endpoint {
         }
     }
 
+    var timeout: TimeInterval {
+        5
+    }
+    
     var shouldAuthorize: Bool {
         true
     }
