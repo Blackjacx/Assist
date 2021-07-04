@@ -40,8 +40,8 @@ extension ASC.BetaTesters {
         @Argument(help: "The attribute you are interested in. [firstName | lastName | email | attributes] (default: id).")
         var attribute: String?
 
-        func run() throws {
-            let list: [BetaTester] = try ASCService.list(filters: filters, limit: limit)
+        func run() async throws {
+            let list: [BetaTester] = try await ASCService.list(filters: filters, limit: limit)
             list.out(attribute)
         }
     }
@@ -62,8 +62,8 @@ extension ASC.BetaTesters {
         @Option(name: .shortAndLong, help: "The unique email of the tester to send the invite to.")
         var email: String
 
-        func run() throws {
-            try ASCService.inviteBetaTester(email: email, appIds: appIds)
+        func run() async throws {
+            try await ASCService.inviteBetaTester(email: email, appIds: appIds)
         }
     }
 
@@ -89,8 +89,8 @@ extension ASC.BetaTesters {
         @Option(name: .shortAndLong, parsing: .upToNextOption, help: "The group names to add the new beta tester to.")
         var groupNames: [String]
 
-        func run() throws {
-            try ASCService.addBetaTester(email: email, first: firstName, last: lastName, groupNames: groupNames)
+        func run() async throws {
+            try await ASCService.addBetaTester(email: email, first: firstName, last: lastName, groupNames: groupNames)
         }
     }
 
@@ -107,10 +107,10 @@ extension ASC.BetaTesters {
         @Option(name: .shortAndLong, help: "A list of emails of users you want to remove.")
         var emails: [String]
 
-        func run() throws {
+        func run() async throws {
             // Get id's
             let filter = Filter(key: BetaTester.FilterKey.email, value: emails.joined(separator: ","))
-            let list: [BetaTester] = try ASCService.list(filters: [filter], limit: nil)
+            let list: [BetaTester] = try await ASCService.list(filters: [filter], limit: nil)
 
             // Delete items by id
             let ops = list.map { DeleteOperation<BetaTester>(model: $0) }

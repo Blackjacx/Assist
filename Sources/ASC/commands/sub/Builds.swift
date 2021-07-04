@@ -40,8 +40,8 @@ extension ASC.Builds {
         @Argument(help: "The attribute you want to get [expired, minOsVersion, processingState, version, usesNonExemptEncryption, uploadedDate, expirationDate] (default: id).")
         var attribute: String?
 
-        func run() throws {
-            let list: [Build] = try ASCService.list(filters: filters, limit: limit)
+        func run() async throws {
+            let list: [Build] = try await ASCService.list(filters: filters, limit: limit)
             list.out(attribute)
         }
     }
