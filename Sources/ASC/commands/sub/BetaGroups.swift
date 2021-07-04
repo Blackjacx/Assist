@@ -40,8 +40,8 @@ extension ASC.BetaGroups {
         @Argument(help: "The attribute you are interested in. [firstName | lastName | email | attributes] (default: id).")
         var attribute: String?
 
-        func run() throws {
-            let list: [BetaGroup] = try ASCService.list(filters: filters, limit: limit)
+        func run() async throws {
+            let list: [BetaGroup] = try await ASCService.list(filters: filters, limit: limit)
             list.out(attribute)
         }
     }

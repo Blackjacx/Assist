@@ -40,8 +40,8 @@ extension ASC.BundleIds {
         @Argument(help: "The attribute you want to get. [identifier | name | platform | seedId] (default: id).")
         var attribute: String?
 
-        func run() throws {
-            let list: [BundleId] = try ASCService.list(filters: filters, limit: limit)
+        func run() async throws {
+            let list: [BundleId] = try await ASCService.list(filters: filters, limit: limit)
             list.out(attribute)
         }
     }
@@ -91,10 +91,10 @@ extension ASC.BundleIds {
         @Option(name: .shortAndLong, help: "A list of bundle ids like \"com.company.app_name\".")
         var identifiers: [String]
 
-        func run() throws {
+        func run() async throws {
             // Get id's
             let filter = Filter(key: BundleId.FilterKey.identifier, value: identifiers.joined(separator: ","))
-            let list: [BundleId] = try ASCService.list(filters: [filter], limit: nil)
+            let list: [BundleId] = try await ASCService.list(filters: [filter], limit: nil)
 
             // Delete items by id
             let ops = list.map { DeleteOperation<BundleId>(model: $0) }

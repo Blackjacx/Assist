@@ -43,8 +43,8 @@ extension ASC.AppStoreVersions {
         @Argument(help: "The attribute you are interested in. [attributes] (default: id).")
         var attribute: String?
 
-        func run() throws {
-            let result = try ASCService.listAppStoreVersions(appIds: appIds, filters: filters, limit: limit)
+        func run() async throws {
+            let result = try await ASCService.listAppStoreVersions(appIds: appIds, filters: filters, limit: limit)
             for item in result {
                 if let readyForSaleVersion = item.versions.filter({ $0.attributes.appStoreState == .readyForSale }).first {
                     print("\(item.app.name.padding(toLength: 30, withPad: " ", startingAt: 0)): \(readyForSaleVersion.attributes.versionString)")

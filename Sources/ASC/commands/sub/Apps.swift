@@ -40,8 +40,8 @@ extension ASC.Apps {
         @Argument(help: "The attribute you want to get. [name | bundleId | locale | attributes] (default: id).")
         var attribute: String?
 
-        func run() throws {
-            let list: [App] = try ASCService.list(filters: filters, limit: limit)
+        func run() async throws {
+            let list: [App] = try await ASCService.list(filters: filters, limit: limit)
             list.out(attribute)
         }
     }
