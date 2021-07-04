@@ -108,14 +108,21 @@ extension ASC.BetaTesters {
         var emails: [String]
 
         func run() async throws {
-            // Get id's
-            let filter = Filter(key: BetaTester.FilterKey.email, value: emails.joined(separator: ","))
-            let list: [BetaTester] = try await ASCService.list(filters: [filter], limit: nil)
 
-            // Delete items by id
-            let ops = list.map { DeleteOperation<BetaTester>(model: $0) }
-            ops.executeSync()
-            try ops.forEach { _ = try $0.result.get() } // logs error
+            var errors: [Error] = []
+
+            for email in emails {
+                do {
+                    let deletedTester = try await ASCService.deleteBetaTester(email: email)
+                    print("Successfully removed \(deletedTester)")
+                } catch {
+                    errors.append(error)
+                }
+            }
+
+            if !errors.isEmpty {
+                throw AscError.requestFailed(underlyingErrors: errors)
+            }
         }
     }
 }

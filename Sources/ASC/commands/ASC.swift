@@ -66,6 +66,6 @@ struct ApiKeyOptions: ParsableArguments {
         Network.verbosityLevel = verbose
 
         // Set the api key ID passed as parameter
-        ApiKeysOperation.specifiedKeyId = keyId
+        ASCService.specifiedKeyId = keyId
     }
 }

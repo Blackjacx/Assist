@@ -34,9 +34,7 @@ extension ASC.Keys {
         var options: Options
 
         func run() throws {
-            let op = ApiKeysOperation(.list)
-            op.executeSync()
-            try op.result.get().forEach { print($0) }
+            ASCService.listApiKeys().forEach { print($0) }
         }
     }
 
@@ -53,9 +51,8 @@ extension ASC.Keys {
         var id: String
 
         func run() throws {
-            let op = ApiKeysOperation(.activate(id: id))
-            op.executeSync()
-            try op.result.get().forEach { print($0) }
+            let activatedKey = try ASCService.activateApiKey(id: id)
+            print(activatedKey)
         }
     }
 
@@ -82,9 +79,8 @@ extension ASC.Keys {
 
         func run() throws {
             let key = ApiKey(id: id, name: name, source: .localFilePath(path: path), issuerId: issuerId)
-            let op = ApiKeysOperation(.register(key: key))
-            op.executeSync()
-            try op.result.get().forEach { print($0) }
+            let registeredKey = try ASCService.registerApiKey(key: key)
+            print(registeredKey)
         }
     }
 
@@ -101,9 +97,8 @@ extension ASC.Keys {
         var id: String
 
         func run() throws {
-            let op = ApiKeysOperation(.delete(id: id))
-            op.executeSync()
-            try op.result.get().forEach { print($0) }
+            let deletedKey = try ASCService.deleteApiKey(id: id)
+            print(deletedKey)
         }
     }
 }

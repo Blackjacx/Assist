@@ -5,6 +5,9 @@ let package = Package(
     name: "Assist",
     platforms: [
       .macOS(.v12)
+//        .iOS(.v11),
+//        .watchOS(.v5),
+//        .tvOS(.v11)
     ],
     products: [
         .executable(name: "asc", targets: ["ASC"]),
