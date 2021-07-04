@@ -2,24 +2,6 @@
   "object": {
     "pins": [
       {
-        "package": "ASCKit",
-        "repositoryURL": "https://github.com/blackjacx/asckit",
-        "state": {
-          "branch": "develop",
-          "revision": "070deeb220425884558e9473403832f4435d3350",
-          "version": null
-        }
-      },
-      {
-        "package": "Engine",
-        "repositoryURL": "https://github.com/blackjacx/Engine",
-        "state": {
-          "branch": "develop",
-          "revision": "47855b04cf96a56ed6dde6aa555db87f62cfdbcc",
-          "version": null
-        }
-      },
-      {
         "package": "jwt-kit",
         "repositoryURL": "https://github.com/vapor/jwt-kit.git",
         "state": {
