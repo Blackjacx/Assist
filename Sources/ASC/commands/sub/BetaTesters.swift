@@ -56,7 +56,7 @@ extension ASC.BetaTesters {
         @OptionGroup()
         var options: ApiKeyOptions
 
-        @Option(name: [.customShort("i", allowingJoined: false), .long], parsing: .upToNextOption, help: "The Apple app ID(s) that uniquely identifiy the app(s) (e.g. -i \"12345678\" -i \"14324567\").")
+        @Option(name: [.customShort("i", allowingJoined: false), .long], parsing: .upToNextOption, help: "The Apple app ID(s) that uniquely identifiy the app(s) (e.g. -i \"12345678\" \"14324567\").")
         var appIds: [String] = []
 
         @Option(name: .shortAndLong, help: "The unique email of the tester to send the invite to.")
