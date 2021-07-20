@@ -72,15 +72,12 @@ public extension Simctl {
 
     static func createDevice(name: String, id: String, runtime: Runtime) throws -> String {
         Logger.shared.info("Create device \(id) with name \"\(name)\" and runtime \(runtime)", inset: 1)
-
-        let deviceId = try Simctl._createDevice(name: name, id: id, runtime: runtime)
-        return deviceId
+        return try Simctl._createDevice(name: name, id: id, runtime: runtime)
     }
 
     static func updateStyle(_ style: Style, deviceIds: [String]) throws {
         try deviceIds.forEach {
             Logger.shared.info("Set style \(style) for device \($0)", inset: 1)
-
             try _boot(deviceId: $0, logInset: 1)
             try _setAppearance(for: $0, style: style)
         }
