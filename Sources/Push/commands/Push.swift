@@ -18,7 +18,7 @@ public final class Push: ParsableCommand {
         abstract: "A utility for sending and testing push notifications to Apple Push Notification Service (APNS) and via Firebase.",
 
         // Commands can define a version for automatic '--version' support.
-        version: "0.0.6",
+        version: "0.0.8",
 
         // Pass an array to `subcommands` to set up a nested tree of subcommands.
         // With language support for type-level introspection, this could be
