@@ -8,6 +8,7 @@
 import Foundation
 import ArgumentParser
 import Core
+import Engine
 import SwiftShell
 
 /// This script runs your screenshot UNIT tests with the goal to automatically generate as many screenshot varaints
@@ -49,14 +50,17 @@ extension Snap {
         @Option(help: "The workspace used to make the screenshots.")
         var workspace: String
 
-        @Option(help: "A list of schemes to run the screenshot tests on.")
+        @Option(name: [.short, .customLong("scheme")], help: "A scheme to run the screenshot tests on. Can be specified multiple times to generate screenshots for multiple schemes.")
         var schemes: [String]
 
         @Option(help: "The mode the tool should run in.")
         var mode: ExecutionMode
 
-        @Option(help: "An optional platform to be used. Omit to use the latest. Currently only iOS is supported.")
+        @Option(help: "The destination directory where the screenshots and the zip archive should be stored.")
         var destinationDir: String?
+
+        @Option(help: "The zip file name that should be used.")
+        var zipFileName: String
 
         @Option(help: "An optional platform to be used. Omit to use the latest. Currently only iOS is supported.")
         var platform: Simctl.Platform?
@@ -102,28 +106,37 @@ extension Snap {
                     styles: \(mode.styles.map { $0.name })
                     devices: \(mode.devices.map { $0.name })
                     platform: \(platform)
-                    destination: \(outURL.path)
+                    schemes: \(schemes)
+                    destination: \(outURL.path.appendPathComponent(zipFileName))
                 """
-                print(configMessage)
+                Logger.shared.info(configMessage)
 
-                print("➡️  Killing all open simulators")
+                Logger.shared.info("Killing all open simulators")
                 SwiftShell.run("killall", ["simulator"])
 
-                print("➡️  Finding runtime for platform \(platform)")
+                Logger.shared.info("Finding runtime for platform \(platform)")
                 let runtime = try Simctl.runtimeForPlatform(platform)
-                print("✅  Runtime found \(runtime)")
+                Logger.shared.info("Runtime found \(runtime)")
 
-                print("➡️  Find IDs of preferred device IDs")
+                Logger.shared.info("Find IDs of preferred device IDs")
                 let deviceIds = try Simctl.deviceIdsFor(deviceTypes: mode.devices, runtime: runtime)
-                print("✅  \(deviceIds)")
+                Logger.shared.info("Device IDs Found: \(deviceIds)")
 
-                print("➡️  Building all requested schemes for testing")
-                try Xcodebuild.execute(cmd: .buildForTesting, workspace: workspace, schemes: schemes, deviceIds: deviceIds)
+                Logger.shared.info("Building all requested schemes for testing")
+                try Xcodebuild.execute(cmd: .buildForTesting,
+                                       workspace: workspace,
+                                       schemes: schemes,
+                                       deviceIds: deviceIds)
 
-                print("➡️  Taking screenshots for all requested configs")
-                try Simctl.snap(styles: mode.styles, workspace: workspace, schemes: schemes, deviceIds: deviceIds, outURL: outURL)
+                Logger.shared.info("Taking screenshots for all requested configs")
+                try Simctl.snap(styles: mode.styles,
+                                workspace: workspace,
+                                schemes: schemes,
+                                deviceIds: deviceIds,
+                                outURL: outURL,
+                                zipFileName: zipFileName)
 
-                print("✅  Find your screens in \(outURL.path)")
+                Logger.shared.info("Find your screens in \(outURL.path)")
 
             } catch {
                 // Do not remove the destination directory when it came from outside.
@@ -162,8 +175,8 @@ extension Snap.Run {
 
         var devices: [Simctl.DeviceType] {
             switch self {
-            case .fast: return [.iPhone11Pro]
-            case .full: return [.iPhoneSE, .iPhone11Pro, .iPhone11ProMax]
+            case .fast: return [.iPhone12]
+            case .full: return [.iPhoneSE, .iPhone12Pro, .iPhone12ProMax]
             }
         }
 

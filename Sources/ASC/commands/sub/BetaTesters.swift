@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import ASCKit
 import ArgumentParser
 
 extension ASC {
@@ -28,17 +29,20 @@ extension ASC.BetaTesters {
         // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
         // `ParsableArguments` type.
         @OptionGroup()
-        var options: Options
+        var options: ApiKeyOptions
 
         @Option(name: .shortAndLong, help: "Filter which is set as part of the request. See https://developer.apple.com/documentation/appstoreconnectapi/list_beta_testers for possible values.")
         var filters: [Filter] = []
 
+        @Option(name: .shortAndLong, help: "Number of resources to return.")
+        var limit: UInt?
+        
         @Argument(help: "The attribute you are interested in. [firstName | lastName | email | attributes] (default: id).")
         var attribute: String?
 
         func run() throws {
-            let result = try ASCService.listBetaTester(filters: filters)
-            result.out(attribute)
+            let list: [BetaTester] = try ASCService.list(filters: filters, limit: limit)
+            list.out(attribute)
         }
     }
 
@@ -50,9 +54,9 @@ extension ASC.BetaTesters {
         // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
         // `ParsableArguments` type.
         @OptionGroup()
-        var options: Options
+        var options: ApiKeyOptions
 
-        @Option(name: .shortAndLong, parsing: .upToNextOption, help: "The opaque resource IDs that uniquely identifiy the resources.")
+        @Option(name: [.customShort("i", allowingJoined: false), .long], parsing: .upToNextOption, help: "The Apple app ID(s) that uniquely identifiy the app(s) (e.g. -i \"12345678\" -i \"14324567\").")
         var appIds: [String] = []
 
         @Option(name: .shortAndLong, help: "The unique email of the tester to send the invite to.")
@@ -71,7 +75,7 @@ extension ASC.BetaTesters {
         // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
         // `ParsableArguments` type.
         @OptionGroup()
-        var options: Options
+        var options: ApiKeyOptions
 
         @Option(name: [.long, .customShort("n")], help: "The first name of the user.")
         var firstName: String
@@ -98,13 +102,20 @@ extension ASC.BetaTesters {
         // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
         // `ParsableArguments` type.
         @OptionGroup()
-        var options: Options
+        var options: ApiKeyOptions
         
         @Option(name: .shortAndLong, help: "A list of emails of users you want to remove.")
         var emails: [String]
 
         func run() throws {
-            try ASCService.deleteBetaTester(emails: emails)
+            // Get id's
+            let filter = Filter(key: BetaTester.FilterKey.email, value: emails.joined(separator: ","))
+            let list: [BetaTester] = try ASCService.list(filters: [filter], limit: nil)
+
+            // Delete items by id
+            let ops = list.map { DeleteOperation<BetaTester>(model: $0) }
+            ops.executeSync()
+            try ops.forEach { _ = try $0.result.get() } // logs error
         }
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Engine
 import ArgumentParser
 import Core
 
@@ -17,7 +18,7 @@ public final class Snap: ParsableCommand {
         abstract: "Make your mobile screenshot automation a breeze and blazingly fast.",
 
         // Commands can define a version for automatic '--version' support.
-        version: "0.0.1",
+        version: "0.0.8",
 
         // Pass an array to `subcommands` to set up a nested tree of subcommands.
         // With language support for type-level introspection, this could be

@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+## [0.0.8] - 2021-08-30Z
+* Specify zipFileName for Snap (https://github.com/Blackjacx/Assist/commit/a10d0f9f561de2d62d1aceace20a09a4a13a503a) - [@blackjacx](https://github.com/blackjacx).
+
 ## [0.0.4] - 2021-01-29
 * [#25](https://github.com/blackjacx/assist/pull/25): Use group name parameter instead of group id's - [@blackjacx](https://github.com/blackjacx).
 * [#21](https://github.com/blackjacx/assist/pull/21): Implement command pattern for asc api-keys - [@blackjacx](https://github.com/blackjacx).
