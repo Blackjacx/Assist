@@ -111,8 +111,7 @@ extension Snap {
                 """
                 Logger.shared.info(configMessage)
 
-                Logger.shared.info("Killing all open simulators")
-                SwiftShell.run("killall", ["simulator"])
+                Simctl.killAllSimulators()
 
                 Logger.shared.info("Finding runtime for platform \(platform)")
                 let runtime = try Simctl.runtimeForPlatform(platform)
