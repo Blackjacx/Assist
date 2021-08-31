@@ -1,6 +1,7 @@
 # Changelog
 
 ## [Unreleased]
+* Add more log statements - [@blackjacx](https://github.com/blackjacx).
 
 ## [0.0.8] - 2021-08-30Z
 * Specify zipFileName for Snap (https://github.com/Blackjacx/Assist/commit/a10d0f9f561de2d62d1aceace20a09a4a13a503a) - [@blackjacx](https://github.com/blackjacx).
