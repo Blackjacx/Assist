@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.0.9] - 2021-08-31Z
 * Add more log statements - [@blackjacx](https://github.com/blackjacx).
 
 ## [0.0.8] - 2021-08-30Z
