@@ -53,8 +53,11 @@ extension Snap {
         @Option(name: [.short, .customLong("scheme")], help: "A scheme to run the screenshot tests on. Can be specified multiple times to generate screenshots for multiple schemes.")
         var schemes: [String]
 
-        @Option(help: "The mode the tool should run in.")
-        var mode: ExecutionMode
+        @Option(parsing: .upToNextOption, help: "The appearances the screenshots should be made for, e.g. --appearances \(Simctl.Style.allCases.map({"\"\($0.parameterName)\""}).joined(separator: " "))")
+        var appearances: [Simctl.Style] = [.light]
+
+        @Option(parsing: .upToNextOption, help: "Devices you want to generate screenshots for, e.g. --devices \(Simctl.DeviceType.allCases.map({"\"\($0.parameterName)\""}).joined(separator: " "))")
+        var devices: [Simctl.DeviceType] = [.iPhone12Pro]
 
         @Option(help: "The destination directory where the screenshots and the zip archive should be stored.")
         var destinationDir: String?
@@ -102,9 +105,8 @@ extension Snap {
 
                 let configMessage = """
                 Using the following config:
-                    mode: \(mode.name)
-                    styles: \(mode.styles.map { $0.name })
-                    devices: \(mode.devices.map { $0.name })
+                    styles: \(appearances.map { $0.parameterName })
+                    devices: \(devices.map { $0.parameterName })
                     platform: \(platform)
                     schemes: \(schemes)
                     destination: \(outURL.path.appendPathComponent(zipFileName))
@@ -118,7 +120,7 @@ extension Snap {
                 Logger.shared.info("Runtime found \(runtime)")
 
                 Logger.shared.info("Find IDs of preferred device IDs")
-                let deviceIds = try Simctl.deviceIdsFor(deviceTypes: mode.devices, runtime: runtime)
+                let deviceIds = try Simctl.deviceIdsFor(deviceTypes: devices, runtime: runtime)
                 Logger.shared.info("Device IDs Found: \(deviceIds)")
 
                 Logger.shared.info("Building all requested schemes for testing")
@@ -128,7 +130,7 @@ extension Snap {
                                        deviceIds: deviceIds)
 
                 Logger.shared.info("Taking screenshots for all requested configs")
-                try Simctl.snap(styles: mode.styles,
+                try Simctl.snap(styles: appearances,
                                 workspace: workspace,
                                 schemes: schemes,
                                 deviceIds: deviceIds,
@@ -150,35 +152,5 @@ extension Snap {
 }
 
 extension Simctl.Style: ExpressibleByArgument {}
+extension Simctl.DeviceType: ExpressibleByArgument {}
 extension Simctl.Platform: ExpressibleByArgument {}
-
-extension Snap.Run {
-
-    enum ExecutionMode: String, ExpressibleByArgument, CaseIterable {
-        case fast
-        case full
-
-        var defaultValueDescription: String {
-            switch self {
-            case .fast: return "Generates screenshots on a single device / language / appearance only."
-            case .full: return "Generates all the combinations of screenshots. Takes significantly longer."
-            }
-        }
-
-        var styles: [Simctl.Style] {
-            switch self {
-            case .fast: return [.light]
-            case .full: return [.light, .dark]
-            }
-        }
-
-        var devices: [Simctl.DeviceType] {
-            switch self {
-            case .fast: return [.iPhone12]
-            case .full: return [.iPhoneSE, .iPhone12Pro, .iPhone12ProMax]
-            }
-        }
-
-        var name: String { "\(self)" }
-    }
-}

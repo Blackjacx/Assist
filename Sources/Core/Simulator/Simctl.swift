@@ -51,9 +51,9 @@ public extension Simctl {
         var deviceIDs: [String] = []
 
         try deviceTypes.forEach { (deviceType) in
-            guard let deviceID = try devicesForRuntime(runtime).first(where: { $0.name == deviceType.rawValue }) else {
+            guard let deviceID = try devicesForRuntime(runtime).first(where: { $0.name == deviceType.simCtlValue }) else {
                 // Create device if it is not yet available
-                let deviceID = try createDevice(name: deviceType.rawValue, id: deviceType.rawValue, runtime: runtime)
+                let deviceID = try createDevice(name: deviceType.simCtlValue, id: deviceType.simCtlValue, runtime: runtime)
                 deviceIDs.append(deviceID)
                 return
             }
@@ -173,16 +173,73 @@ public extension Simctl {
         case light
         case dark
 
-        public var name: String { "\(self)" }
+        public var parameterName: String { rawValue }
     }
 
-    enum DeviceType: String, CaseIterable {
-        case iPhoneSE = "iPhone SE (2nd generation)"
-        case iPhone12 = "iPhone 12"
-        case iPhone12Pro = "iPhone 12 Pro"
-        case iPhone12ProMax = "iPhone 12 Pro Max"
+//    "Apple TV 4K (2nd generation)"
+//    "Apple TV 4K (at 1080p) (2nd generation)"
+//    "Apple TV 4K (at 1080p)"
+//    "Apple TV 4K"
+//    "Apple TV"
+//    "Apple Watch SE - 40mm"
+//    "Apple Watch SE - 44mm"
+//    "Apple Watch Series 3 - 38mm"
+//    "Apple Watch Series 3 - 42mm"
+//    "Apple Watch Series 4 - 40mm"
+//    "Apple Watch Series 4 - 44mm"
+//    "Apple Watch Series 5 - 40mm"
+//    "Apple Watch Series 5 - 44mm"
+//    "Apple Watch Series 6 - 40mm"
+//    "Apple Watch Series 6 - 44mm"
+//    "iPad (5th generation)"
+//    "iPad (6th generation)"
+//    "iPad (7th generation)"
+//    "iPad (8th generation)"
+//    "iPad Air (3rd generation)"
+//    "iPad Air (4th generation)"
+//    "iPad Air 2"
+//    "iPad Air"
+//    "iPad Pro (10.5-inch)"
+//    "iPad Pro (11-inch) (1st generation)"
+//    "iPad Pro (11-inch) (2nd generation)"
+//    "iPad Pro (11-inch) (3rd generation)"
+//    "iPad Pro (12.9-inch) (1st generation)"
+//    "iPad Pro (12.9-inch) (2nd generation)"
+//    "iPad Pro (12.9-inch) (3rd generation)"
+//    "iPad Pro (12.9-inch) (4th generation)"
+//    "iPad Pro (12.9-inch) (5th generation)"
+//    "iPad Pro (9.7-inch)"
+//    "iPad mini (5th generation)"
+//    "iPad mini 2"
+//    "iPad mini 3"
+//    "iPad mini 4"
+//    "iPhone 8 Plus"
+//    "iPhone 8"
 
-        public var name: String { "\(self)" }
+    enum DeviceType: String, CaseIterable {
+        case iPhoneSE
+        case iPhone11
+        case iPhone11Pro
+        case iPhone11ProMax
+        case iPhone12Mini
+        case iPhone12
+        case iPhone12Pro
+        case iPhone12ProMax
+
+        public var parameterName: String { rawValue }
+
+        public var simCtlValue: String {
+            switch self {
+            case .iPhoneSE: return "iPhone SE (2nd generation)"
+            case .iPhone11: return "iPhone 11"
+            case .iPhone11Pro: return "iPhone 11 Pro"
+            case .iPhone11ProMax: return "iPhone 11 Pro Max"
+            case .iPhone12Mini: return "iPhone 12 mini"
+            case .iPhone12: return "iPhone 12"
+            case .iPhone12Pro: return "iPhone 12 Pro"
+            case .iPhone12ProMax: return "iPhone 12 Pro Max"
+            }
+        }
     }
 
     /// This enum represents only the latest ios versions from a major version. Omit the platform parameter to use the
@@ -192,7 +249,7 @@ public extension Simctl {
         case ios13_7 = "iOS 13.6"
         case ios14_5 = "iOS 14.5"
 
-        public var name: String { "\(self)" }
+        public var parameterName: String { "\(self)" }
     }
 
     enum DataNetwork: String {
