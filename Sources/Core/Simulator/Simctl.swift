@@ -53,7 +53,7 @@ public extension Simctl {
         try deviceTypes.forEach { (deviceType) in
             guard let deviceID = try devicesForRuntime(runtime).first(where: { $0.name == deviceType.rawValue }) else {
                 // Create device if it is not yet available
-                let deviceID = try _createDevice(name: deviceType.rawValue, id: deviceType.rawValue, runtime: runtime)
+                let deviceID = try createDevice(name: deviceType.rawValue, id: deviceType.rawValue, runtime: runtime)
                 deviceIDs.append(deviceID)
                 return
             }
@@ -65,31 +65,32 @@ public extension Simctl {
     static func killAllSimulators(logInset: Int = 0) {
         Logger.shared.info("Killing all open simulators", inset: logInset)
 
-        run(bash: "killall Simulator")
-        run(bash: "killall iPhone Simulator")
+        try? runAndPrint(bash: "killall Simulator")
+        try? runAndPrint(bash: "killall iPhone Simulator")
+//        try? runAndPrint(bash: "killall -10 com.apple.CoreSimulator.CoreSimulatorService")
     }
 
     static func createDevice(name: String, id: String, runtime: Runtime) throws -> String {
         Logger.shared.info("Create device \(id) with name \"\(name)\" and runtime \(runtime)", inset: 1)
 
-        let deviceId = try Simctl.createDevice(name: name, id: id, runtime: runtime)
+        let deviceId = try Simctl._createDevice(name: name, id: id, runtime: runtime)
         return deviceId
     }
 
     static func updateStyle(_ style: Style, deviceIds: [String]) throws {
         try deviceIds.forEach {
-            Logger.shared.info("Set style \(style) for devices \(deviceIds)", inset: 1)
+            Logger.shared.info("Set style \(style) for device \($0)", inset: 1)
 
-            try _boot(deviceId: $0)
+            try _boot(deviceId: $0, logInset: 1)
             try _setAppearance(for: $0, style: style)
         }
     }
 
     static func updateStatusBar(deviceIds: [String]) throws {
         try deviceIds.forEach {
-            Logger.shared.info("Set statusbar for devices \(deviceIds)", inset: 1)
+            Logger.shared.info("Set statusbar for device \($0)", inset: 1)
 
-            try _boot(deviceId: $0)
+            try _boot(deviceId: $0, logInset: 1)
             try _updateStatusBar(deviceId: $0)
         }
     }
@@ -97,6 +98,16 @@ public extension Simctl {
     static func snap(styles: [Style], workspace: String, schemes: [String], deviceIds: [String], outURL: URL, zipFileName: String) throws {
 
         for style in styles {
+            // The following generates a long log of all devices (Useful on a CI for debugging)
+//            Logger.shared.info("Found devices:", inset: 1)
+//            let devicesForRT = try _list().devices
+//            devicesForRT.keys.forEach({ runtime in
+//                Logger.shared.info("Runtime \(runtime)", inset: 2)
+//                devicesForRT[runtime]!.forEach({ device in
+//                    Logger.shared.info(device, inset: 3)
+//                })
+//            })
+
             try updateStyle(style, deviceIds: deviceIds)
             try updateStatusBar(deviceIds: deviceIds)
 
@@ -153,6 +164,7 @@ public extension Simctl {
         case latestPlatformNameNotFound
         case runtimeNotFoundForPlatform(String)
         case devicesNotFoundForRuntime(Runtime)
+        case deviceIdNotFoundInDevices(id: String)
         case createDeviceFailed(deviceName: String, runtimeID: String)
         case createDeviceFailedInvalidRuntime(deviceName: String, runtimeID: String)
     }
@@ -217,7 +229,6 @@ public extension Simctl {
 private extension Simctl {
 
     static func _list() throws -> SimctlList {
-
         let out = run(bash: "xcrun simctl list --json")
 
         if let error = out.error {
@@ -232,16 +243,18 @@ private extension Simctl {
         return try Json.decoder.decode(SimctlList.self, from: outData)
     }
 
-    static func deviceForID(_ id: String) throws -> Device? {
-        try _list().devices.flatMap { $0.value }.first { $0.udid == id }
+    static func deviceForID(_ id: String) throws -> Device {
+        guard let id = try _list().devices.flatMap({ $0.value }).first(where: { $0.udid == id }) else {
+            throw Error.deviceIdNotFoundInDevices(id: id)
+        }
+        return id
     }
 
-    static func _boot(deviceId: String) throws {
+    static func _boot(deviceId: String, logInset: Int = 0) throws {
+        Logger.shared.info("Boot device \(deviceId)", inset: logInset)
 
-        // Prevent booting an already booted device
-        guard try deviceForID(deviceId)?.state != .booted else { return }
-
-        let out = run(bash: "xcrun simctl boot '\(deviceId)'")
+        // Wait while the simulator is booting (https://stackoverflow.com/a/56267933/971329)
+        let out = run(bash: "xcrun simctl bootstatus '\(deviceId)' -b")
 
         if let error = out.error {
             Logger.shared.error(out.stderror)
@@ -250,7 +263,6 @@ private extension Simctl {
     }
 
     static func _shutdown(deviceId: String = "all") throws {
-
         let out = run(bash: "xcrun simctl shutdown '\(deviceId)'")
 
         if let error = out.error {
@@ -260,7 +272,6 @@ private extension Simctl {
     }
 
     static func _setAppearance(for deviceId: String, style: Style) throws {
-
         let out = run(bash: "xcrun simctl ui '\(deviceId)' appearance '\(style.rawValue)'")
 
         if let error = out.error {
@@ -276,7 +287,6 @@ private extension Simctl {
     ///   - runtime: The runtime id. One of the ones shown in `xcrun simctl list`
     /// - Returns: The id of the created device
     static func _createDevice(name: String, id: String, runtime: Runtime) throws -> String {
-
         let out = run(bash: "xcrun simctl create '\(name)' '\(id)' '\(runtime.identifier)'")
 
         if let error = out.error {
@@ -296,7 +306,6 @@ private extension Simctl {
                                 operatorName: String = "T-Mobile",
                                 batteryState: BatteryState = .charged,
                                 batteryLevel: BatteryLevel = .full) throws {
-
         let args: [Any] = [
             "simctl", "status_bar", deviceId, "override",
             "--time", time,
