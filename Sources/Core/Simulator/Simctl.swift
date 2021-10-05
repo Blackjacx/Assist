@@ -176,8 +176,52 @@ public extension Simctl {
         public var parameterName: String { rawValue }
     }
 
+//    "Apple TV 4K (2nd generation)"
+//    "Apple TV 4K (at 1080p) (2nd generation)"
+//    "Apple TV 4K (at 1080p)"
+//    "Apple TV 4K"
+//    "Apple TV"
+//    "Apple Watch SE - 40mm"
+//    "Apple Watch SE - 44mm"
+//    "Apple Watch Series 3 - 38mm"
+//    "Apple Watch Series 3 - 42mm"
+//    "Apple Watch Series 4 - 40mm"
+//    "Apple Watch Series 4 - 44mm"
+//    "Apple Watch Series 5 - 40mm"
+//    "Apple Watch Series 5 - 44mm"
+//    "Apple Watch Series 6 - 40mm"
+//    "Apple Watch Series 6 - 44mm"
+//    "iPad (5th generation)"
+//    "iPad (6th generation)"
+//    "iPad (7th generation)"
+//    "iPad (8th generation)"
+//    "iPad Air (3rd generation)"
+//    "iPad Air (4th generation)"
+//    "iPad Air 2"
+//    "iPad Air"
+//    "iPad Pro (10.5-inch)"
+//    "iPad Pro (11-inch) (1st generation)"
+//    "iPad Pro (11-inch) (2nd generation)"
+//    "iPad Pro (11-inch) (3rd generation)"
+//    "iPad Pro (12.9-inch) (1st generation)"
+//    "iPad Pro (12.9-inch) (2nd generation)"
+//    "iPad Pro (12.9-inch) (3rd generation)"
+//    "iPad Pro (12.9-inch) (4th generation)"
+//    "iPad Pro (12.9-inch) (5th generation)"
+//    "iPad Pro (9.7-inch)"
+//    "iPad mini (5th generation)"
+//    "iPad mini 2"
+//    "iPad mini 3"
+//    "iPad mini 4"
+//    "iPhone 8 Plus"
+//    "iPhone 8"
+
     enum DeviceType: String, CaseIterable {
         case iPhoneSE
+        case iPhone11
+        case iPhone11Pro
+        case iPhone11ProMax
+        case iPhone12Mini
         case iPhone12
         case iPhone12Pro
         case iPhone12ProMax
@@ -187,6 +231,10 @@ public extension Simctl {
         public var simCtlValue: String {
             switch self {
             case .iPhoneSE: return "iPhone SE (2nd generation)"
+            case .iPhone11: return "iPhone 11"
+            case .iPhone11Pro: return "iPhone 11 Pro"
+            case .iPhone11ProMax: return "iPhone 11 Pro Max"
+            case .iPhone12Mini: return "iPhone 12 mini"
             case .iPhone12: return "iPhone 12"
             case .iPhone12Pro: return "iPhone 12 Pro"
             case .iPhone12ProMax: return "iPhone 12 Pro Max"
