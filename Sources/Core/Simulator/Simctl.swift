@@ -51,9 +51,9 @@ public extension Simctl {
         var deviceIDs: [String] = []
 
         try deviceTypes.forEach { (deviceType) in
-            guard let deviceID = try devicesForRuntime(runtime).first(where: { $0.name == deviceType.rawValue }) else {
+            guard let deviceID = try devicesForRuntime(runtime).first(where: { $0.name == deviceType.simCtlValue }) else {
                 // Create device if it is not yet available
-                let deviceID = try createDevice(name: deviceType.rawValue, id: deviceType.rawValue, runtime: runtime)
+                let deviceID = try createDevice(name: deviceType.simCtlValue, id: deviceType.simCtlValue, runtime: runtime)
                 deviceIDs.append(deviceID)
                 return
             }
@@ -173,16 +173,25 @@ public extension Simctl {
         case light
         case dark
 
-        public var name: String { "\(self)" }
+        public var parameterName: String { rawValue }
     }
 
     enum DeviceType: String, CaseIterable {
-        case iPhoneSE = "iPhone SE (2nd generation)"
-        case iPhone12 = "iPhone 12"
-        case iPhone12Pro = "iPhone 12 Pro"
-        case iPhone12ProMax = "iPhone 12 Pro Max"
+        case iPhoneSE
+        case iPhone12
+        case iPhone12Pro
+        case iPhone12ProMax
 
-        public var name: String { "\(self)" }
+        public var parameterName: String { rawValue }
+
+        public var simCtlValue: String {
+            switch self {
+            case .iPhoneSE: return "iPhone SE (2nd generation)"
+            case .iPhone12: return "iPhone 12"
+            case .iPhone12Pro: return "iPhone 12 Pro"
+            case .iPhone12ProMax: return "iPhone 12 Pro Max"
+            }
+        }
     }
 
     /// This enum represents only the latest ios versions from a major version. Omit the platform parameter to use the
@@ -192,7 +201,7 @@ public extension Simctl {
         case ios13_7 = "iOS 13.6"
         case ios14_5 = "iOS 14.5"
 
-        public var name: String { "\(self)" }
+        public var parameterName: String { "\(self)" }
     }
 
     enum DataNetwork: String {
