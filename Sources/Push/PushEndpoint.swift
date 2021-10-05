@@ -63,38 +63,38 @@ extension PushEndpoint: Endpoint {
         true
     }
 
-    var headers: [String : String]? {
+    func headers() async -> [String : String]? {
 
-      var headers: [String: String] = [
-          "Content-Type": "application/json",
-      ]
+        var headers: [String: String] = [
+            "Content-Type": "application/json",
+        ]
 
-      guard shouldAuthorize else {
+        guard shouldAuthorize else {
+          return headers
+        }
+
+        switch self {
+        case let .pushViaApns(credentials, _, _, topic, _):
+          headers["apns-topic"] = topic
+          headers["apns-push-type"] = "alert"
+
+          do {
+              let token = try await JSONWebToken.token(for: .apns(credentials: credentials))
+              headers["Authorization"] = "Bearer \(token)"
+          } catch {
+              print("Error generating token: \(error)")
+          }
+
+        case let .pushViaFcm(_, _, credentials):
+          do {
+              let token = try await JSONWebToken.token(for: .fcm(credentials: credentials))
+              headers["Authorization"] = "Bearer \(token)"
+          } catch {
+              print("Error generating token: \(error)")
+          }
+        }
+
         return headers
-      }
-
-      switch self {
-      case let .pushViaApns(credentials, _, _, topic, _):
-        headers["apns-topic"] = topic
-        headers["apns-push-type"] = "alert"
-
-        do {
-            let token = try JSONWebToken.tokenApns(credentials: credentials)
-            headers["Authorization"] = "Bearer \(token)"
-        } catch {
-            print("Error generating token: \(error)")
-        }
-      
-      case let .pushViaFcm(_, _, credentials): 
-        do {
-            let token = try JSONWebToken.tokenFcm(credentials: credentials)
-            headers["Authorization"] = "Bearer \(token)"
-        } catch {
-            print("Error generating token: \(error)")
-        }
-      }
-
-      return headers
     }
 
     var parameters: [String : Any]? {
