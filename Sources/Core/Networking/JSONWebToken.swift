@@ -15,7 +15,31 @@ import FoundationNetworking
 
 public struct JSONWebToken {
 
-    public static func tokenApns(credentials: JWTApnsCredentials) throws -> String {
+    public enum Service {
+        case apns(credentials: JWTApnsCredentials)
+        case fcm(credentials: JWTFcmCredentials)
+    }
+
+    public enum Error: Swift.Error {
+        case credentialsNotSet
+        case unableToConstructJWT
+        case fileNotFound(String)
+        case privateKeyInvalid
+        case privateKeyEmpty
+        case keyContainsNoData(String)
+        case googleServiceAccountJsonNotFound(path: String)
+        case invalidResonse(response: URLResponse)
+    }
+
+    public static func token(for service: Service) async throws -> String {
+
+        switch service {
+        case .apns(let credentials): return try token(credentials: credentials)
+        case .fcm(let credentials): return try await token(credentials: credentials)
+        }
+    }
+
+    private static func token(credentials: JWTApnsCredentials) throws -> String {
 
         let claims = JWTClaimsApns(iss: credentials.issuerId)
         let signers = JWTSigners()
@@ -36,7 +60,7 @@ public struct JSONWebToken {
     /// https://github.com/googleapis/google-auth-library-swift/blob/f3c652646735e27885e81e710d4147f33eb6c26f/Sources/OAuth2/ServiceAccountTokenProvider/ServiceAccountTokenProvider.swift
     /// https://medium.com/rocket-fuel/getting-started-with-firebase-for-server-side-swift-93c11098702a
     /// https://stackoverflow.com/questions/46396224/how-do-i-generate-an-auth-token-using-jwt-for-google-firebase
-    public static func tokenFcm(credentials: JWTFcmCredentials) throws -> String {
+    private static func token(credentials: JWTFcmCredentials) async throws -> String {
 
         let claims = JWTClaimsFcm(iss: credentials.clientEmail,
                                   sub: credentials.clientEmail,
@@ -55,8 +79,8 @@ public struct JSONWebToken {
         let jwt = try signer.sign(claims)
 
         //
-        // With the signed JWT we have to make another sync request to
-        // Google which gives us the token we use to send the push.
+        // With the signed JWT we have to make another request to Google which gives us the token we use to send the
+        // push message.
         //
 
         let jsonData = try JSONSerialization.data(withJSONObject: [
@@ -71,37 +95,13 @@ public struct JSONWebToken {
         urlRequest.setValue("application/json", forHTTPHeaderField:"Content-Type")
 
         let session = URLSession(configuration: .default)
-        let semaphore = DispatchSemaphore(value: 0)
-        var result: Result<String, Swift.Error>!
-        session.dataTask(with:urlRequest) {(data, response, error) -> Void in
-            if let response = response as? HTTPURLResponse, response.statusCode == 200, let data = data {
-                do {
-                    let token = try Json.decoder.decode(JWTFcmCredentials.Token.self, from: data).accessToken
-                    result = .success(token)
-                } catch {
-                    result = .failure(error)
-                }
-            } else {
-                result = .failure(error!)
-            }
-            semaphore.signal()
-        }.resume()
+        let (data, response) = try await session.data(for: urlRequest, delegate: nil)
 
-        semaphore.wait()
-        return try result.get()
-    }
-}
+        guard let httpResponse = response as? HTTPURLResponse, (200...399).contains(httpResponse.statusCode) else {
+            throw JSONWebToken.Error.invalidResonse(response: response)
+        }
 
-public extension JSONWebToken {
-
-    enum Error: Swift.Error {
-        case credentialsNotSet
-        case unableToConstructJWT
-        case fileNotFound(String)
-        case privateKeyInvalid
-        case privateKeyEmpty
-        case keyContainsNoData(String)
-        case googleServiceAccountJsonNotFound(path: String)
+        return try Json.decoder.decode(JWTFcmCredentials.Token.self, from: data).accessToken
     }
 }
 
