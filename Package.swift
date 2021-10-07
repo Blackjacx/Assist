@@ -1,10 +1,10 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.4
 import PackageDescription
 
 let package = Package(
     name: "Assist",
     platforms: [
-        .macOS(.v10_15),
+        .macOS(.v11),
 //        .iOS(.v11),
 //        .watchOS(.v5),
 //        .tvOS(.v11)
@@ -19,9 +19,9 @@ let package = Package(
         .package(name: "Engine", url: "https://github.com/blackjacx/Engine", .branch("develop")),
 //        .package(name: "ASCKit", path: "../ASCKit"),
 //        .package(name: "Engine", path: "../Engine"),
-        .package(url: "https://github.com/apple/swift-argument-parser", from: "0.4.1"),
-        .package(url: "https://github.com/vapor/jwt-kit.git", from: "4.1.0"),
-        .package(url: "https://github.com/kareman/SwiftShell", from: "5.1.0")
+        .package(url: "https://github.com/apple/swift-argument-parser", .upToNextMajor(from: "1.0.0")),
+        .package(url: "https://github.com/vapor/jwt-kit.git", .upToNextMajor(from: "4.1.0")),
+        .package(url: "https://github.com/kareman/SwiftShell", .upToNextMajor(from: "5.1.0"))        
     ],
     targets: [
         .target(
@@ -33,7 +33,7 @@ let package = Package(
             ]
         ),
 
-        .target(
+        .executableTarget(
             name: "ASC",
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
@@ -46,7 +46,7 @@ let package = Package(
         ),
 
 
-        .target(
+        .executableTarget(
             name: "Push",
             dependencies: [
                 "Core",
@@ -59,7 +59,7 @@ let package = Package(
         ),
 
 
-        .target(
+        .executableTarget(
             name: "Snap",
             dependencies: [
                 "Core",
