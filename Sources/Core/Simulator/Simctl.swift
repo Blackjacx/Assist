@@ -248,6 +248,7 @@ public extension Simctl {
         case ios12_4 = "iOS 12.4"
         case ios13_7 = "iOS 13.6"
         case ios14_5 = "iOS 14.5"
+        case ios15_0 = "iOS 15.0"
 
         public var parameterName: String { "\(self)" }
     }
