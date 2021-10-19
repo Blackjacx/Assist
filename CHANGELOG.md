@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.0.11] - 2021-10-19Z
 * [#34](https://github.com/blackjacx/assist/pull/34): Replace mode by dedicated parameters for appearance and devices - [@blackjacx](https://github.com/blackjacx).
 
 ## [0.0.10] - 2021-10-05Z
