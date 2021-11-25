@@ -16,9 +16,9 @@
 App Store Connect API access using your private API key. The great power of this tool is that it can operate on all apps of one or multiple teams (is you wish to), e.g. it is super easy to print the live versions of all of your apps, even across multiple teams:
 
 ```sh
-asc app-store-versions list -k <key1> \
-asc app-store-versions list -k <key2> \
-asc app-store-versions list -k <key3>
+asc app-store-versions list -k <key_id_1> \
+asc app-store-versions list -k <key_id_2> \
+asc app-store-versions list -k <key_id_3>
 ```
 
 ## Installation
