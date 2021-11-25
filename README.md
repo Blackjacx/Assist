@@ -13,7 +13,13 @@
 [![License](https://img.shields.io/github/license/blackjacx/engine.svg)](https://github.com/blackjacx/engine/blob/master/LICENSE)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://www.paypal.me/STHEROLD)
 
-App Store Connect API access using your private API key. The tool is in an early stage but already quite versatile 🥳
+App Store Connect API access using your private API key. The great power of this tool is that it can operate on all apps of one or multiple teams (is you wish to), e.g. it is super easy to print the live versions of all of your apps, even across multiple teams:
+
+```sh
+asc app-store-versions list -k <key1> \
+asc app-store-versions list -k <key2> \
+asc app-store-versions list -k <key3>
+```
 
 ## Installation
 
@@ -28,7 +34,7 @@ brew install asc
 
 Just install Mint using with [Homebrew](https://brew.sh/) via `brew install mint`. 
 
-```
+```sh
 mint install Blackjacx/Assist
 ```
 
@@ -42,7 +48,7 @@ mint run git@github.com:Blackjacx/Assist.git asc apps
 
 Authentication is handled by the tool itself. The only thing needed is your private API key. Generate one at [App Store Connect account](https://appstoreconnect.apple.com/access/api) and execute the following command which will just store the exact parameters you provide in the user defaults. 
 
-```shell
+```sh
 asc api-keys register -n "name" -k "key-id" -i "issuer-id" -p "path-to-private-key-file"
 ```
 
@@ -52,7 +58,7 @@ asc api-keys register -n "name" -k "key-id" -i "issuer-id" -p "path-to-private-k
 
 Executing one of the following sub commands is as easy as appending it with its parameters to the base command:
 
-```shell
+```sh
 # list all registered API keys
 asc api-keys list
 
@@ -96,7 +102,7 @@ asc app-store-versions
 
 ### `api-keys`
 
-```
+```sh
 OVERVIEW: Lists, registers and deletes App Store Connect API keys on your Mac.
 
 USAGE: asc api-keys <subcommand>
@@ -115,7 +121,7 @@ See 'asc help api-keys <subcommand>' for detailed help.
 
 ### `beta-groups`
 
-```
+```sh
 OVERVIEW: Manage groups of beta testers that have access to one or more builds.
 
 USAGE: asc beta-groups <subcommand>
@@ -132,7 +138,7 @@ See 'asc help beta-groups <subcommand>' for detailed help.
 
 ### `beta-testers`
 
-```
+```sh
 OVERVIEW: Manage people who can install and test prerelease builds.
 
 USAGE: asc beta-testers <subcommand>
@@ -156,7 +162,7 @@ See 'asc help beta-testers <subcommand>' for detailed help.
 
 ### `apps`
 
-```
+```sh
 OVERVIEW: Manage your apps in App Store Connect.
 
 USAGE: asc apps <subcommand>
@@ -173,7 +179,7 @@ See 'asc help apps <subcommand>' for detailed help.
 
 ### `app-store-versions`
 
-```
+```sh
 OVERVIEW: Manage versions of your app that are available in App Store.
 
 USAGE: asc app-store-versions <subcommand>
@@ -191,7 +197,7 @@ See 'asc help app-store-versions <subcommand>' for detailed help.
 
 ### `builds`
 
-```
+```sh
 OVERVIEW: Manage builds for testers and submit builds for review.
 
 USAGE: asc builds <subcommand>
@@ -207,7 +213,8 @@ See 'asc help builds <subcommand>' for detailed help.
 ```
 
 ### `bundle-ids`
-```
+
+```sh
 OVERVIEW: Manage the bundle IDs that uniquely identify your apps.
 
 USAGE: asc bundle-ids <subcommand>
