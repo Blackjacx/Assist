@@ -23,14 +23,14 @@ asc app-store-versions list -k <key_id_3>
 
 ## Installation
 
-### Using [Homebrew](http://brew.sh/):
+### Via [Homebrew](http://brew.sh/)
 
 ```sh
 brew tap Blackjacx/asc
 brew install asc
 ```
 
-### Using [Mint](https://github.com/yonaskolb/mint):
+### Via [Mint](https://github.com/yonaskolb/mint)
 
 Just install Mint using with [Homebrew](https://brew.sh/) via `brew install mint`. 
 
@@ -42,6 +42,14 @@ You can also run command line tools with mint without installing them first. Min
 
 ```sh
 mint run git@github.com:Blackjacx/Assist.git asc apps
+```
+
+### Via Command Line
+
+```sh
+git clone https://github.com/blackjacx/assist.git AppStoreConnect
+cd AppStoreConnect
+swift run asc -h
 ```
 
 ## Authentication
