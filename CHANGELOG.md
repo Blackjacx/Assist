@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+## [0.1.0] - 2021-11-25Z
+* [#39](https://github.com/blackjacx/assist/pull/39): Establishing Homebrew Support - [@Blackjacx](https://github.com/blackjacx).
+
 ## [0.0.11] - 2021-10-19Z
 * [#34](https://github.com/blackjacx/assist/pull/34): Replace mode by dedicated parameters for appearance and devices - [@blackjacx](https://github.com/blackjacx).
 
