@@ -2,7 +2,7 @@
 <img src="./icon.png" alt="SHSearchBar" height="128" width="128">
 </p> -->
 
-# ASC - App Store Connect API
+# App Store Connect API Command-Line Tool
 
 [![Twitter](https://img.shields.io/twitter/follow/blackjacxxx?label=%40Blackjacxxx)](https://twitter.com/blackjacx)
 [![Test](https://github.com/Blackjacx/Assist/actions/workflows/test.yml/badge.svg)](https://github.com/Blackjacx/Assist/actions/workflows/test.yml)
@@ -15,14 +15,27 @@
 
 App Store Connect API access using your private API key. The tool is in an early stage but already quite versatile 🥳
 
-> ⚠️ Currently this repository contains a collection of command line tools. This is the reason why it is called "Assist". But in future I want to focus on the App Store Connect API here.
+## Installation
 
-## General
+### Using [Homebrew](http://brew.sh/):
 
-You can quickly try it out by using [Mint](https://github.com/yonaskolb/Mint). Just install it with [Homebrew](https://brew.sh/) via `brew install mint`. Then you can run each command by letting mint automatically clone and install it. Just prefix each command below with `mint run git@github.com:Blackjacx/Assist.git`, e.g.:
+```sh
+brew tap Blackjacx/asc
+brew install asc
+```
 
-```shell
-$ mint run git@github.com:Blackjacx/Assist.git asc groups -g <group_name>
+### Using [Mint](https://github.com/yonaskolb/mint):
+
+Just install Mint using with [Homebrew](https://brew.sh/) via `brew install mint`. 
+
+```
+mint install Blackjacx/Assist
+```
+
+You can also run command line tools with mint without installing them first. Mint will automatically clone and install it.
+
+```sh
+mint run git@github.com:Blackjacx/Assist.git asc apps
 ```
 
 ## Authentication
