@@ -1,6 +1,7 @@
 # Changelog
 
 ## [Unreleased]
+* [#42](https://github.com/blackjacx/assist/pull/42): Adding TestPlan Parameter - [@Blackjacx](https://github.com/blackjacx).
 
 ## [0.1.0] - 2021-11-25Z
 * [#39](https://github.com/blackjacx/assist/pull/39): Establishing Homebrew Support - [@Blackjacx](https://github.com/blackjacx).
