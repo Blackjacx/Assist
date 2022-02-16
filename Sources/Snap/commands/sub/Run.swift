@@ -53,6 +53,9 @@ extension Snap {
         @Option(name: [.short, .customLong("scheme")], help: "A scheme to run the screenshot tests on. Can be specified multiple times to generate screenshots for multiple schemes.")
         var schemes: [String]
 
+        @Option(help: "The name of the TestPlan running the screenshot tests.")
+        var testPlanName: String?
+
         @Option(parsing: .upToNextOption, help: "The appearances the screenshots should be made for, e.g. --appearances \(Simctl.Style.allCases.map({"\"\($0.parameterName)\""}).joined(separator: " "))")
         var appearances: [Simctl.Style] = [.light]
 
@@ -133,6 +136,7 @@ extension Snap {
                 try Simctl.snap(styles: appearances,
                                 workspace: workspace,
                                 schemes: schemes,
+                                testPlanName: testPlanName,
                                 deviceIds: deviceIds,
                                 outURL: outURL,
                                 zipFileName: zipFileName)

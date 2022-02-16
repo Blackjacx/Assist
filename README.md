@@ -2,7 +2,7 @@
 <img src="./icon.png" alt="SHSearchBar" height="128" width="128">
 </p> -->
 
-# ASC - App Store Connect API
+# App Store Connect API Command-Line Tool
 
 [![Twitter](https://img.shields.io/twitter/follow/blackjacxxx?label=%40Blackjacxxx)](https://twitter.com/blackjacx)
 [![Test](https://github.com/Blackjacx/Assist/actions/workflows/test.yml/badge.svg)](https://github.com/Blackjacx/Assist/actions/workflows/test.yml)
@@ -13,23 +13,50 @@
 [![License](https://img.shields.io/github/license/blackjacx/engine.svg)](https://github.com/blackjacx/engine/blob/master/LICENSE)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://www.paypal.me/STHEROLD)
 
-App Store Connect API access using your private API key. The tool is in an early stage but already quite versatile 🥳
+App Store Connect API access using your private API key. The great power of this tool is that it can operate on all apps of one or multiple teams (is you wish to), e.g. it is super easy to print the live versions of all of your apps, even across multiple teams:
 
-> ⚠️ Currently this repository contains a collection of command line tools. This is the reason why it is called "Assist". But in future I want to focus on the App Store Connect API here.
+```sh
+asc app-store-versions list -k <key_id_1> \
+asc app-store-versions list -k <key_id_2> \
+asc app-store-versions list -k <key_id_3>
+```
 
-## General
+## Installation
 
-You can quickly try it out by using [Mint](https://github.com/yonaskolb/Mint). Just install it with [Homebrew](https://brew.sh/) via `brew install mint`. Then you can run each command by letting mint automatically clone and install it. Just prefix each command below with `mint run git@github.com:Blackjacx/Assist.git`, e.g.:
+### Via [Homebrew](http://brew.sh/)
 
-```shell
-$ mint run git@github.com:Blackjacx/Assist.git asc groups -g <group_name>
+```sh
+brew tap Blackjacx/asc
+brew install asc
+```
+
+### Via [Mint](https://github.com/yonaskolb/mint)
+
+Just install Mint using with [Homebrew](https://brew.sh/) via `brew install mint`. 
+
+```sh
+mint install Blackjacx/Assist
+```
+
+You can also run command line tools with mint without installing them first. Mint will automatically clone and install it.
+
+```sh
+mint run git@github.com:Blackjacx/Assist.git asc apps
+```
+
+### Via Command Line
+
+```sh
+git clone https://github.com/blackjacx/assist.git AppStoreConnect
+cd AppStoreConnect
+swift run asc -h
 ```
 
 ## Authentication
 
 Authentication is handled by the tool itself. The only thing needed is your private API key. Generate one at [App Store Connect account](https://appstoreconnect.apple.com/access/api) and execute the following command which will just store the exact parameters you provide in the user defaults. 
 
-```shell
+```sh
 asc api-keys register -n "name" -k "key-id" -i "issuer-id" -p "path-to-private-key-file"
 ```
 
@@ -39,7 +66,7 @@ asc api-keys register -n "name" -k "key-id" -i "issuer-id" -p "path-to-private-k
 
 Executing one of the following sub commands is as easy as appending it with its parameters to the base command:
 
-```shell
+```sh
 # list all registered API keys
 asc api-keys list
 
@@ -83,7 +110,7 @@ asc app-store-versions
 
 ### `api-keys`
 
-```
+```sh
 OVERVIEW: Lists, registers and deletes App Store Connect API keys on your Mac.
 
 USAGE: asc api-keys <subcommand>
@@ -102,7 +129,7 @@ See 'asc help api-keys <subcommand>' for detailed help.
 
 ### `beta-groups`
 
-```
+```sh
 OVERVIEW: Manage groups of beta testers that have access to one or more builds.
 
 USAGE: asc beta-groups <subcommand>
@@ -119,7 +146,7 @@ See 'asc help beta-groups <subcommand>' for detailed help.
 
 ### `beta-testers`
 
-```
+```sh
 OVERVIEW: Manage people who can install and test prerelease builds.
 
 USAGE: asc beta-testers <subcommand>
@@ -143,7 +170,7 @@ See 'asc help beta-testers <subcommand>' for detailed help.
 
 ### `apps`
 
-```
+```sh
 OVERVIEW: Manage your apps in App Store Connect.
 
 USAGE: asc apps <subcommand>
@@ -160,7 +187,7 @@ See 'asc help apps <subcommand>' for detailed help.
 
 ### `app-store-versions`
 
-```
+```sh
 OVERVIEW: Manage versions of your app that are available in App Store.
 
 USAGE: asc app-store-versions <subcommand>
@@ -178,7 +205,7 @@ See 'asc help app-store-versions <subcommand>' for detailed help.
 
 ### `builds`
 
-```
+```sh
 OVERVIEW: Manage builds for testers and submit builds for review.
 
 USAGE: asc builds <subcommand>
@@ -194,7 +221,8 @@ See 'asc help builds <subcommand>' for detailed help.
 ```
 
 ### `bundle-ids`
-```
+
+```sh
 OVERVIEW: Manage the bundle IDs that uniquely identify your apps.
 
 USAGE: asc bundle-ids <subcommand>

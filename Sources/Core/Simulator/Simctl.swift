@@ -95,7 +95,13 @@ public extension Simctl {
         }
     }
 
-    static func snap(styles: [Style], workspace: String, schemes: [String], deviceIds: [String], outURL: URL, zipFileName: String) throws {
+    static func snap(styles: [Style],
+                     workspace: String,
+                     schemes: [String],
+                     testPlanName: String?,
+                     deviceIds: [String],
+                     outURL: URL,
+                     zipFileName: String) throws {
 
         for style in styles {
             // The following generates a long log of all devices (Useful on a CI for debugging)
@@ -115,8 +121,8 @@ public extension Simctl {
                 let currentURL = outURL.appendingPathComponent(scheme).appendingPathComponent(style.rawValue)
                 let resultsBundleURL = currentURL.appendingPathComponent("result_bundle.xcresult")
                 let screensURL = currentURL.appendingPathComponent("screens")
-                let testPlanName = "\(scheme)-Screenshots"
 
+                let testPlanName = testPlanName ?? "\(scheme)-Screenshots"
                 Logger.shared.info("Running test plan '\(testPlanName)' for scheme '\(scheme)' and style '\(style)'", inset: 1)
 
                 // This command just needs the binaries and the path to the xctestrun file created before the actual
