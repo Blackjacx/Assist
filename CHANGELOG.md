@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.2.0] - 2022-03-14Z
 * [#43](https://github.com/blackjacx/assist/pull/43): Async Await Support - [@Blackjacx](https://github.com/blackjacx).
 
 ## [0.1.1] - 2022-02-16Z
