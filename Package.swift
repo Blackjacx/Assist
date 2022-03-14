@@ -3,6 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "Assist",
+//    platforms: [.macOS(.v10_15), .macCatalyst(.v13), .iOS(.v13), .tvOS(.v13), .watchOS(.v6)],
     platforms: [
       .macOS(.v12)
 //        .iOS(.v11),
@@ -15,10 +16,9 @@ let package = Package(
         .executable(name: "snap", targets: ["Snap"])
     ],
     dependencies: [
-//        .package(name: "ASCKit", url: "https://github.com/blackjacx/asckit", .branch("develop")),
-//        .package(name: "Engine", url: "https://github.com/blackjacx/Engine", .branch("develop")),
-        .package(name: "ASCKit", path: "../ASCKit"),
-        .package(name: "Engine", path: "../Engine"),
+        .package(name: "Engine", url: "https://github.com/blackjacx/Engine", from: "0.0.3"),
+        .package(name: "ASCKit", url: "https://github.com/blackjacx/ASCKit", from: "0.1.0"),
+        // Change back to https://github.com/Apple/swift-argument-parser
         .package(url: "https://github.com/Blackjacx/swift-argument-parser", branch: "async"),
         .package(url: "https://github.com/vapor/jwt-kit.git", from: "4.1.0"),
         .package(url: "https://github.com/kareman/SwiftShell", from: "5.1.0")
