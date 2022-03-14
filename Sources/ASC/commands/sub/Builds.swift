@@ -40,8 +40,8 @@ extension ASC.Builds {
         @Argument(help: "The attribute you want to get [expired, minOsVersion, processingState, version, usesNonExemptEncryption, uploadedDate, expirationDate] (default: id).")
         var attribute: String?
 
-        func run() throws {
-            let list: [Build] = try ASCService.list(filters: filters, limit: limit)
+        func run() async throws {
+            let list: [Build] = try await ASCService.list(filters: filters, limit: limit)
             list.out(attribute)
         }
     }
@@ -62,10 +62,9 @@ extension ASC.Builds {
         @Argument(help: "The attribute you want to get [expired, minOsVersion, processingState, version, usesNonExemptEncryption, uploadedDate, expirationDate] (default: id).")
         var attribute: String?
 
-        func run() throws {
-            let op = BuildsOperation(.expire(ids: ids))
-            op.executeSync()
-            try op.result.get().out(attribute)
+        func run() async throws {
+            let expiredBuilds: [Build] = try await ASCService.expireBuilds(ids: ids)
+            expiredBuilds.out(attribute)
         }
     }
 }

@@ -3,20 +3,20 @@
     "pins": [
       {
         "package": "ASCKit",
-        "repositoryURL": "https://github.com/blackjacx/asckit",
+        "repositoryURL": "https://github.com/blackjacx/ASCKit",
         "state": {
-          "branch": "develop",
-          "revision": "070deeb220425884558e9473403832f4435d3350",
-          "version": null
+          "branch": null,
+          "revision": "90e05ac524dd800041af5244342cc2e5a35b5b98",
+          "version": "0.1.0"
         }
       },
       {
         "package": "Engine",
         "repositoryURL": "https://github.com/blackjacx/Engine",
         "state": {
-          "branch": "develop",
-          "revision": "47855b04cf96a56ed6dde6aa555db87f62cfdbcc",
-          "version": null
+          "branch": null,
+          "revision": "87ffff294809c405ccb558850a4bac93e5a32424",
+          "version": "0.0.3"
         }
       },
       {
@@ -24,17 +24,17 @@
         "repositoryURL": "https://github.com/vapor/jwt-kit.git",
         "state": {
           "branch": null,
-          "revision": "1822bb0abf0a31a4b5078ec19061c548835253b5",
-          "version": "4.3.0"
+          "revision": "5f9c44d4c196cc06c3fc601f279169f121d6f62d",
+          "version": "4.4.0"
         }
       },
       {
         "package": "swift-argument-parser",
-        "repositoryURL": "https://github.com/apple/swift-argument-parser",
+        "repositoryURL": "https://github.com/Blackjacx/swift-argument-parser",
         "state": {
-          "branch": null,
-          "revision": "e1465042f195f374b94f915ba8ca49de24300a0d",
-          "version": "1.0.2"
+          "branch": "async",
+          "revision": "747d66953cd1c49e8f6110d2be9a9c51a07fd272",
+          "version": null
         }
       },
       {
@@ -42,8 +42,8 @@
         "repositoryURL": "https://github.com/apple/swift-crypto.git",
         "state": {
           "branch": null,
-          "revision": "9b5ef28601a9c745c9cdb54d3f243e28ac830982",
-          "version": "2.0.1"
+          "revision": "a8911e0fadc25aef1071d582355bd1037a176060",
+          "version": "2.0.4"
         }
       },
       {

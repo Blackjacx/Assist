@@ -18,18 +18,14 @@ struct PushService {
                             endpoint: Push.Apns.Endpoint, 
                             deviceToken: String, 
                             topic: String, 
-                            message: String) throws -> EmptyResponse {
+                            message: String) async throws -> EmptyResponse {
 
-        let result: RequestResult<EmptyResponse> = 
-            Network.shared.syncRequest(endpoint: PushEndpoint.pushViaApns(credentials: credentials,
-                                                                          endpoint: endpoint,
-                                                                          deviceToken: deviceToken,
-                                                                          topic: topic,
-                                                                          message: message))
-        switch result {
-        case let .success(result): return result
-        case let .failure(error): throw error
-        }
+        let endpoint = PushEndpoint.pushViaApns(credentials: credentials,
+                                                endpoint: endpoint,
+                                                deviceToken: deviceToken,
+                                                topic: topic,
+                                                message: message)
+        return try await Network.shared.request(endpoint: endpoint)
     }
 
     // MARK: - FCM
@@ -37,19 +33,14 @@ struct PushService {
     @discardableResult
     static func pushViaFcm(deviceToken: String,
                            message: String, 
-                           serviceAccountJsonPath: String) throws -> EmptyResponse {
+                           serviceAccountJsonPath: String) async throws -> EmptyResponse {
 
         guard let data = FileManager.default.contents(atPath: serviceAccountJsonPath) else {
           throw JSONWebToken.Error.googleServiceAccountJsonNotFound(path: serviceAccountJsonPath)
         }
+
         let credentials = try Json.decoder.decode(JWTFcmCredentials.self, from: data)
-        let result: RequestResult<EmptyResponse> = 
-            Network.shared.syncRequest(endpoint: PushEndpoint.pushViaFcm(deviceToken: deviceToken,
-                                                                         message: message,
-                                                                         credentials: credentials))
-        switch result {
-        case let .success(result): return result
-        case let .failure(error): throw error
-        }
+        let endpoint = PushEndpoint.pushViaFcm(deviceToken: deviceToken, message: message, credentials: credentials)
+        return try await Network.shared.request(endpoint: endpoint)
     }
 }

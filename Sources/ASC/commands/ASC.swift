@@ -11,6 +11,7 @@ import Engine
 import ArgumentParser
 
 /// The main class for the App Store Connect command line tool.
+@main
 public final class ASC: ParsableCommand {
 
     /// The API key chosen by the user. If only one key is registered this one is automatically used.
@@ -65,6 +66,6 @@ struct ApiKeyOptions: ParsableArguments {
         Network.verbosityLevel = verbose
 
         // Set the api key ID passed as parameter
-        ApiKeysOperation.specifiedKeyId = keyId
+        ASCService.specifiedKeyId = keyId
     }
 }
