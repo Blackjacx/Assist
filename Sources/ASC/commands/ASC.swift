@@ -58,7 +58,7 @@ struct ApiKeyOptions: ParsableArguments {
     @Flag(name: .shortAndLong, help: "Activate verbose logging.")
     var verbose: Int
 
-    @Option(name: .shortAndLong, help: "The absolute path to the p8 key file.")
+    @Option(name: .shortAndLong, help: "The ID of the key to use.")
     var keyId: String?
 
     mutating func validate() throws {
