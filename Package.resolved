@@ -30,11 +30,11 @@
       },
       {
         "package": "swift-argument-parser",
-        "repositoryURL": "https://github.com/Blackjacx/swift-argument-parser",
+        "repositoryURL": "https://github.com/apple/swift-argument-parser",
         "state": {
-          "branch": "async",
-          "revision": "747d66953cd1c49e8f6110d2be9a9c51a07fd272",
-          "version": null
+          "branch": null,
+          "revision": "82905286cc3f0fa8adc4674bf49437cab65a8373",
+          "version": "1.1.1"
         }
       },
       {
