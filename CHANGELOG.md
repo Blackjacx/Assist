@@ -1,6 +1,7 @@
 # Changelog
 
 ## [Unreleased]
+* Upgrade to Swift 5.6 - [@Blackjacx](https://github.com/blackjacx).
 
 ## [0.2.0] - 2022-03-14Z
 * [#43](https://github.com/blackjacx/assist/pull/43): Async Await Support - [@Blackjacx](https://github.com/blackjacx).

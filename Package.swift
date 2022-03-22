@@ -1,4 +1,4 @@
-// swift-tools-version:5.5
+// swift-tools-version:5.6
 import PackageDescription
 
 let package = Package(
@@ -16,8 +16,8 @@ let package = Package(
         .executable(name: "snap", targets: ["Snap"])
     ],
     dependencies: [
-        .package(name: "Engine", url: "https://github.com/blackjacx/Engine", from: "0.0.3"),
-        .package(name: "ASCKit", url: "https://github.com/blackjacx/ASCKit", from: "0.1.0"),
+        .package(url: "https://github.com/blackjacx/Engine", from: "0.0.3"),
+        .package(url: "https://github.com/blackjacx/ASCKit", from: "0.1.0"),
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.1.1"),
         .package(url: "https://github.com/vapor/jwt-kit.git", from: "4.1.0"),
         .package(url: "https://github.com/kareman/SwiftShell", from: "5.1.0")
