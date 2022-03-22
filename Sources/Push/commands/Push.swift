@@ -12,7 +12,7 @@ import Core
 
 /// The main class for the Push command line tool.
 @main
-public final class Push: ParsableCommand {
+public final class Push: AsyncParsableCommand {
 
     public static var configuration = CommandConfiguration(
         // Optional abstracts and discussions are used for help output.

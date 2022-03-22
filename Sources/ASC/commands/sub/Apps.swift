@@ -11,7 +11,7 @@ import ArgumentParser
 
 extension ASC {
 
-    struct Apps: ParsableCommand {
+    struct Apps: AsyncParsableCommand {
         static var configuration = CommandConfiguration(
             abstract: "Manage your apps in App Store Connect.",
             subcommands: [List.self],
@@ -23,7 +23,7 @@ extension ASC.Apps {
 
     /// Find and list apps added in App Store Connect.
     /// https://developer.apple.com/documentation/appstoreconnectapi/list_apps
-    struct List: ParsableCommand {
+    struct List: AsyncParsableCommand {
         static var configuration = CommandConfiguration(abstract: "Find and list apps added in App Store Connect.")
 
         // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another

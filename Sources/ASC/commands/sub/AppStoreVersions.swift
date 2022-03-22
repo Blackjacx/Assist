@@ -11,7 +11,7 @@ import ArgumentParser
 
 extension ASC {
 
-    struct AppStoreVersions: ParsableCommand {
+    struct AppStoreVersions: AsyncParsableCommand {
         static var configuration = CommandConfiguration(
             abstract: "Manage versions of your app that are available in App Store.",
             subcommands: [List.self],
@@ -23,7 +23,7 @@ extension ASC.AppStoreVersions {
 
     /// Get a list of all App Store versions of an app across all platforms.
     /// https://developer.apple.com/documentation/appstoreconnectapi/list_all_app_store_versions_for_an_app
-    struct List: ParsableCommand {
+    struct List: AsyncParsableCommand {
         static var configuration = CommandConfiguration(abstract: "Get a list of all App Store versions of an app across all platforms.")
 
         // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another

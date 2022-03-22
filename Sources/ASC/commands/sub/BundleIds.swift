@@ -11,7 +11,7 @@ import ArgumentParser
 
 extension ASC {
 
-    struct BundleIds: ParsableCommand {
+    struct BundleIds: AsyncParsableCommand {
         static var configuration = CommandConfiguration(
             abstract: "Manage the bundle IDs that uniquely identify your apps.",
             subcommands: [List.self, Register.self, Delete.self],
@@ -23,7 +23,7 @@ extension ASC.BundleIds {
 
     /// Manage the bundle IDs that uniquely identify your apps.
     /// https://developer.apple.com/documentation/appstoreconnectapi/bundle_ids
-    struct List: ParsableCommand {
+    struct List: AsyncParsableCommand {
         static var configuration = CommandConfiguration(abstract: "Find and list bundle IDs that are registered to your team.")
 
         // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
@@ -48,7 +48,7 @@ extension ASC.BundleIds {
 
     /// Register a new bundle ID for app development.
     /// https://developer.apple.com/documentation/appstoreconnectapi/register_a_new_bundle_id
-    struct Register: ParsableCommand {
+    struct Register: AsyncParsableCommand {
 
         static var configuration = CommandConfiguration(abstract: "Register a new bundle ID for app development.")
 
@@ -80,7 +80,7 @@ extension ASC.BundleIds {
 
     /// Delete a bundle ID that is used for app development.
     /// https://developer.apple.com/documentation/appstoreconnectapi/delete_a_bundle_id
-    struct Delete: ParsableCommand {
+    struct Delete: AsyncParsableCommand {
 
         static var configuration = CommandConfiguration(abstract: "Delete a bundle ID that is used for app development.",
                                                         discussion: "You can only delete bundle IDs that are used for development. You can’t delete bundle IDs that are being used by an app in App Store Connect.")
