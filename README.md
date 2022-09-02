@@ -256,6 +256,7 @@ To release this Swift package the following steps have to be taken:
 - Run `bundle update` to update all Ruby gems
 - Commit all changes, make a PR and merge it to develop
 - Run `bundle exec fastlane release framework:"Assist" version:"x.y.z" formula:"blackjacx/formulae/asc"` to release the new version
+- Merge the created PR on https://github.com/Blackjacx/homebrew-formulae
 - Post the following on Twitter
 ```
 Assist release x.y.z 🎉
