@@ -11,7 +11,7 @@ import Core
 
 extension Push {
     
-    struct Apns: ParsableCommand {
+    struct Apns: AsyncParsableCommand {
         
         enum Endpoint: String, ExpressibleByArgument, CaseIterable {
             case sandbox

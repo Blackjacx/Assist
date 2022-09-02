@@ -11,7 +11,7 @@ import ArgumentParser
 
 extension ASC {
 
-    struct Builds: ParsableCommand {
+    struct Builds: AsyncParsableCommand {
         static var configuration = CommandConfiguration(
             abstract: "Manage builds for testers and submit builds for review.",
             subcommands: [List.self, Expire.self],
@@ -23,7 +23,7 @@ extension ASC.Builds {
 
     /// Find and list builds for all apps in App Store Connect.
     /// https://developer.apple.com/documentation/appstoreconnectapi/list_builds
-    struct List: ParsableCommand {
+    struct List: AsyncParsableCommand {
         static var configuration = CommandConfiguration(abstract: "Find and list builds for all apps in App Store Connect.")
 
         // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
@@ -48,7 +48,7 @@ extension ASC.Builds {
 
     /// Expire a build.
     /// https://developer.apple.com/documentation/appstoreconnectapi/modify_a_build
-    struct Expire: ParsableCommand {
+    struct Expire: AsyncParsableCommand {
         static var configuration = CommandConfiguration(abstract: "Expire a build.")
 
         // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another

@@ -11,7 +11,7 @@ import ArgumentParser
 
 extension ASC {
 
-    struct BetaTesters: ParsableCommand {
+    struct BetaTesters: AsyncParsableCommand {
         static var configuration = CommandConfiguration(
             abstract: "Manage people who can install and test prerelease builds.",
             subcommands: [List.self, Invite.self, Add.self, Delete.self],
@@ -23,7 +23,7 @@ extension ASC.BetaTesters {
 
     /// Find and list beta testers for all apps, builds, and beta groups.
     /// https://developer.apple.com/documentation/appstoreconnectapi/list_beta_testers
-    struct List: ParsableCommand {
+    struct List: AsyncParsableCommand {
         static var configuration = CommandConfiguration(abstract: "Find and list beta testers for all apps, builds, and beta groups.")
 
         // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
@@ -48,7 +48,7 @@ extension ASC.BetaTesters {
 
     /// Send or resend an invitation to a beta tester to test a specified app.
     /// https://developer.apple.com/documentation/appstoreconnectapi/send_an_invitation_to_a_beta_tester
-    struct Invite: ParsableCommand {
+    struct Invite: AsyncParsableCommand {
         static var configuration = CommandConfiguration(abstract: "Send or resend an invitation to a beta tester to test specified apps.")
 
         // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
@@ -69,7 +69,7 @@ extension ASC.BetaTesters {
 
     /// Create a beta tester assigned to a group, a build, or an app.
     /// https://developer.apple.com/documentation/appstoreconnectapi/create_a_beta_tester
-    struct Add: ParsableCommand {
+    struct Add: AsyncParsableCommand {
         static var configuration = CommandConfiguration(abstract: "Create a beta tester assigned to a group, a build, or an app.")
 
         // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
@@ -96,7 +96,7 @@ extension ASC.BetaTesters {
 
     /// Remove a beta tester's ability to test all or specific apps.
     /// https://developer.apple.com/documentation/appstoreconnectapi/delete_a_beta_tester
-    struct Delete: ParsableCommand {
+    struct Delete: AsyncParsableCommand {
         static var configuration = CommandConfiguration(abstract: "Remove a beta tester's ability to test all or specific apps.")
 
         // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another

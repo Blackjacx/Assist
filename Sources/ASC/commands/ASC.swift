@@ -9,10 +9,11 @@ import Foundation
 import ASCKit
 import Engine
 import ArgumentParser
+import Core
 
 /// The main class for the App Store Connect command line tool.
 @main
-public final class ASC: ParsableCommand {
+public final class ASC: AsyncParsableCommand {
 
     /// The API key chosen by the user. If only one key is registered this one is automatically used.
     static var apiKey: ApiKey?
@@ -22,7 +23,7 @@ public final class ASC: ParsableCommand {
         abstract: "A utility for accessing the App Store Connect API.",
 
         // Commands can define a version for automatic '--version' support.
-        version: "0.0.8",
+        version: Constants.version,
 
         subcommands: [Keys.self,
                       BetaGroups.self,
@@ -58,7 +59,7 @@ struct ApiKeyOptions: ParsableArguments {
     @Flag(name: .shortAndLong, help: "Activate verbose logging.")
     var verbose: Int
 
-    @Option(name: .shortAndLong, help: "The absolute path to the p8 key file.")
+    @Option(name: .shortAndLong, help: "The ID of the key to use.")
     var keyId: String?
 
     mutating func validate() throws {

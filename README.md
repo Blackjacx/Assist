@@ -4,7 +4,7 @@
 
 # App Store Connect API Command-Line Tool
 
-[![Twitter](https://img.shields.io/twitter/follow/blackjacxxx?label=%40Blackjacxxx)](https://twitter.com/blackjacx)
+[![Twitter](https://img.shields.io/twitter/follow/blackjacxxx?label=%40Blackjacxxx)](https://twitter.com/blackjacxxx)
 <!-- [![Test](https://github.com/Blackjacx/Assist/actions/workflows/test.yml/badge.svg)](https://github.com/Blackjacx/Assist/actions/workflows/test.yml) -->
 [![Swift Package Manager Compatible](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
 [![Swift Versions](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FBlackjacx%2FAssist%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/Blackjacx/Assist)
@@ -246,6 +246,28 @@ SUBCOMMANDS:
 - If you found a **bug**, please open an **issue**.
 - If you have a **feature request**, please open an **issue**.
 - If you want to **contribute**, please submit a **pull request**.
+
+### Release
+
+To release this Swift package the following steps have to be taken:
+- Create a new branch `release-x.y.z`
+- Increment the version in `Core.Constants.version`
+- Run `bash <(curl -H -s https://raw.githubusercontent.com/Blackjacx/Scripts/master/frameworks/bootstrap.sh)` to update to the latest shared development files
+- Run `bundle update` to update all Ruby gems
+- Commit all changes, make a PR and merge it to develop
+- Run `bundle exec fastlane release framework:"Assist" version:"x.y.z" formula:"blackjacx/formulae/asc"` to release the new version
+- Post the following on Twitter
+```
+Assist release x.y.z 🎉
+
+▸ 🚀  Tools asc, snap, push (x.y.z) successfully published
+▸ 📅  September 2nd
+▸ 🌎  https://swiftpackageindex.com/Blackjacx/Assist
+▸ 🌎  https://github.com/Blackjacx/Assist/releases/latest
+▸ 👍  Tell your friends!
+
+#SPM #Automated #Snapshots #Push #Firebase #APNS #ASC #AppStoreConnectAPI
+```
 
 ## Author
 

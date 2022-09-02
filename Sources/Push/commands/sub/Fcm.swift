@@ -11,7 +11,7 @@ import Core
 
 extension Push {
 
-    struct Fcm: ParsableCommand {
+    struct Fcm: AsyncParsableCommand {
 
         static var configuration = CommandConfiguration(
             abstract: "Access FCM, see https://firebase.google.com/docs/cloud-messaging"
