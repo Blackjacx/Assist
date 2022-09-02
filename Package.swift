@@ -36,6 +36,7 @@ let package = Package(
             name: "ASC",
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
+                "Core",
                 "ASCKit",
             ]
         ),

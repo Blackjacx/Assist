@@ -9,6 +9,7 @@ import Foundation
 import ASCKit
 import Engine
 import ArgumentParser
+import Core
 
 /// The main class for the App Store Connect command line tool.
 @main
@@ -22,7 +23,7 @@ public final class ASC: AsyncParsableCommand {
         abstract: "A utility for accessing the App Store Connect API.",
 
         // Commands can define a version for automatic '--version' support.
-        version: "0.0.8",
+        version: Constants.version,
 
         subcommands: [Keys.self,
                       BetaGroups.self,
