@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.3.0] - 2022-09-02Z
 * Upgrade to Swift 5.6 - [@Blackjacx](https://github.com/blackjacx).
 
 ## [0.2.0] - 2022-03-14Z

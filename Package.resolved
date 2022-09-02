@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/blackjacx/Engine",
       "state" : {
-        "revision" : "611147d6c343f22ef13f9f99d322b9df8bebbfe7",
-        "version" : "0.0.4"
+        "revision" : "87ffff294809c405ccb558850a4bac93e5a32424",
+        "version" : "0.0.3"
       }
     },
     {
@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/jwt-kit.git",
       "state" : {
-        "revision" : "87ce13a1df913ba4d51cf00606df7ef24d455571",
-        "version" : "4.7.0"
+        "revision" : "5f9c44d4c196cc06c3fc601f279169f121d6f62d",
+        "version" : "4.4.0"
       }
     },
     {
@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-crypto.git",
       "state" : {
-        "revision" : "d9825fa541df64b1a7b182178d61b9a82730d01f",
-        "version" : "2.1.0"
+        "revision" : "a8911e0fadc25aef1071d582355bd1037a176060",
+        "version" : "2.0.4"
       }
     },
     {
