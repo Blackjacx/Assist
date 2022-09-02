@@ -220,7 +220,10 @@ public extension Simctl {
 //    "iPhone 8"
 
     enum DeviceType: String, CaseIterable {
+        // DEPRECATED: Use `iPhoneSE2` instead
         case iPhoneSE
+        case iPhoneSE2
+        case iPhoneSE3
         case iPhone11
         case iPhone11Pro
         case iPhone11ProMax
@@ -228,12 +231,18 @@ public extension Simctl {
         case iPhone12
         case iPhone12Pro
         case iPhone12ProMax
+        case iPhone13Mini
+        case iPhone13
+        case iPhone13Pro
+        case iPhone13ProMax
 
         public var parameterName: String { rawValue }
 
         public var simCtlValue: String {
             switch self {
             case .iPhoneSE: return "iPhone SE (2nd generation)"
+            case .iPhoneSE2: return "iPhone SE (2nd generation)"
+            case .iPhoneSE3: return "iPhone SE (3rd generation)"
             case .iPhone11: return "iPhone 11"
             case .iPhone11Pro: return "iPhone 11 Pro"
             case .iPhone11ProMax: return "iPhone 11 Pro Max"
@@ -241,23 +250,34 @@ public extension Simctl {
             case .iPhone12: return "iPhone 12"
             case .iPhone12Pro: return "iPhone 12 Pro"
             case .iPhone12ProMax: return "iPhone 12 Pro Max"
+            case .iPhone13Mini: return "iPhone 13 mini"
+            case .iPhone13: return "iPhone 13"
+            case .iPhone13Pro: return "iPhone 13 Pro"
+            case .iPhone13ProMax: return "iPhone 13 Pro Max"
             }
         }
     }
 
-    /// This enum represents only the latest ios versions from a major version. Omit the platform parameter to use the
-    /// latest current version. This enum is updated after a new version comes out.
+    /// This enum represents only the latest iOS versions from a major version.
+    /// Omit the platform parameter to use the latest available version. This
+    /// enum is updated after a new version comes out.
     enum Platform: String, CaseIterable {
         case ios12_4 = "iOS 12.4"
         case ios13_7 = "iOS 13.6"
         case ios14_5 = "iOS 14.5"
         case ios15_0 = "iOS 15.0"
+        case ios16_0 = "iOS 16.0"
 
         public var parameterName: String { "\(self)" }
     }
 
     enum DataNetwork: String {
-        case wifi, three_g = "3g", four_g = "4g", lte, lte_a = "lte-a", ltePlus = "lte+"
+        case wifi
+        case three_g = "3g"
+        case four_g = "4g"
+        case lte
+        case lte_a = "lte-a"
+        case ltePlus = "lte+"
     }
 
     enum WifiMode: String {
