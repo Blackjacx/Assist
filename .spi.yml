@@ -1,4 +1,4 @@
-version: 0.0.3
+version: 1
 builder:
   configs:
-    - documentation_targets: [snap,push,asc]
+    - documentation_targets: [Snap,Push,ASC]
