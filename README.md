@@ -242,18 +242,15 @@ SUBCOMMANDS:
 
 ```
 
-## Contribution
+## Code Documentation
 
-- If you found a **bug**, please open an **issue**.
-- If you have a **feature request**, please open an **issue**.
-- If you want to **contribute**, please submit a **pull request**.
+The code documentation for [ASC](https://swiftpackageindex.com/Blackjacx/Assist/develop/documentation/asc), [Push](https://swiftpackageindex.com/Blackjacx/Assist/develop/documentation/push) and [Snap](https://swiftpackageindex.com/Blackjacx/Assist/develop/documentation/snap) is generated and hosted by [Swift Package Index](https://swiftpackageindex.com/) (powered by [DocC](https://developer.apple.com/documentation/docc))
 
-### Release
+## Release
 
 To release this Swift package the following steps have to be taken:
 - Create a new branch `release-x.y.z`
 - Increment the version in `Core.Constants.version`
-- Increment the version in https://github.com/Blackjacx/Assist/blob/develop/.spi.yml
 - Run `bash <(curl -H -s https://raw.githubusercontent.com/Blackjacx/Scripts/master/frameworks/bootstrap.sh)` to update to the latest shared development files
 - Run `bundle update` to update all Ruby gems
 - Commit all changes, make a PR and merge it to develop
@@ -261,7 +258,7 @@ To release this Swift package the following steps have to be taken:
 - Merge the created PR on https://github.com/Blackjacx/homebrew-formulae
 - Post the following on Twitter
 ```
-Assist release x.y.z 🎉
+Assist (ASC, Push, Snap) release x.y.z 🎉
 
 ▸ 🚀  Tools asc, snap, push (x.y.z) successfully published
 ▸ 📅  September 2nd
@@ -271,6 +268,12 @@ Assist release x.y.z 🎉
 
 #SPM #Automated #Snapshots #Push #Firebase #APNS #ASC #AppStoreConnectAPI
 ```
+
+## Contribution
+
+- If you found a **bug**, please open an **issue**.
+- If you have a **feature request**, please open an **issue**.
+- If you want to **contribute**, please submit a **pull request**.
 
 ## Author
 
