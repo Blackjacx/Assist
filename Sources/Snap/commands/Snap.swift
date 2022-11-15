@@ -63,8 +63,8 @@ public final class Snap: ParsableCommand {
     @Option(parsing: .upToNextOption, help: "The appearances the screenshots should be made for, e.g. --appearances \(Simctl.Style.allCases.map({"\"\($0.parameterName)\""}).joined(separator: " "))")
     var appearances: [Simctl.Style] = [.light]
 
-    @Option(parsing: .upToNextOption, help: "Devices you want to generate screenshots for, e.g. --devices \(Simctl.DeviceType.allCases.map({"\"\($0.parameterName)\""}).joined(separator: " "))")
-    var devices: [Simctl.DeviceType] = [.iPhone12Pro]
+    @Option(parsing: .upToNextOption, help: "Devices you want to generate screenshots for (run `xcrun simctl list` to list all possible devices)")
+    var devices: [String] = ["iPhone 14 Pro"]
 
     @Option(help: "The destination directory where the screenshots and the zip archive should be stored.")
     var destinationDir: String?
@@ -116,10 +116,10 @@ public final class Snap: ParsableCommand {
 
             let configMessage = """
                 Using the following config:
-                    styles: \(appearances.map { $0.parameterName })
-                    devices: \(devices.map { $0.parameterName })
+                    styles: \(ListFormatter.localizedString(byJoining: appearances.map { $0.parameterName }))
+                    devices: \(ListFormatter.localizedString(byJoining: devices))
                     platform: \(platform)
-                    schemes: \(schemes)
+                    schemes: \(ListFormatter.localizedString(byJoining: schemes))
                     destination: \(outURL.path.appendPathComponent(zipFileName))
                 """
             Logger.shared.info(configMessage)
@@ -131,7 +131,7 @@ public final class Snap: ParsableCommand {
             Logger.shared.info("Runtime found \(runtime)")
 
             Logger.shared.info("Find IDs of preferred device IDs")
-            let deviceIds = try Simctl.deviceIdsFor(deviceTypes: devices, runtime: runtime)
+            let deviceIds = try Simctl.deviceIdsFor(deviceNames: devices, runtime: runtime)
             Logger.shared.info("Device IDs Found: \(deviceIds)")
 
             Logger.shared.info("Building all requested schemes for testing")
@@ -175,5 +175,4 @@ struct Options: ParsableArguments {
 }
 
 extension Simctl.Style: ExpressibleByArgument {}
-extension Simctl.DeviceType: ExpressibleByArgument {}
 extension Simctl.Platform: ExpressibleByArgument {}
