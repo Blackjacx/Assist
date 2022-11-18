@@ -18,7 +18,8 @@ public struct Device: Codable {
 public extension Device {
 
     enum State: String, Codable {
-        case shutdown = "Shutdown"
         case booted = "Booted"
+        case shuttingDown = "Shutting Down"
+        case shutdown = "Shutdown"
     }
 }
