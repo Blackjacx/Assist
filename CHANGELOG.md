@@ -1,6 +1,7 @@
 # Changelog
 
 ## [Unreleased]
+* [#53](https://github.com/blackjacx/assist/pull/53): Handle "Shutting Down" simctl status - [@Blackjacx](https://github.com/blackjacx).
 * [#52](https://github.com/blackjacx/assist/pull/52): Switch to String types when specifying devices - [@Blackjacx](https://github.com/blackjacx).
 
 ## [0.3.0] - 2022-09-02Z
