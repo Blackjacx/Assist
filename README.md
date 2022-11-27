@@ -279,6 +279,14 @@ Assist (ASC, Push, Snap) release x.y.z 🎉
 
 [Stefan Herold](mailto:stefan.herold@gmail.com) • 🐦 [@Blackjacxxx](https://twitter.com/Blackjacxxx)
 
+## Contributors
+
+Thanks to all of you who are part of this:
+
+<a href="https://github.com/blackjacx/Assist/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=blackjacx/Assist" />
+</a>
+
 ## License
 
 ASC is available under the MIT license. See the [LICENSE](LICENSE) file for more info.
