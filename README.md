@@ -13,7 +13,7 @@
 [![License](https://img.shields.io/github/license/blackjacx/assist.svg)](https://github.com/blackjacx/assist/blob/master/LICENSE)
 [![Donate PayPal](https://img.shields.io/badge/Donate-PayPal-0079c1?logo=paypal)](https://www.paypal.me/STHEROLD)
 
-# App Store Connect API Command-Line Tool
+# App Store Connect API • CLI
 
 App Store Connect API access using your private API key. The great power of this tool is that it can operate on all apps of one or multiple teams (is you wish to), e.g. it is super easy to print the live versions of all of your apps, even across multiple teams:
 
