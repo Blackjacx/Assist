@@ -133,7 +133,7 @@ public extension Simctl {
                     testPlan: testPlanName,
                     resultsBundleURL: resultsBundleURL)
 
-                Logger.shared.info("Extracting screenshots from xcresult bundle '\(resultsBundleURL.path)' for scheme '\(scheme)' and style '\(style)'", inset: 2)
+                Logger.shared.info("Extracting screenshots from xcresult bundle '\(resultsBundleURL.path)' for scheme '\(scheme)' and style '\(style)'", inset: 1)
 
                 try FileManager.default.createDirectory(at: screensURL, withIntermediateDirectories: true, attributes: nil)
                 try Mint.screenshots(resultsBundleURL: resultsBundleURL, screensURL: screensURL)
