@@ -19,7 +19,7 @@ public extension Zip {
                     outFile,
                     relativeTargetFolder]
 
-        if let excludePattern = excludePattern {
+        if let excludePattern {
             args += ["-x", excludePattern]
         }
 

@@ -31,11 +31,11 @@ public extension Xcodebuild {
             var args = ["xcodebuild", cmd.rawValue, "-workspace", workspace, "-scheme", scheme]
             destinations.forEach { args += ["-destination", $0] }
 
-            if let testPlan = testPlan {
+            if let testPlan {
                 args += ["-testPlan", testPlan]
             }
 
-            if let resultBundleURL = resultsBundleURL {
+            if let resultBundleURL {
                 args += ["-resultBundlePath", resultBundleURL.path]
             }
 

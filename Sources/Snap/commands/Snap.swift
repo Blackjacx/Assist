@@ -105,7 +105,7 @@ public final class Snap: ParsableCommand {
     public func run() throws {
         let outURL: URL
 
-        if let destinationDir = destinationDir {
+        if let destinationDir {
             outURL = URL(fileURLWithPath: destinationDir, isDirectory: true)
         } else {
             outURL = try FileManager.createTemporaryDirectory()
