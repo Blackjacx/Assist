@@ -73,7 +73,7 @@ public final class Snap: ParsableCommand {
     var zipFileName: String
 
     @Option(help: "An optional platform to be used. Omit to use the latest. Currently only iOS is supported.")
-    var platform: Simctl.Platform?
+    var platform: String?
 
     public init() {
         
@@ -88,15 +88,15 @@ public final class Snap: ParsableCommand {
             throw ValidationError("No target specified.")
         }
 
-        if let destinationDir = self.destinationDir {
+        if let destinationDir {
             var isDir: ObjCBool = false
             guard FileManager.default.fileExists(atPath: destinationDir, isDirectory: &isDir), isDir.boolValue else {
                 throw ValidationError("\(destinationDir) does not exist or is no directory.")
             }
         }
 
-        if let platform = self.platform {
-            guard try Simctl.isPlatformValid(platform.rawValue) else {
+        if let platform {
+            guard try Simctl.isPlatformValid(platform) else {
                 throw ValidationError("\(platform) not installed on your system. Run `xcrun simctl list` to find available ones.")
             }
         }
@@ -112,7 +112,7 @@ public final class Snap: ParsableCommand {
         }
 
         do {
-            let platform = try self.platform?.rawValue ?? Simctl.latestAvailableIOS()
+            let platform = try self.platform ?? Simctl.latestAvailableIOS()
 
             let configMessage = """
                 Using the following config:
@@ -175,4 +175,3 @@ struct Options: ParsableArguments {
 }
 
 extension Simctl.Style: ExpressibleByArgument {}
-extension Simctl.Platform: ExpressibleByArgument {}

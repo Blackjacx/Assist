@@ -179,19 +179,6 @@ public extension Simctl {
         public var parameterName: String { rawValue }
     }
 
-    /// This enum represents only the latest iOS versions from a major version.
-    /// Omit the platform parameter to use the latest available version. This
-    /// enum is updated after a new version comes out.
-    enum Platform: String, CaseIterable {
-        case ios12_4 = "iOS 12.4"
-        case ios13_7 = "iOS 13.6"
-        case ios14_5 = "iOS 14.5"
-        case ios15_0 = "iOS 15.0"
-        case ios16_0 = "iOS 16.0"
-
-        public var parameterName: String { "\(self)" }
-    }
-
     enum DataNetwork: String {
         case wifi
         case three_g = "3g"
