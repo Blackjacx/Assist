@@ -72,8 +72,8 @@ public final class Snap: ParsableCommand {
     @Option(help: "The zip file name that should be used.")
     var zipFileName: String
 
-    @Option(help: "An optional platform to be used. Omit to use the latest. Currently only iOS is supported.")
-    var platform: Simctl.Platform?
+    @Option(help: "An optional runtime to be used. Omit to use the latest.")
+    var runtime: String?
 
     public init() {
         
@@ -88,16 +88,17 @@ public final class Snap: ParsableCommand {
             throw ValidationError("No target specified.")
         }
 
-        if let destinationDir = self.destinationDir {
+        if let destinationDir {
             var isDir: ObjCBool = false
             guard FileManager.default.fileExists(atPath: destinationDir, isDirectory: &isDir), isDir.boolValue else {
                 throw ValidationError("\(destinationDir) does not exist or is no directory.")
             }
         }
 
-        if let platform = self.platform {
-            guard try Simctl.isPlatformValid(platform.rawValue) else {
-                throw ValidationError("\(platform) not installed on your system. Run `xcrun simctl list` to find available ones.")
+        if let runtime {
+            guard try Simctl.isRuntimeNameValid(runtime) else {
+                let availableRuntimes = ListFormatter.localizedString(byJoining: try Simctl.availableRuntimes().map(\.name))
+                throw ValidationError("\(runtime) not installed on your system. Valid runtimes: \(availableRuntimes).")
             }
         }
     }
@@ -112,13 +113,13 @@ public final class Snap: ParsableCommand {
         }
 
         do {
-            let platform = try self.platform?.rawValue ?? Simctl.latestAvailableIOS()
+            let runtimeName = try self.runtime ?? Simctl.latestAvailableIosRuntime()
 
             let configMessage = """
                 Using the following config:
                     styles: \(ListFormatter.localizedString(byJoining: appearances.map { $0.parameterName }))
                     devices: \(ListFormatter.localizedString(byJoining: devices))
-                    platform: \(platform)
+                    platform: \(runtimeName)
                     schemes: \(ListFormatter.localizedString(byJoining: schemes))
                     destination: \(outURL.path.appendPathComponent(zipFileName))
                 """
@@ -126,8 +127,8 @@ public final class Snap: ParsableCommand {
 
             Simctl.killAllSimulators()
 
-            Logger.shared.info("Finding runtime for platform \(platform)")
-            let runtime = try Simctl.runtimeForPlatform(platform)
+            Logger.shared.info("Finding runtime for platform \(runtimeName)")
+            let runtime = try Simctl.runtime(for: runtimeName)
             Logger.shared.info("Runtime found \(runtime)")
 
             Logger.shared.info("Find IDs of preferred device IDs")
@@ -175,4 +176,3 @@ struct Options: ParsableArguments {
 }
 
 extension Simctl.Style: ExpressibleByArgument {}
-extension Simctl.Platform: ExpressibleByArgument {}

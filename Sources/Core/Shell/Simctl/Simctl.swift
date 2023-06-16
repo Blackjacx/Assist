@@ -9,33 +9,32 @@ import Foundation
 import Engine
 import SwiftShell
 
-public struct Simctl {
-
-}
+public struct Simctl {}
 
 // MARK: - Public: Simctl Convenience Functions
 
 public extension Simctl {
 
-    static func latestAvailableIOS() throws -> String {
-        guard let platformName = try Simctl
-            ._list()
-            .runtimes
+    static func availableRuntimes() throws -> [Runtime] {
+        try Simctl._list().runtimes
+    }
+
+    static func latestAvailableIosRuntime() throws -> String {
+        guard let runtimeName = try availableRuntimes()
             .sorted(by: { $0.version > $1.version })
-            .first(where: { $0.name.starts(with: "iOS") })?
-            .name else {
-                throw Error.latestPlatformNameNotFound
+            .first(where: { $0.name.starts(with: "iOS") }) else {
+            throw Error.latestRuntimeNameNotFound
         }
-        return platformName
+        return runtimeName.name
     }
 
-    static func isPlatformValid(_ platform: String) throws -> Bool {
-        try Simctl._list().runtimes.first { $0.name == platform } != nil
+    static func isRuntimeNameValid(_ runtimeName: String) throws -> Bool {
+        try Simctl._list().runtimes.contains(where: { $0.name == runtimeName })
     }
 
-    static func runtimeForPlatform(_ platform: String) throws -> Runtime {
-        guard let runtime = try Simctl._list().runtimes.first(where: { $0.name == platform }) else {
-            throw Error.runtimeNotFoundForPlatform(platform)
+    static func runtime(for runtimeName: String) throws -> Runtime {
+        guard let runtime = try Simctl._list().runtimes.first(where: { $0.name == runtimeName }) else {
+            throw Error.runtimeNotFound(name: runtimeName)
         }
         return runtime
     }
@@ -164,8 +163,8 @@ public extension Simctl {
 
     enum Error: Swift.Error {
         case simctlListFailed
-        case latestPlatformNameNotFound
-        case runtimeNotFoundForPlatform(String)
+        case latestRuntimeNameNotFound
+        case runtimeNotFound(name: String)
         case devicesNotFoundForRuntime(Runtime)
         case deviceIdNotFoundInDevices(id: String)
         case createDeviceFailed(deviceName: String, runtimeID: String)
@@ -177,19 +176,6 @@ public extension Simctl {
         case dark
 
         public var parameterName: String { rawValue }
-    }
-
-    /// This enum represents only the latest iOS versions from a major version.
-    /// Omit the platform parameter to use the latest available version. This
-    /// enum is updated after a new version comes out.
-    enum Platform: String, CaseIterable {
-        case ios12_4 = "iOS 12.4"
-        case ios13_7 = "iOS 13.6"
-        case ios14_5 = "iOS 14.5"
-        case ios15_0 = "iOS 15.0"
-        case ios16_0 = "iOS 16.0"
-
-        public var parameterName: String { "\(self)" }
     }
 
     enum DataNetwork: String {
