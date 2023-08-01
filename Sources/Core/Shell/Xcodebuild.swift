@@ -9,38 +9,55 @@ import Foundation
 import SwiftShell
 
 public struct Xcodebuild {
-}
 
-public extension Xcodebuild {
+    public static func execute(subcommand: Subcommand,
+                               deviceIds: [String],
+                               derivedDataUrl: URL) throws {
+        let destinations = deviceIds
+            .map { "platform=iOS Simulator,id=\($0)" }
+            .flatMap { ["-destination", $0] }
+        let commonArgs = ["xcodebuild", subcommand.name, "-derivedDataPath", derivedDataUrl.path()] + destinations
+        let invocations: [Invocation]
 
-    enum Command: String {
-        case buildForTesting = "build-for-testing"
-        case testWithoutBuilding = "test-without-building"
-    }
-    
-    static func execute(cmd: Command,
-                        workspace: String,
-                        schemes: [String],
-                        deviceIds: [String],
-                        testPlan: String? = nil,
-                        resultsBundleURL: URL? = nil) throws {
-
-        let destinations = deviceIds.map { "platform=iOS Simulator,id=\($0)" }
-
-        for scheme in schemes {
-            var args = ["xcodebuild", cmd.rawValue, "-workspace", workspace, "-scheme", scheme]
-            destinations.forEach { args += ["-destination", $0] }
-
-            if let testPlan {
-                args += ["-testPlan", testPlan]
+        switch subcommand {
+        case let .buildForTesting(workspace, schemes):
+            invocations = schemes.map {
+                Invocation(arguments: commonArgs + ["-workspace", workspace, "-scheme", $0])
             }
 
+        case let .testWithoutBuilding(xcTestRunFile, resultsBundleURL):
+            var args = ["-xctestrun", xcTestRunFile.path()]
             if let resultsBundleURL {
                 args += ["-resultBundlePath", resultsBundleURL.path]
             }
+            invocations = [Invocation(arguments: commonArgs + args)]
+        }
 
-            let out = run("xcrun", args)
-            
+        for invocation in invocations {
+            try invocation.execute()
+        }
+    }
+
+    // MARK: - Subcommand
+
+    public enum Subcommand {
+        case buildForTesting(workspace: String, schemes: [String])
+        case testWithoutBuilding(xcTestRunFile: URL, resultsBundleURL: URL? = nil)
+
+        var name: String {
+            switch self {
+            case .buildForTesting: return "build-for-testing"
+            case .testWithoutBuilding: return "test-without-building"
+            }
+        }
+    }
+
+    private struct Invocation {
+        let arguments: [String]
+
+        func execute() throws {
+            let out = run("xcrun", arguments)
+
             if let error = out.error {
                 Logger.shared.error(out.stderror)
                 throw error
