@@ -58,7 +58,7 @@ public final class Snap: ParsableCommand {
     var schemes: [String]
 
     @Option(help: "The name of the TestPlan running the screenshot tests.")
-    var testPlanName: String?
+    var testPlanName: String
 
     @Option(parsing: .upToNextOption, help: "The appearances the screenshots should be made for, e.g. --appearances \(Simctl.Style.allCases.map({"\"\($0.parameterName)\""}).joined(separator: " "))")
     var appearances: [Simctl.Style] = [.light]

@@ -94,7 +94,7 @@ public extension Simctl {
     static func snap(styles: [Style],
                      workspace: String,
                      schemes: [String],
-                     testPlanName: String?,
+                     testPlanName: String,
                      deviceIds: [String],
                      outURL: URL,
                      zipFileName: String) throws {
@@ -118,7 +118,6 @@ public extension Simctl {
                 let resultsBundleURL = currentURL.appendingPathComponent("result_bundle.xcresult")
                 let screensURL = currentURL.appendingPathComponent("screens")
 
-                let testPlanName = testPlanName ?? "\(scheme)-Screenshots"
                 Logger.shared.info("Running test plan '\(testPlanName)' for scheme '\(scheme)' and style '\(style)'", inset: 1)
 
                 // This command just needs the binaries and the path to the xctestrun file created before the actual
