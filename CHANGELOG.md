@@ -1,6 +1,7 @@
 # Changelog
 
 ## [Unreleased]
+* [#57](https://github.com/blackjacx/assist/pull/57): Fix screenshot generation because of broken TestPlan parameter - [@Blackjacx](https://github.com/blackjacx).
 * [#55](https://github.com/blackjacx/assist/pull/55): Remove platforms enum - [@Blackjacx](https://github.com/blackjacx).
 * [#53](https://github.com/blackjacx/assist/pull/53): Handle "Shutting Down" simctl status - [@Blackjacx](https://github.com/blackjacx).
 * [#52](https://github.com/blackjacx/assist/pull/52): Switch to String types when specifying devices - [@Blackjacx](https://github.com/blackjacx).

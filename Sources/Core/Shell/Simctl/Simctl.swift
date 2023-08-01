@@ -94,10 +94,16 @@ public extension Simctl {
     static func snap(styles: [Style],
                      workspace: String,
                      schemes: [String],
+                     derivedDataUrl: URL,
                      testPlanName: String,
+                     runtime: String,
+                     arch: String,
+                     platform: String,
                      deviceIds: [String],
-                     outURL: URL,
+                     outUrl: URL,
                      zipFileName: String) throws {
+
+        let fileManager = FileManager.default
 
         for style in styles {
             // The following generates a long log of all devices (Useful on a CI for debugging)
@@ -114,44 +120,55 @@ public extension Simctl {
             try updateStatusBar(deviceIds: deviceIds)
 
             for scheme in schemes {
-                let currentURL = outURL.appendingPathComponent(scheme).appendingPathComponent(style.rawValue)
-                let resultsBundleURL = currentURL.appendingPathComponent("result_bundle.xcresult")
-                let screensURL = currentURL.appendingPathComponent("screens")
+                let currentUrl = outUrl.appendingPathComponent(scheme).appendingPathComponent(style.rawValue)
+                let screensUrl = currentUrl.appendingPathComponent("screens")
+                let resultsBundleUrl = currentUrl.appendingPathComponent("result_bundle.xcresult")
+                let xcTestRunFile = derivedDataUrl.appending(components: "Build", "Products", "\(scheme)_\(testPlanName)_\(platform)\(runtime)-\(arch).xctestrun")
 
-                Logger.shared.info("Running test plan '\(testPlanName)' for scheme '\(scheme)' and style '\(style)'", inset: 1)
+                guard fileManager.fileExists(atPath: xcTestRunFile.path()) else {
+                    throw Error.xcTestResultsFileNotFound(path: xcTestRunFile.path())
+                }
 
-                // This command just needs the binaries and the path to the xctestrun file created before the actual
-                // testing. There everything can be configured to run the tests without needing the source code,
-                // i.e. the tests could be performed on different machines.
-                try Xcodebuild.execute(
-                    cmd: .testWithoutBuilding,
-                    workspace: workspace,
-                    schemes: [scheme],
-                    deviceIds: deviceIds,
-                    testPlan: testPlanName,
-                    resultsBundleURL: resultsBundleURL)
+                let messageComponents = [
+                    "style '\(style)'",
+                    "scheme '\(scheme)'",
+                    "runtime: '\(runtime)'",
+                    "platform: '\(platform)'",
+                    "architecture: '\(arch)'"
+                ]
+                Logger.shared.info("Running test plan '\(testPlanName)' for \(ListFormatter.localizedString(byJoining: messageComponents)))", inset: 1)
 
-                Logger.shared.info("Extracting screenshots from xcresult bundle '\(resultsBundleURL.path)' for scheme '\(scheme)' and style '\(style)'", inset: 1)
+                // This command just needs the binaries and the path to the
+                // xctestrun file created before the actual testing. Then
+                // everything can be configured to run the tests without
+                // needing the source code, i.e. the tests could be performed
+                // on different machines.
+                try Xcodebuild.execute(subcommand: .testWithoutBuilding(xcTestRunFile: xcTestRunFile,
+                                                                        resultsBundleURL: resultsBundleUrl),
+                                       deviceIds: deviceIds,
+                                       derivedDataUrl: derivedDataUrl)
 
-                try FileManager.default.createDirectory(at: screensURL, withIntermediateDirectories: true, attributes: nil)
-                try Mint.screenshots(resultsBundleURL: resultsBundleURL, screensURL: screensURL)
+                Logger.shared.info("Extracting screenshots from xcresult bundle '\(resultsBundleUrl.path())' for scheme '\(scheme)' and style '\(style)'", inset: 1)
+
+                try fileManager.createDirectory(at: screensUrl, withIntermediateDirectories: true, attributes: nil)
+                try Mint.screenshots(resultsBundleURL: resultsBundleUrl, screensURL: screensUrl)
             }
         }
 
         for scheme in schemes {
             Logger.shared.info("Package files into one ZIP for scheme '\(scheme)'", inset: 1)
 
-            let originalDirectoryPath = FileManager.default.currentDirectoryPath
+            let originalDirectoryPath = fileManager.currentDirectoryPath
 
             // Switch into folder to prevent storage of absolute paths
-            FileManager.default.changeCurrentDirectoryPath(outURL.path)
+            fileManager.changeCurrentDirectoryPath(outUrl.path)
 
             try Zip.zip(outFile: zipFileName,
                         relativeTargetFolder: scheme,
                         excludePattern: "*.xcresult*")
 
             // Switch back to the original directory
-            FileManager.default.changeCurrentDirectoryPath(originalDirectoryPath)
+            fileManager.changeCurrentDirectoryPath(originalDirectoryPath)
         }
     }
 }
@@ -168,6 +185,7 @@ public extension Simctl {
         case deviceIdNotFoundInDevices(id: String)
         case createDeviceFailed(deviceName: String, runtimeID: String)
         case createDeviceFailedInvalidRuntime(deviceName: String, runtimeID: String)
+        case xcTestResultsFileNotFound(path: String)
     }
 
     enum Style: String, CaseIterable {

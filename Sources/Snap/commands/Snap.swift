@@ -105,6 +105,7 @@ public final class Snap: ParsableCommand {
 
     public func run() throws {
         let outURL: URL
+        let derivedDataUrl = try FileManager.createTemporaryDirectory()
 
         if let destinationDir {
             outURL = URL(fileURLWithPath: destinationDir, isDirectory: true)
@@ -136,18 +137,21 @@ public final class Snap: ParsableCommand {
             Logger.shared.info("Device IDs Found: \(deviceIds)")
 
             Logger.shared.info("Building all requested schemes for testing")
-            try Xcodebuild.execute(cmd: .buildForTesting,
-                                   workspace: workspace,
-                                   schemes: schemes,
-                                   deviceIds: deviceIds)
+            try Xcodebuild.execute(subcommand: .buildForTesting(workspace: workspace, schemes: schemes),
+                                   deviceIds: deviceIds,
+                                   derivedDataUrl: derivedDataUrl)
 
-            Logger.shared.info("Taking screenshots for all requested configs")
+            Logger.shared.info("Taking screenshots for all requested configurations")
             try Simctl.snap(styles: appearances,
                             workspace: workspace,
                             schemes: schemes,
+                            derivedDataUrl: derivedDataUrl,
                             testPlanName: testPlanName,
+                            runtime: runtimeName.components(separatedBy: " ").last!, // grab the version number of the provided runtime
+                            arch: "arm64",
+                            platform: "iphonesimulator", // we're always generating on a simulator
                             deviceIds: deviceIds,
-                            outURL: outURL,
+                            outUrl: outURL,
                             zipFileName: zipFileName)
 
             Logger.shared.info("Find your screens in \(outURL.path)")
