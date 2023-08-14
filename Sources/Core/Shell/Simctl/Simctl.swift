@@ -129,14 +129,14 @@ public extension Simctl {
                     throw Error.xcTestResultsFileNotFound(path: xcTestRunFile.path())
                 }
 
-                let messageComponents = [
-                    "style '\(style)'",
-                    "scheme '\(scheme)'",
-                    "runtime: '\(runtime)'",
-                    "platform: '\(platform)'",
-                    "architecture: '\(arch)'"
-                ]
-                Logger.shared.info("Running test plan '\(testPlanName)' for \(ListFormatter.localizedString(byJoining: messageComponents)))", inset: 1)
+                Logger.shared.info("""
+                    Running test plan '\(testPlanName)' for:
+                        style '\(style)'
+                        scheme '\(scheme)'
+                        runtime: '\(runtime)'
+                        platform: '\(platform)'
+                        architecture: '\(arch)'
+                    """, inset: 1)
 
                 // This command just needs the binaries and the path to the
                 // xctestrun file created before the actual testing. Then

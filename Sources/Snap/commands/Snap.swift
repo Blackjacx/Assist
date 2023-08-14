@@ -148,7 +148,7 @@ public final class Snap: ParsableCommand {
                             derivedDataUrl: derivedDataUrl,
                             testPlanName: testPlanName,
                             runtime: runtimeName.components(separatedBy: " ").last!, // grab the version number of the provided runtime
-                            arch: "arm64",
+                            arch: ProcessInfo.machineHardwareName,
                             platform: "iphonesimulator", // we're always generating on a simulator
                             deviceIds: deviceIds,
                             outUrl: outURL,
