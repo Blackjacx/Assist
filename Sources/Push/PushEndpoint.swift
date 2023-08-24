@@ -22,36 +22,35 @@ extension PushEndpoint: Endpoint {
     
     var host: String {
         switch self {
-        case .pushViaApns(_, let endpoint, _, _, _): return endpoint.host
-        case .pushViaFcm: return "fcm.googleapis.com"
+        case .pushViaApns(_, let endpoint, _, _, _): endpoint.host
+        case .pushViaFcm: "fcm.googleapis.com"
         }
     }
     
     var port: Int? {
         switch self {
-        case .pushViaApns: return 443
-        case .pushViaFcm: return nil
+        case .pushViaApns: 443
+        case .pushViaFcm: nil
         }
     }
 
     var path: String {
         switch self {
-        case let .pushViaApns(_, _, deviceToken, _, _): return "/3/device/\(deviceToken)"
-        case let .pushViaFcm(_, _, credentials): return "/v1/projects/\(credentials.projectId)/messages:send"
+        case let .pushViaApns(_, _, deviceToken, _, _): "/3/device/\(deviceToken)"
+        case let .pushViaFcm(_, _, credentials):  "/v1/projects/\(credentials.projectId)/messages:send"
         }
     }
 
     var queryItems: [URLQueryItem] {
         switch self {
-        case .pushViaApns: return []
-        case .pushViaFcm: return []
+        case .pushViaApns: []
+        case .pushViaFcm: []
         }
     }
 
     var method: HTTPMethod {
         switch self {
-        case .pushViaApns, .pushViaFcm:
-            return .post
+        case .pushViaApns, .pushViaFcm: .post
         }
     }
 
@@ -100,16 +99,20 @@ extension PushEndpoint: Endpoint {
     var parameters: [String : Any]? {
         switch self {
         case let .pushViaApns(_, _, _, _, message):
-            return ["aps": ["alert": message]]
+            [
+                "aps": [
+                        "alert": message
+                ]
+            ]
         case let .pushViaFcm(deviceToken, message, _):
-            return [
+            [
                 "message": [
                     "notification": [
                         "title": "Hello FCM",
                         "body": message
                     ],
                     "token": deviceToken
-                ] as [String: Any]
+                ]
             ]
         }
     }

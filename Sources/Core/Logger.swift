@@ -63,17 +63,17 @@ public extension Logger {
 
         var name: String {
             switch self {
-            case .warn: return "Warn"
-            case .info: return "Info"
-            case .error: return "Error"
+            case .warn: "Warn"
+            case .info: "Info"
+            case .error: "Error"
             }
         }
 
         var emoji: String {
             switch self {
-            case .warn: return "🟡"
-            case .info: return "🟢"
-            case .error: return "🔴"
+            case .warn: "🟡"
+            case .info: "🟢"
+            case .error: "🔴"
             }
         }
     }
