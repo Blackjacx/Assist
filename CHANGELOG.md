@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.4.0] - 2023-08-24Z
 * [#60](https://github.com/blackjacx/assist/pull/60): Fix beta tester deletion - [@Blackjacx](https://github.com/blackjacx).
 * [#58](https://github.com/blackjacx/assist/pull/58): Fix `xcTestRunFile` Name Generation - [@Blackjacx](https://github.com/blackjacx).
 * [#57](https://github.com/blackjacx/assist/pull/57): Fix screenshot generation because of broken TestPlan parameter - [@Blackjacx](https://github.com/blackjacx).
