@@ -59,7 +59,7 @@ public struct Xcodebuild {
             let out = run("xcrun", arguments)
 
             if let error = out.error {
-                Logger.shared.error(out.stderror)
+                Log.xcodebuild.error("\(out.stderror)")
                 throw error
             }
         }
