@@ -25,7 +25,7 @@ public extension Mint {
         let out = run("mint", args)
 
         if let error = out.error {
-            Logger.shared.error(out.stderror)
+            Log.mint.error("\(out.stderror)")
             throw error
         }
     }

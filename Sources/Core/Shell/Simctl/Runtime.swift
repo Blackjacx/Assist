@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Runtime: Codable {
+public struct Runtime: Codable, CustomStringConvertible {
 
     enum CodingKeys: String, CodingKey {
         case buildVersion = "buildversion"
@@ -22,4 +22,10 @@ public struct Runtime: Codable {
     public var version: String
     public var isAvailable: Bool
     public var name: String
+
+    // MARK: - CustomStringConvertible
+
+    public var description: String {
+        "ID: \(identifier), Name: \(name)"
+    }
 }

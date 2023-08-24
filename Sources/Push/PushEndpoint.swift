@@ -81,7 +81,7 @@ extension PushEndpoint: Endpoint {
                 let token = try await JSONWebToken.token(for: .apns(credentials: credentials))
                 headers["Authorization"] = "Bearer \(token)"
             } catch {
-                print("Error generating token: \(error)")
+                Log.push.error("Error generating token: \(error)")
             }
 
         case let .pushViaFcm(_, _, credentials):
@@ -89,7 +89,7 @@ extension PushEndpoint: Endpoint {
                 let token = try await JSONWebToken.token(for: .fcm(credentials: credentials))
                 headers["Authorization"] = "Bearer \(token)"
             } catch {
-                print("Error generating token: \(error)")
+                Log.push.error("Error generating token: \(error)")
             }
         }
 
