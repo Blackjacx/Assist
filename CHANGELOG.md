@@ -1,6 +1,7 @@
 # Changelog
 
 ## [Unreleased]
+* Add log to show which tester is processed - [@Blackjacx](https://github.com/blackjacx).
 
 ## [0.4.0] - 2023-08-24Z
 * [#60](https://github.com/blackjacx/assist/pull/60): Fix beta tester deletion - [@Blackjacx](https://github.com/blackjacx).
