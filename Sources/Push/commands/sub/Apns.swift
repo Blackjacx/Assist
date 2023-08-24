@@ -19,8 +19,8 @@ extension Push {
             
             var host: String {
                 switch self {
-                case .sandbox: return "api.sandbox.push.apple.com"
-                case .production: return "api.push.apple.com"
+                case .sandbox: "api.sandbox.push.apple.com"
+                case .production: "api.push.apple.com"
                 }
             }
         }
