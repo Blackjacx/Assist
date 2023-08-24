@@ -20,18 +20,18 @@ extension PushEndpoint: Endpoint {
 
     var url: URL? { nil }
     
-    var host: String { 
-      switch self {
+    var host: String {
+        switch self {
         case .pushViaApns(_, let endpoint, _, _, _): return endpoint.host
         case .pushViaFcm: return "fcm.googleapis.com"
-      }
+        }
     }
     
-    var port: Int? { 
-      switch self {
+    var port: Int? {
+        switch self {
         case .pushViaApns: return 443
         case .pushViaFcm: return nil
-      }
+        }
     }
 
     var path: String {
@@ -56,7 +56,7 @@ extension PushEndpoint: Endpoint {
     }
 
     var timeout: TimeInterval {
-        5
+        30
     }
     
     var shouldAuthorize: Bool {
@@ -70,39 +70,47 @@ extension PushEndpoint: Endpoint {
         ]
 
         guard shouldAuthorize else {
-          return headers
+            return headers
         }
 
         switch self {
         case let .pushViaApns(credentials, _, _, topic, _):
-          headers["apns-topic"] = topic
-          headers["apns-push-type"] = "alert"
+            headers["apns-topic"] = topic
+            headers["apns-push-type"] = "alert"
 
-          do {
-              let token = try await JSONWebToken.token(for: .apns(credentials: credentials))
-              headers["Authorization"] = "Bearer \(token)"
-          } catch {
-              print("Error generating token: \(error)")
-          }
+            do {
+                let token = try await JSONWebToken.token(for: .apns(credentials: credentials))
+                headers["Authorization"] = "Bearer \(token)"
+            } catch {
+                print("Error generating token: \(error)")
+            }
 
         case let .pushViaFcm(_, _, credentials):
-          do {
-              let token = try await JSONWebToken.token(for: .fcm(credentials: credentials))
-              headers["Authorization"] = "Bearer \(token)"
-          } catch {
-              print("Error generating token: \(error)")
-          }
+            do {
+                let token = try await JSONWebToken.token(for: .fcm(credentials: credentials))
+                headers["Authorization"] = "Bearer \(token)"
+            } catch {
+                print("Error generating token: \(error)")
+            }
         }
 
         return headers
     }
 
     var parameters: [String : Any]? {
-      switch self {
+        switch self {
         case let .pushViaApns(_, _, _, _, message):
-          return ["aps": ["alert": message]]
+            return ["aps": ["alert": message]]
         case let .pushViaFcm(deviceToken, message, _):
-          return ["message": ["notification": ["title": "Hello FCM", "body": message], "token": deviceToken]]
+            return [
+                "message": [
+                    "notification": [
+                        "title": "Hello FCM",
+                        "body": message
+                    ],
+                    "token": deviceToken
+                ] as [String: Any]
+            ]
         }
     }
 

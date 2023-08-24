@@ -1,0 +1,56 @@
+name: Bug Report
+description: File a bug report
+title: "[Bug]: "
+labels: [bug]
+assignees: [blackjacx]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out 
+        this bug report!
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Tell us, what happened?
+      placeholder: Tell us what you see!
+      value: "🔥"
+    validations:
+      required: true
+  - type: textarea
+    id: what-expected
+    attributes:
+      label: What did you expect?
+      description: Tell us, what you expected to happen?
+      placeholder: Tell us your thoughts!
+      value: "🧐"
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: What version of our software are you running?
+      placeholder: ex. 1.2.3
+    validations:
+      required: true
+  - type: input
+    id: macos
+    attributes:
+      label: What macOS version are you seeing the problem on?
+      placeholder: ex. macOS Ventura 13.0.1
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: |
+        Please copy and paste any relevant log 
+        output. This will be automatically 
+        formatted into code, so no need for 
+        backticks.
+      render: shell
+    validations:
+      required: false

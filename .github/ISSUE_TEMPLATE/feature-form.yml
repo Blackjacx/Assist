@@ -1,0 +1,37 @@
+name: Feature Request
+description: File a feature request
+title: "[Feat]: "
+labels: [feature]
+assignees:
+  - blackjacx
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this form!
+  - type: textarea
+    id: what-expect
+    attributes:
+      label: What is your wish?
+      description: Tell us, which functionality you expect to see?
+      placeholder: Tell us what you need!
+      value: "💡"
+    validations:
+      required: true
+  - type: dropdown
+    id: urgency
+    attributes:
+      label: Urgency
+      description: How urgent is you request?
+      options:
+        - Low
+        - Medium
+        - High
+    validations:
+      required: false
+  - type: textarea
+    id: code-examples
+    attributes:
+      label: Code Example
+      description: Please add a descriptive code example. This will be automatically formatted into code, so no need for backticks.
+      render: swift

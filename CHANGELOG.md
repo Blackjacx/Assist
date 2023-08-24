@@ -2,8 +2,17 @@
 
 ## [Unreleased]
 
+## [0.4.0] - 2023-08-24Z
+* [#60](https://github.com/blackjacx/assist/pull/60): Fix beta tester deletion - [@Blackjacx](https://github.com/blackjacx).
+* [#58](https://github.com/blackjacx/assist/pull/58): Fix `xcTestRunFile` Name Generation - [@Blackjacx](https://github.com/blackjacx).
+* [#57](https://github.com/blackjacx/assist/pull/57): Fix screenshot generation because of broken TestPlan parameter - [@Blackjacx](https://github.com/blackjacx).
+* [#55](https://github.com/blackjacx/assist/pull/55): Remove platforms enum - [@Blackjacx](https://github.com/blackjacx).
+* [#53](https://github.com/blackjacx/assist/pull/53): Handle "Shutting Down" simctl status - [@Blackjacx](https://github.com/blackjacx).
+* [#52](https://github.com/blackjacx/assist/pull/52): Switch to String types when specifying devices - [@Blackjacx](https://github.com/blackjacx).
+
 ## [0.3.0] - 2022-09-02Z
 * Upgrade to Swift 5.6 - [@Blackjacx](https://github.com/blackjacx).
+* Adding iPhone 13 models (https://github.com/Blackjacx/Assist/commit/d3bb98bd703ef54c7849586cbe72ba5f829940af) - [@Blackjacx](https://github.com/blackjacx)
 
 ## [0.2.0] - 2022-03-14Z
 * [#43](https://github.com/blackjacx/assist/pull/43): Async Await Support - [@Blackjacx](https://github.com/blackjacx).

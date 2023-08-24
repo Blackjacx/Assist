@@ -1,21 +1,28 @@
 name: Test
       
-on: [push]
+on:
+  push:
+    branches: [ develop ]
 
 jobs:
   build:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest]
-
+        os: ["macos-12"]
+        swift: ["5.6.1"]
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Build
-        run: |
-          swift --version
-          swift build -v --enable-test-discovery
-      - name: Test
-        run: swift test -v --enable-test-discovery --parallel
+      - uses: swift-actions/setup-swift@v1
+        with:
+          swift-version: ${{ matrix.swift }}
+      - uses: actions/checkout@v3
+      - name: Log Swift Version
+        run: swift --version
+      - name: Log Xcode Versions
+        run: ls -la /Applications/
+      - name: Build for macOS
+        run: swift build -v
+      - name: Run Tests for macOS
+        run: swift test -v

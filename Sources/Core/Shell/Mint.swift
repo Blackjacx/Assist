@@ -17,7 +17,9 @@ public extension Mint {
     static func screenshots(resultsBundleURL: URL, screensURL: URL) throws {
         let args = ["run", "ChargePoint/xcparse", "xcparse", "screenshots",
                     "--test-plan-config",
-                    "--model", resultsBundleURL.path,
+                    "--model",
+                    "--verbose",
+                    resultsBundleURL.path,
                     screensURL.path]
 
         let out = run("mint", args)

@@ -9,33 +9,32 @@ import Foundation
 import Engine
 import SwiftShell
 
-public struct Simctl {
-
-}
+public struct Simctl {}
 
 // MARK: - Public: Simctl Convenience Functions
 
 public extension Simctl {
 
-    static func latestAvailableIOS() throws -> String {
-        guard let platformName = try Simctl
-            ._list()
-            .runtimes
+    static func availableRuntimes() throws -> [Runtime] {
+        try Simctl._list().runtimes
+    }
+
+    static func latestAvailableIosRuntime() throws -> String {
+        guard let runtimeName = try availableRuntimes()
             .sorted(by: { $0.version > $1.version })
-            .first(where: { $0.name.starts(with: "iOS") })?
-            .name else {
-                throw Error.latestPlatformNameNotFound
+            .first(where: { $0.name.starts(with: "iOS") }) else {
+            throw Error.latestRuntimeNameNotFound
         }
-        return platformName
+        return runtimeName.name
     }
 
-    static func isPlatformValid(_ platform: String) throws -> Bool {
-        try Simctl._list().runtimes.first { $0.name == platform } != nil
+    static func isRuntimeNameValid(_ runtimeName: String) throws -> Bool {
+        try Simctl._list().runtimes.contains(where: { $0.name == runtimeName })
     }
 
-    static func runtimeForPlatform(_ platform: String) throws -> Runtime {
-        guard let runtime = try Simctl._list().runtimes.first(where: { $0.name == platform }) else {
-            throw Error.runtimeNotFoundForPlatform(platform)
+    static func runtime(for runtimeName: String) throws -> Runtime {
+        guard let runtime = try Simctl._list().runtimes.first(where: { $0.name == runtimeName }) else {
+            throw Error.runtimeNotFound(name: runtimeName)
         }
         return runtime
     }
@@ -47,13 +46,13 @@ public extension Simctl {
         return devices
     }
 
-    static func deviceIdsFor(deviceTypes: [DeviceType], runtime: Runtime) throws -> [String] {
+    static func deviceIdsFor(deviceNames: [String], runtime: Runtime) throws -> [String] {
         var deviceIDs: [String] = []
 
-        try deviceTypes.forEach { (deviceType) in
-            guard let deviceID = try devicesForRuntime(runtime).first(where: { $0.name == deviceType.simCtlValue }) else {
+        try deviceNames.forEach { (name) in
+            guard let deviceID = try devicesForRuntime(runtime).first(where: { $0.name == name }) else {
                 // Create device if it is not yet available
-                let deviceID = try createDevice(name: deviceType.simCtlValue, id: deviceType.simCtlValue, runtime: runtime)
+                let deviceID = try createDevice(name: name, id: name, runtime: runtime)
                 deviceIDs.append(deviceID)
                 return
             }
@@ -95,10 +94,16 @@ public extension Simctl {
     static func snap(styles: [Style],
                      workspace: String,
                      schemes: [String],
-                     testPlanName: String?,
+                     derivedDataUrl: URL,
+                     testPlanName: String,
+                     runtime: String,
+                     arch: String,
+                     platform: String,
                      deviceIds: [String],
-                     outURL: URL,
+                     outUrl: URL,
                      zipFileName: String) throws {
+
+        let fileManager = FileManager.default
 
         for style in styles {
             // The following generates a long log of all devices (Useful on a CI for debugging)
@@ -115,45 +120,55 @@ public extension Simctl {
             try updateStatusBar(deviceIds: deviceIds)
 
             for scheme in schemes {
-                let currentURL = outURL.appendingPathComponent(scheme).appendingPathComponent(style.rawValue)
-                let resultsBundleURL = currentURL.appendingPathComponent("result_bundle.xcresult")
-                let screensURL = currentURL.appendingPathComponent("screens")
+                let currentUrl = outUrl.appendingPathComponent(scheme).appendingPathComponent(style.rawValue)
+                let screensUrl = currentUrl.appendingPathComponent("screens")
+                let resultsBundleUrl = currentUrl.appendingPathComponent("result_bundle.xcresult")
+                let xcTestRunFile = derivedDataUrl.appending(components: "Build", "Products", "\(scheme)_\(testPlanName)_\(platform)\(runtime)-\(arch).xctestrun")
 
-                let testPlanName = testPlanName ?? "\(scheme)-Screenshots"
-                Logger.shared.info("Running test plan '\(testPlanName)' for scheme '\(scheme)' and style '\(style)'", inset: 1)
+                guard fileManager.fileExists(atPath: xcTestRunFile.path()) else {
+                    throw Error.xcTestResultsFileNotFound(path: xcTestRunFile.path())
+                }
 
-                // This command just needs the binaries and the path to the xctestrun file created before the actual
-                // testing. There everything can be configured to run the tests without needing the source code,
-                // i.e. the tests could be performed on different machines.
-                try Xcodebuild.execute(
-                    cmd: .testWithoutBuilding,
-                    workspace: workspace,
-                    schemes: [scheme],
-                    deviceIds: deviceIds,
-                    testPlan: testPlanName,
-                    resultsBundleURL: resultsBundleURL)
+                Logger.shared.info("""
+                    Running test plan '\(testPlanName)' for:
+                        style '\(style)'
+                        scheme '\(scheme)'
+                        runtime: '\(runtime)'
+                        platform: '\(platform)'
+                        architecture: '\(arch)'
+                    """, inset: 1)
 
-                Logger.shared.info("Extracting screenshots from xcresult bundle '\(resultsBundleURL.path)' for scheme '\(scheme)' and style '\(style)'", inset: 2)
+                // This command just needs the binaries and the path to the
+                // xctestrun file created before the actual testing. Then
+                // everything can be configured to run the tests without
+                // needing the source code, i.e. the tests could be performed
+                // on different machines.
+                try Xcodebuild.execute(subcommand: .testWithoutBuilding(xcTestRunFile: xcTestRunFile,
+                                                                        resultsBundleURL: resultsBundleUrl),
+                                       deviceIds: deviceIds,
+                                       derivedDataUrl: derivedDataUrl)
 
-                try FileManager.default.createDirectory(at: screensURL, withIntermediateDirectories: true, attributes: nil)
-                try Mint.screenshots(resultsBundleURL: resultsBundleURL, screensURL: screensURL)
+                Logger.shared.info("Extracting screenshots from xcresult bundle '\(resultsBundleUrl.path())' for scheme '\(scheme)' and style '\(style)'", inset: 1)
+
+                try fileManager.createDirectory(at: screensUrl, withIntermediateDirectories: true, attributes: nil)
+                try Mint.screenshots(resultsBundleURL: resultsBundleUrl, screensURL: screensUrl)
             }
         }
 
         for scheme in schemes {
             Logger.shared.info("Package files into one ZIP for scheme '\(scheme)'", inset: 1)
 
-            let originalDirectoryPath = FileManager.default.currentDirectoryPath
+            let originalDirectoryPath = fileManager.currentDirectoryPath
 
             // Switch into folder to prevent storage of absolute paths
-            FileManager.default.changeCurrentDirectoryPath(outURL.path)
+            fileManager.changeCurrentDirectoryPath(outUrl.path)
 
             try Zip.zip(outFile: zipFileName,
                         relativeTargetFolder: scheme,
                         excludePattern: "*.xcresult*")
 
             // Switch back to the original directory
-            FileManager.default.changeCurrentDirectoryPath(originalDirectoryPath)
+            fileManager.changeCurrentDirectoryPath(originalDirectoryPath)
         }
     }
 }
@@ -164,12 +179,13 @@ public extension Simctl {
 
     enum Error: Swift.Error {
         case simctlListFailed
-        case latestPlatformNameNotFound
-        case runtimeNotFoundForPlatform(String)
+        case latestRuntimeNameNotFound
+        case runtimeNotFound(name: String)
         case devicesNotFoundForRuntime(Runtime)
         case deviceIdNotFoundInDevices(id: String)
         case createDeviceFailed(deviceName: String, runtimeID: String)
         case createDeviceFailedInvalidRuntime(deviceName: String, runtimeID: String)
+        case xcTestResultsFileNotFound(path: String)
     }
 
     enum Style: String, CaseIterable {
@@ -177,98 +193,6 @@ public extension Simctl {
         case dark
 
         public var parameterName: String { rawValue }
-    }
-
-//    "Apple TV 4K (2nd generation)"
-//    "Apple TV 4K (at 1080p) (2nd generation)"
-//    "Apple TV 4K (at 1080p)"
-//    "Apple TV 4K"
-//    "Apple TV"
-//    "Apple Watch SE - 40mm"
-//    "Apple Watch SE - 44mm"
-//    "Apple Watch Series 3 - 38mm"
-//    "Apple Watch Series 3 - 42mm"
-//    "Apple Watch Series 4 - 40mm"
-//    "Apple Watch Series 4 - 44mm"
-//    "Apple Watch Series 5 - 40mm"
-//    "Apple Watch Series 5 - 44mm"
-//    "Apple Watch Series 6 - 40mm"
-//    "Apple Watch Series 6 - 44mm"
-//    "iPad (5th generation)"
-//    "iPad (6th generation)"
-//    "iPad (7th generation)"
-//    "iPad (8th generation)"
-//    "iPad Air (3rd generation)"
-//    "iPad Air (4th generation)"
-//    "iPad Air 2"
-//    "iPad Air"
-//    "iPad Pro (10.5-inch)"
-//    "iPad Pro (11-inch) (1st generation)"
-//    "iPad Pro (11-inch) (2nd generation)"
-//    "iPad Pro (11-inch) (3rd generation)"
-//    "iPad Pro (12.9-inch) (1st generation)"
-//    "iPad Pro (12.9-inch) (2nd generation)"
-//    "iPad Pro (12.9-inch) (3rd generation)"
-//    "iPad Pro (12.9-inch) (4th generation)"
-//    "iPad Pro (12.9-inch) (5th generation)"
-//    "iPad Pro (9.7-inch)"
-//    "iPad mini (5th generation)"
-//    "iPad mini 2"
-//    "iPad mini 3"
-//    "iPad mini 4"
-//    "iPhone 8 Plus"
-//    "iPhone 8"
-
-    enum DeviceType: String, CaseIterable {
-        // DEPRECATED: Use `iPhoneSE2` instead
-        case iPhoneSE
-        case iPhoneSE2
-        case iPhoneSE3
-        case iPhone11
-        case iPhone11Pro
-        case iPhone11ProMax
-        case iPhone12Mini
-        case iPhone12
-        case iPhone12Pro
-        case iPhone12ProMax
-        case iPhone13Mini
-        case iPhone13
-        case iPhone13Pro
-        case iPhone13ProMax
-
-        public var parameterName: String { rawValue }
-
-        public var simCtlValue: String {
-            switch self {
-            case .iPhoneSE: return "iPhone SE (2nd generation)"
-            case .iPhoneSE2: return "iPhone SE (2nd generation)"
-            case .iPhoneSE3: return "iPhone SE (3rd generation)"
-            case .iPhone11: return "iPhone 11"
-            case .iPhone11Pro: return "iPhone 11 Pro"
-            case .iPhone11ProMax: return "iPhone 11 Pro Max"
-            case .iPhone12Mini: return "iPhone 12 mini"
-            case .iPhone12: return "iPhone 12"
-            case .iPhone12Pro: return "iPhone 12 Pro"
-            case .iPhone12ProMax: return "iPhone 12 Pro Max"
-            case .iPhone13Mini: return "iPhone 13 mini"
-            case .iPhone13: return "iPhone 13"
-            case .iPhone13Pro: return "iPhone 13 Pro"
-            case .iPhone13ProMax: return "iPhone 13 Pro Max"
-            }
-        }
-    }
-
-    /// This enum represents only the latest iOS versions from a major version.
-    /// Omit the platform parameter to use the latest available version. This
-    /// enum is updated after a new version comes out.
-    enum Platform: String, CaseIterable {
-        case ios12_4 = "iOS 12.4"
-        case ios13_7 = "iOS 13.6"
-        case ios14_5 = "iOS 14.5"
-        case ios15_0 = "iOS 15.0"
-        case ios16_0 = "iOS 16.0"
-
-        public var parameterName: String { "\(self)" }
     }
 
     enum DataNetwork: String {

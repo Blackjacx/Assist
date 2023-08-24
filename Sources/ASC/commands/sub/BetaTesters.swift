@@ -103,25 +103,21 @@ extension ASC.BetaTesters {
         // `ParsableArguments` type.
         @OptionGroup()
         var options: ApiKeyOptions
-        
-        @Option(name: .shortAndLong, help: "A list of emails of users you want to remove.")
-        var emails: [String]
+
+        @Option(name: .shortAndLong, help: "Filter used for searching for the user. See https://developer.apple.com/documentation/appstoreconnectapi/list_beta_testers for possible values.")
+        var filters: [Filter] = []
 
         func run() async throws {
+            let deletedTesters = try await ASCService.deleteBetaTesters(filters: filters)
 
-            var errors: [Error] = []
-
-            for email in emails {
-                do {
-                    let deletedTester = try await ASCService.deleteBetaTester(email: email)
-                    print("Successfully removed \(deletedTester)")
-                } catch {
-                    errors.append(error)
-                }
+            guard !deletedTesters.isEmpty else {
+                print("No testers found…")
+                return
             }
 
-            if !errors.isEmpty {
-                throw AscError.requestFailed(underlyingErrors: errors)
+            print("Successfully removed the following testers:")
+            deletedTesters.forEach {
+                dump($0)
             }
         }
     }
