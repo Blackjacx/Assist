@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.4.1] - 2023-08-24Z
 * Add log to show which tester is processed - [@Blackjacx](https://github.com/blackjacx).
 
 ## [0.4.0] - 2023-08-24Z
