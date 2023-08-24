@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+## [0.4.1] - 2023-08-24Z
+* Add log to show which tester is processed - [@Blackjacx](https://github.com/blackjacx).
+
 ## [0.4.0] - 2023-08-24Z
 * [#60](https://github.com/blackjacx/assist/pull/60): Fix beta tester deletion - [@Blackjacx](https://github.com/blackjacx).
 * [#58](https://github.com/blackjacx/assist/pull/58): Fix `xcTestRunFile` Name Generation - [@Blackjacx](https://github.com/blackjacx).
