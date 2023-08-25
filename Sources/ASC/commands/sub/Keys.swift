@@ -17,7 +17,7 @@ extension ASC {
 
         static var configuration = CommandConfiguration(
             abstract: "Lists, registers and deletes App Store Connect API keys on your Mac.",
-            subcommands: [List.self, Activate.self, Register.self, Delete.self],
+            subcommands: [List.self, Activate.self, Register.self, Delete.self, Token.self],
             defaultSubcommand: List.self)
     }
 }
@@ -28,8 +28,6 @@ extension ASC.Keys {
     struct List: ParsableCommand {
         static var configuration = CommandConfiguration(abstract: "List locally stored App Store Connect API keys.")
 
-        // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
-        // `ParsableArguments` type.
         @OptionGroup()
         var options: Options
 
@@ -42,16 +40,14 @@ extension ASC.Keys {
     struct Activate: ParsableCommand {
         static var configuration = CommandConfiguration(abstract: "Makes a registered API key the default one.")
 
-        // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
-        // `ParsableArguments` type.
         @OptionGroup()
         var options: Options
 
         @Option(name: .shortAndLong, help: "The key's id.")
-        var id: String
+        var keyId: String
 
         func run() throws {
-            let activatedKey = try ASCService.activateApiKey(id: id)
+            let activatedKey = try ASCService.activateApiKey(id: keyId)
             print(activatedKey)
         }
     }
@@ -60,13 +56,11 @@ extension ASC.Keys {
     struct Register: ParsableCommand {
         static var configuration = CommandConfiguration(abstract: "Registers App Store Connect API keys locally.")
 
-        // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
-        // `ParsableArguments` type.
         @OptionGroup()
         var options: Options
 
         @Option(name: .shortAndLong, help: "The key's id.")
-        var id: String
+        var keyId: String
 
         @Option(name: .shortAndLong, help: "The key's name you. You can choose freely.")
         var name: String
@@ -78,7 +72,7 @@ extension ASC.Keys {
         var issuerId: String
 
         func run() throws {
-            let key = ApiKey(id: id, name: name, source: .localFilePath(path: path), issuerId: issuerId)
+            let key = ApiKey(id: keyId, name: name, source: .localFilePath(path: path), issuerId: issuerId)
             let registeredKey = try ASCService.registerApiKey(key: key)
             print(registeredKey)
         }
@@ -88,17 +82,28 @@ extension ASC.Keys {
     struct Delete: ParsableCommand {
         static var configuration = CommandConfiguration(abstract: "Delete locally stored App Store Connect API keys.")
 
-        // The `@OptionGroup` attribute includes the flags, options, and arguments defined by another
-        // `ParsableArguments` type.
         @OptionGroup()
         var options: Options
 
         @Option(name: .shortAndLong, help: "The key's id.")
-        var id: String
+        var keyId: String
 
         func run() throws {
-            let deletedKey = try ASCService.deleteApiKey(id: id)
+            let deletedKey = try ASCService.deleteApiKey(id: keyId)
             print(deletedKey)
+        }
+    }
+
+    /// Generate a token from a locally stored App Store Connect API keys.
+    struct Token: ParsableCommand {
+        static var configuration = CommandConfiguration(abstract: "Generate a token from a locally stored App Store Connect API keys.")
+
+        @OptionGroup()
+        var options: ApiKeyOptions
+
+        func run() throws {
+            let token = try ASCService.createAccessToken(keyId: options.keyId)
+            print(token)
         }
     }
 }
