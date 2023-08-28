@@ -1,6 +1,7 @@
 # Changelog
 
 ## [Unreleased]
+* [#63](https://github.com/blackjacx/assist/pull/63): Add token subcommand to keys - [@Blackjacx](https://github.com/blackjacx).
 * [#61](https://github.com/blackjacx/assist/pull/61): Switch to Swift 5.9 - [@Blackjacx](https://github.com/blackjacx).
 
 ## [0.4.1] - 2023-08-24Z
