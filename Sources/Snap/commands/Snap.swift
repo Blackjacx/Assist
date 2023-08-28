@@ -51,7 +51,7 @@ public final class Snap: ParsableCommand {
     @OptionGroup()
     var options: Options
 
-    @Option(help: "The workspace used to make the screenshots.")
+    @Option(help: "The path to the workspace used to make the screenshots.")
     var workspace: String
 
     @Option(name: [.short, .customLong("scheme")], help: "A scheme to run the screenshot tests on. Can be specified multiple times to generate screenshots for multiple schemes.")
@@ -59,6 +59,9 @@ public final class Snap: ParsableCommand {
 
     @Option(help: "The name of the TestPlan running the screenshot tests.")
     var testPlanName: String
+
+    @Option(name: .shortAndLong, parsing: .upToNextOption, help: "An optional list of test plan configurations. They must match exactly the name of the config from the test plan.")
+    var testPlanConfigs: [String] = []
 
     @Option(parsing: .upToNextOption, help: "The appearances the screenshots should be made for, e.g. --appearances \(Simctl.Style.allCases.map({"\"\($0.parameterName)\""}).joined(separator: " "))")
     var appearances: [Simctl.Style] = [.light]
@@ -80,7 +83,9 @@ public final class Snap: ParsableCommand {
     }
 
     public func validate() throws {
-        guard FileManager.default.fileExists(atPath: workspace) else {
+        let fileManager = FileManager.default
+
+        guard fileManager.fileExists(atPath: workspace) else {
             throw ValidationError("\(workspace) not found.")
         }
 
@@ -90,7 +95,7 @@ public final class Snap: ParsableCommand {
 
         if let destinationDir {
             var isDir: ObjCBool = false
-            guard FileManager.default.fileExists(atPath: destinationDir, isDirectory: &isDir), isDir.boolValue else {
+            guard fileManager.fileExists(atPath: destinationDir, isDirectory: &isDir), isDir.boolValue else {
                 throw ValidationError("\(destinationDir) does not exist or is no directory.")
             }
         }
@@ -122,6 +127,7 @@ public final class Snap: ParsableCommand {
                     devices: \(ListFormatter.localizedString(byJoining: devices))
                     platform: \(runtimeName)
                     schemes: \(ListFormatter.localizedString(byJoining: schemes))
+                    test plan: \(testPlanName) (\(testPlanConfigs.isEmpty ? "all configs" : ListFormatter.localizedString(byJoining: testPlanConfigs)))
                     destination: \(outURL.path.appendPathComponent(zipFileName))
                 """
             Logger.shared.info(configMessage)
@@ -147,6 +153,7 @@ public final class Snap: ParsableCommand {
                             schemes: schemes,
                             derivedDataUrl: derivedDataUrl,
                             testPlanName: testPlanName,
+                            testPlanConfigs: testPlanConfigs,
                             runtime: runtimeName.components(separatedBy: " ").last!, // grab the version number of the provided runtime
                             arch: ProcessInfo.machineHardwareName,
                             platform: "iphonesimulator", // we're always generating on a simulator

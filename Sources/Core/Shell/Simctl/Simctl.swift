@@ -96,6 +96,7 @@ public extension Simctl {
                      schemes: [String],
                      derivedDataUrl: URL,
                      testPlanName: String,
+                     testPlanConfigs: [String],
                      runtime: String,
                      arch: String,
                      platform: String,
@@ -130,7 +131,7 @@ public extension Simctl {
                 }
 
                 Logger.shared.info("""
-                    Running test plan '\(testPlanName)' for:
+                    Running test plan '\(testPlanName) (\(testPlanConfigs.isEmpty ? "all configs" : ListFormatter.localizedString(byJoining: testPlanConfigs)))' for:
                         style '\(style)'
                         scheme '\(scheme)'
                         runtime: '\(runtime)'
@@ -144,7 +145,8 @@ public extension Simctl {
                 // needing the source code, i.e. the tests could be performed
                 // on different machines.
                 try Xcodebuild.execute(subcommand: .testWithoutBuilding(xcTestRunFile: xcTestRunFile,
-                                                                        resultsBundleURL: resultsBundleUrl),
+                                                                        resultsBundleURL: resultsBundleUrl,
+                                                                        testPlanConfigs: testPlanConfigs),
                                        deviceIds: deviceIds,
                                        derivedDataUrl: derivedDataUrl)
 
