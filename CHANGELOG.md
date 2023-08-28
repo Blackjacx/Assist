@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.5.0] - 2023-08-28Z
 * [#64](https://github.com/blackjacx/assist/pull/64): Support specifying specific test plan configs - [@Blackjacx](https://github.com/blackjacx).
 
 ## [0.4.2] - 2023-08-28Z
