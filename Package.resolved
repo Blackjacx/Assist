@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/blackjacx/ASCKit",
       "state" : {
-        "revision" : "bf8165371166baf312ee202361df4e25c4c0bce2",
-        "version" : "0.2.1"
+        "revision" : "66450c6527d737a2bd26be11c19d6b951e221ad1",
+        "version" : "0.2.2"
       }
     },
     {

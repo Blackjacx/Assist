@@ -46,8 +46,8 @@ public struct Xcodebuild {
 
         var name: String {
             switch self {
-            case .buildForTesting: return "build-for-testing"
-            case .testWithoutBuilding: return "test-without-building"
+            case .buildForTesting: "build-for-testing"
+            case .testWithoutBuilding: "test-without-building"
             }
         }
     }

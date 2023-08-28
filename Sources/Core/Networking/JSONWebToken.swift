@@ -32,10 +32,9 @@ public struct JSONWebToken {
     }
 
     public static func token(for service: Service) async throws -> String {
-
         switch service {
-        case .apns(let credentials): return try token(credentials: credentials)
-        case .fcm(let credentials): return try await token(credentials: credentials)
+        case .apns(let credentials): try token(credentials: credentials)
+        case .fcm(let credentials): try await token(credentials: credentials)
         }
     }
 
