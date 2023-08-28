@@ -16,7 +16,10 @@ public struct Xcodebuild {
         let destinations = deviceIds
             .map { "platform=iOS Simulator,id=\($0)" }
             .flatMap { ["-destination", $0] }
-        let commonArgs = ["xcodebuild", subcommand.name, "-derivedDataPath", derivedDataUrl.path()] + destinations
+        let commonArgs = [
+            "xcodebuild", subcommand.name,
+            "-derivedDataPath", derivedDataUrl.path()
+        ] + destinations
         let invocations: [Invocation]
 
         switch subcommand {
@@ -25,11 +28,12 @@ public struct Xcodebuild {
                 Invocation(arguments: commonArgs + ["-workspace", workspace, "-scheme", $0])
             }
 
-        case let .testWithoutBuilding(xcTestRunFile, resultsBundleURL):
+        case let .testWithoutBuilding(xcTestRunFile, resultsBundleURL, testPlanConfigs):
             var args = ["-xctestrun", xcTestRunFile.path()]
             if let resultsBundleURL {
                 args += ["-resultBundlePath", resultsBundleURL.path]
             }
+            args += testPlanConfigs.flatMap { ["-only-test-configuration", $0] }
             invocations = [Invocation(arguments: commonArgs + args)]
         }
 
@@ -42,7 +46,7 @@ public struct Xcodebuild {
 
     public enum Subcommand {
         case buildForTesting(workspace: String, schemes: [String])
-        case testWithoutBuilding(xcTestRunFile: URL, resultsBundleURL: URL? = nil)
+        case testWithoutBuilding(xcTestRunFile: URL, resultsBundleURL: URL? = nil, testPlanConfigs: [String] = [])
 
         var name: String {
             switch self {
