@@ -1,6 +1,7 @@
 # Changelog
 
 ## [Unreleased]
+* [#64](https://github.com/blackjacx/assist/pull/64): Support specifying specific test plan configs - [@Blackjacx](https://github.com/blackjacx).
 
 ## [0.4.2] - 2023-08-28Z
 * [#63](https://github.com/blackjacx/assist/pull/63): Add token subcommand to keys - [@Blackjacx](https://github.com/blackjacx).
