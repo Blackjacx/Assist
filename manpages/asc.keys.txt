@@ -1,0 +1,17 @@
+OVERVIEW: Lists, registers and deletes App Store Connect API keys on your Mac.
+
+USAGE: asc keys <subcommand>
+
+OPTIONS:
+  --version               Show the version.
+  -h, --help              Show help information.
+
+SUBCOMMANDS:
+  list (default)          List locally stored App Store Connect API keys.
+  activate                Makes a registered API key the default one.
+  register                Registers App Store Connect API keys locally.
+  delete                  Delete locally stored App Store Connect API keys.
+  token                   Generate a token from a locally stored App Store
+                          Connect API keys.
+
+  See 'asc help keys <subcommand>' for detailed help.

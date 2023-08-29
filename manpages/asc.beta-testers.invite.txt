@@ -1,0 +1,13 @@
+OVERVIEW: Send or resend an invitation to a beta tester to test specified apps.
+
+USAGE: asc beta-testers invite [--verbose ...] [--key-id <key-id>] [--app-ids <app-ids> ...] --email <email>
+
+OPTIONS:
+  -v, --verbose           Activate verbose logging.
+  -k, --key-id <key-id>   The ID of the key to use.
+  -i, --app-ids <app-ids> The Apple app ID(s) that uniquely identifiy the
+                          app(s) (e.g. -i "12345678" "14324567").
+  -e, --email <email>     The unique email of the tester to send the invite to.
+  --version               Show the version.
+  -h, --help              Show help information.
+

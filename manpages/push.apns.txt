@@ -1,0 +1,21 @@
+OVERVIEW: Access APNS, see
+https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/establishing_a_token-based_connection_to_apns
+
+USAGE: push apns [--verbose ...] --device-token <device-token> --message <message> --key-path <key-path> --key-id <key-id> --issuer-id <issuer-id> --endpoint <endpoint> --topic <topic>
+
+OPTIONS:
+  -v, --verbose           Activate verbose logging.
+  -d, --device-token <device-token>
+                          The token of the device you want to push to.
+  -m, --message <message> The message you want to send.
+  --key-path <key-path>   The path to your private key file.
+  --key-id <key-id>       The id of the private key.
+  --issuer-id <issuer-id> The issuer id of the key. Use the team ID of the
+                          account your app is published in.
+  -e, --endpoint <endpoint>
+                          The endpoint to use. `sandbox` or `production`
+  -t, --topic <topic>     The topic. User your bundle id of the app you want to
+                          push to.
+  --version               Show the version.
+  -h, --help              Show help information.
+

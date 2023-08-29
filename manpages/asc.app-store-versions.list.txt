@@ -1,0 +1,19 @@
+OVERVIEW: Get a list of all App Store versions of an app across all platforms.
+
+USAGE: asc app-store-versions list [--verbose ...] [--key-id <key-id>] [--filters <filters> ...] [--app-ids <app-ids> ...] [--limit <limit>] [<attribute>]
+
+ARGUMENTS:
+  <attribute>             The attribute you are interested in. [attributes]
+                          (default: id).
+
+OPTIONS:
+  -v, --verbose           Activate verbose logging.
+  -k, --key-id <key-id>   The ID of the key to use.
+  -f, --filters <filters> Filter which is set as part of the request. See
+                          https://developer.apple.com/documentation/appstoreconnectapi/list_all_app_store_versions_for_an_app
+                          for possible values.
+  -a, --app-ids <app-ids> The IDs of the apps you want to get the versions from.
+  -l, --limit <limit>     Number of resources to return.
+  --version               Show the version.
+  -h, --help              Show help information.
+

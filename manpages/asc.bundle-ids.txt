@@ -1,0 +1,15 @@
+OVERVIEW: Manage the bundle IDs that uniquely identify your apps.
+
+USAGE: asc bundle-ids <subcommand>
+
+OPTIONS:
+  --version               Show the version.
+  -h, --help              Show help information.
+
+SUBCOMMANDS:
+  list (default)          Find and list bundle IDs that are registered to your
+                          team.
+  register                Register a new bundle ID for app development.
+  delete                  Delete a bundle ID that is used for app development.
+
+  See 'asc help bundle-ids <subcommand>' for detailed help.
