@@ -293,8 +293,6 @@ Thanks to all of you who are part of this:
 
 ASC is available under the MIT license. See the [LICENSE](LICENSE) file for more info.
 
-## Stargazers
-
 ## Star History
 
 <a href="https://star-history.com/#blackjacx/assist&Date">
