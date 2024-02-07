@@ -295,4 +295,12 @@ ASC is available under the MIT license. See the [LICENSE](LICENSE) file for more
 
 ## Stargazers
 
-[![Star History Chart](https://api.star-history.com/svg?repos=blackjacx/assist&type=Date)](https://star-history.com/#blackjacx/assist&Date)
+## Star History
+
+<a href="https://star-history.com/#blackjacx/assist&Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=blackjacx/assist&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=blackjacx/assist&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=blackjacx/assist&type=Date" />
+  </picture>
+</a>
