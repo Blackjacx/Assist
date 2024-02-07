@@ -3,6 +3,7 @@
 </p> -->
 
 <!-- [![Test](https://github.com/Blackjacx/Assist/actions/workflows/test.yml/badge.svg)](https://github.com/Blackjacx/Assist/actions/workflows/test.yml) -->
+
 [![Twitter Follow](https://img.shields.io/badge/follow-%40blackjacx-1DA1F2?logo=twitter&style=for-the-badge)](https://twitter.com/intent/follow?original_referer=https%3A%2F%2Fgithub.com%2Fblackjacx&screen_name=Blackjacxxx)
 [![Version](https://shields.io/github/v/release/blackjacx/Assist?display_name=tag&include_prereleases&sort=semver)](https://github.com/Blackjacx/Assist/releases)
 [![Swift Package Manager Compatible](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
@@ -34,7 +35,7 @@ brew install asc
 
 ### Via [Mint](https://github.com/yonaskolb/mint)
 
-Just install Mint using with [Homebrew](https://brew.sh/) via `brew install mint`. 
+Just install Mint using with [Homebrew](https://brew.sh/) via `brew install mint`.
 
 ```sh
 mint install Blackjacx/Assist
@@ -56,7 +57,7 @@ swift run asc -h
 
 ## Authentication
 
-Authentication is handled by the tool itself. The only thing needed is your private API key. Generate one at [App Store Connect account](https://appstoreconnect.apple.com/access/api) and execute the following command which will just store the exact parameters you provide in the user defaults. 
+Authentication is handled by the tool itself. The only thing needed is your private API key. Generate one at [App Store Connect account](https://appstoreconnect.apple.com/access/api) and execute the following command which will just store the exact parameters you provide in the user defaults.
 
 ```sh
 asc api-keys register -n "name" -k "key-id" -i "issuer-id" -p "path-to-private-key-file"
@@ -80,8 +81,8 @@ asc api-keys delete -k "key-id"
 
 
 
-# list is the default 
-asc beta-groups                                
+# list is the default
+asc beta-groups
 
 # list only beta groups with a specific name
 asc beta-groups -g "group-name"
@@ -249,6 +250,7 @@ The code documentation for [ASC](https://swiftpackageindex.com/Blackjacx/Assist/
 ## Release
 
 To release this Swift package the following steps have to be taken:
+
 - Increment the version in `Core.Constants.version`
 - Run `bash <(curl -H -s https://raw.githubusercontent.com/Blackjacx/Scripts/master/frameworks/bootstrap.sh)` to update to the latest shared development files
 - Run `bundle update` to update all Ruby gems
@@ -256,6 +258,7 @@ To release this Swift package the following steps have to be taken:
 - Run `bundle exec fastlane release framework:"Assist" version:"x.y.z" formula:"blackjacx/formulae/asc"` to release the new version
 - Merge the created PR on https://github.com/Blackjacx/homebrew-formulae
 - Post the following on Twitter
+
 ```
 Assist (ASC, Push, Snap) release x.y.z 🎉
 
@@ -289,3 +292,7 @@ Thanks to all of you who are part of this:
 ## License
 
 ASC is available under the MIT license. See the [LICENSE](LICENSE) file for more info.
+
+## Stargazers
+
+[![Star History Chart](https://api.star-history.com/svg?repos=blackjacx/assist&type=Date)](https://star-history.com/#blackjacx/assist&Date)
