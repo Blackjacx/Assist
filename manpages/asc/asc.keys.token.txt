@@ -1,0 +1,10 @@
+OVERVIEW: Generate a token from a locally stored App Store Connect API keys.
+
+USAGE: asc keys token [--verbose ...] [--key-id <key-id>]
+
+OPTIONS:
+  -v, --verbose           Activate verbose logging.
+  -k, --key-id <key-id>   The ID of the key to use.
+  --version               Show the version.
+  -h, --help              Show help information.
+

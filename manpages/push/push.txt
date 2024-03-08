@@ -1,0 +1,16 @@
+OVERVIEW: A utility for sending and testing push notifications to Apple Push
+Notification Service (APNS) and via Firebase.
+
+USAGE: push <subcommand>
+
+OPTIONS:
+  --version               Show the version.
+  -h, --help              Show help information.
+
+SUBCOMMANDS:
+  apns (default)          Access APNS, see
+                          https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/establishing_a_token-based_connection_to_apns
+  fcm                     Access FCM, see
+                          https://firebase.google.com/docs/cloud-messaging
+
+  See 'push help <subcommand>' for detailed help.

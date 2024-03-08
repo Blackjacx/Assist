@@ -1,0 +1,12 @@
+OVERVIEW: Manage your apps in App Store Connect.
+
+USAGE: asc apps <subcommand>
+
+OPTIONS:
+  --version               Show the version.
+  -h, --help              Show help information.
+
+SUBCOMMANDS:
+  list (default)          Find and list apps added in App Store Connect.
+
+  See 'asc help apps <subcommand>' for detailed help.

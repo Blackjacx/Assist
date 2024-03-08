@@ -1,0 +1,14 @@
+OVERVIEW: Access FCM, see https://firebase.google.com/docs/cloud-messaging
+
+USAGE: push fcm [--verbose ...] --device-token <device-token> --message <message> --service-account-json-path <service-account-json-path>
+
+OPTIONS:
+  -v, --verbose           Activate verbose logging.
+  -d, --device-token <device-token>
+                          The token of the device you want to push to.
+  -m, --message <message> The message you want to send.
+  --service-account-json-path <service-account-json-path>
+                          The path to your service-account json file.
+  --version               Show the version.
+  -h, --help              Show help information.
+

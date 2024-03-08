@@ -304,7 +304,7 @@ private extension Simctl {
     }
 
     static func _updateStatusBar(deviceId: String,
-                                time: String = "12:00",
+                                time: String = "09:41",
                                 dataNetwork: DataNetwork = .wifi,
                                 wifiMode: WifiMode = .active,
                                 wifiBars: WifiBars = .three,

@@ -1,0 +1,17 @@
+OVERVIEW: Create a beta tester assigned to a group, a build, or an app.
+
+USAGE: asc beta-testers add [--verbose ...] [--key-id <key-id>] --first-name <first-name> --last-name <last-name> --email <email> --group-names <group-names> ...
+
+OPTIONS:
+  -v, --verbose           Activate verbose logging.
+  -k, --key-id <key-id>   The ID of the key to use.
+  -n, --first-name <first-name>
+                          The first name of the user.
+  -l, --last-name <last-name>
+                          The last name of the user.
+  -e, --email <email>     The email of the user.
+  -g, --group-names <group-names>
+                          The group names to add the new beta tester to.
+  --version               Show the version.
+  -h, --help              Show help information.
+

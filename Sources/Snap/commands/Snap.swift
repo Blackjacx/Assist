@@ -138,7 +138,7 @@ public final class Snap: ParsableCommand {
             let runtime = try Simctl.runtime(for: runtimeName)
             Logger.shared.info("Runtime found \(runtime)")
 
-            Logger.shared.info("Find IDs of preferred device IDs")
+            Logger.shared.info("Find IDs of preferred devices")
             let deviceIds = try Simctl.deviceIdsFor(deviceNames: devices, runtime: runtime)
             Logger.shared.info("Device IDs Found: \(deviceIds)")
 
