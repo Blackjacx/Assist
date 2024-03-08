@@ -1,6 +1,7 @@
 # Changelog
 
 ## [Unreleased]
+* Fix simctl issue with processing `12:00` as default statusbar time in simulator - [@Blackjacx](https://github.com/blackjacx).
 
 ## [0.5.0] - 2023-08-28Z
 * [#64](https://github.com/blackjacx/assist/pull/64): Support specifying specific test plan configs - [@Blackjacx](https://github.com/blackjacx).
