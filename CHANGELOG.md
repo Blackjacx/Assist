@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.5.2] - 2025-02-16Z
 * [#67](https://github.com/blackjacx/assist/pull/67): Using TabularData for AppStoreVersions - [@Blackjacx](https://github.com/blackjacx).
 
 ## [0.5.1] - 2024-03-08Z
