@@ -252,10 +252,16 @@ The code documentation for [ASC](https://swiftpackageindex.com/Blackjacx/Assist/
 To release this Swift package the following steps have to be taken:
 
 - Increment the version in `Core.Constants.version`
-- Run `bash <(curl -H -s https://raw.githubusercontent.com/Blackjacx/Scripts/master/frameworks/bootstrap.sh)` to update to the latest shared development files
+- Run command below to update to the latest shared development files:
+```shell
+bash <(curl -H -s https://raw.githubusercontent.com/Blackjacx/Scripts/master/frameworks/bootstrap.sh)
+``` 
 - Run `bundle update` to update all Ruby gems
 - Commit all changes on `develop`
-- Run `bundle exec fastlane release framework:"Assist" version:"x.y.z" formula:"blackjacx/formulae/asc"` to release the new version
+- Run commadn below to release the new version:
+```
+bundle exec fastlane release framework:"Assist" version:"x.y.z" formula:"blackjacx/formulae/asc"
+```
 - Merge the created PR on https://github.com/Blackjacx/homebrew-formulae
 - Post the following on Twitter
 

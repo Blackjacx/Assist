@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+## [0.5.2] - 2025-02-16Z
+* [#67](https://github.com/blackjacx/assist/pull/67): Using TabularData for AppStoreVersions - [@Blackjacx](https://github.com/blackjacx).
+
 ## [0.5.1] - 2024-03-08Z
 * Fix simctl issue with processing `12:00` as default statusbar time in simulator - [@Blackjacx](https://github.com/blackjacx).
 
