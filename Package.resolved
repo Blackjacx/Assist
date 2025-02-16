@@ -1,4 +1,5 @@
 {
+  "originHash" : "137bd7a50ea65c21262ddf08492e4a01c94698fd874a3dfccb5839c0db5f0c17",
   "pins" : [
     {
       "identity" : "asckit",
@@ -64,5 +65,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

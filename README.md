@@ -9,7 +9,7 @@
 [![Swift Package Manager Compatible](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
 [![Swift Versions](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FBlackjacx%2FAssist%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/Blackjacx/Assist)
 [![Platforms](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FBlackjacx%2FAssist%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/Blackjacx/Assist)
-[![Xcode 13+](https://img.shields.io/badge/Xcode-13%2B-blue.svg)](https://developer.apple.com/download/)
+[![Xcode 16+](https://img.shields.io/badge/Xcode-16%2B-blue.svg)](https://developer.apple.com/download/)
 [![Codebeat](https://codebeat.co/badges/6fb8ff62-9cb4-484a-8c0d-6f7f973d3f0d)](https://codebeat.co/projects/github-com-blackjacx-assist-develop)
 [![License](https://img.shields.io/github/license/blackjacx/assist.svg)](https://github.com/blackjacx/assist/blob/master/LICENSE)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg?logo=paypal&style=for-the-badge)](https://www.paypal.me/STHEROLD)
@@ -253,29 +253,33 @@ To release this Swift package the following steps have to be taken:
 
 - Increment the version in `Core.Constants.version`
 - Run command below to update to the latest shared development files:
-```shell
-bash <(curl -H -s https://raw.githubusercontent.com/Blackjacx/Scripts/master/frameworks/bootstrap.sh)
-``` 
+  ```shell
+  bash <(curl -H -s https://raw.githubusercontent.com/Blackjacx/Scripts/master/frameworks/bootstrap.sh)
+  ``` 
 - Run `bundle update` to update all Ruby gems
-- Commit all changes on `develop`
-- Run commadn below to release the new version:
+- Run `swift package update` to update all SPM dependencies
+- Commit all changes on `develop` with the message below:
 ```
-bundle exec fastlane release framework:"Assist" version:"x.y.z" formula:"blackjacx/formulae/asc"
+Release version `x.y.z`
 ```
+- Run command below to release the new version:
+  ```shell
+  bundle exec fastlane release framework:"Assist" version:"x.y.z" formula:"blackjacx/formulae/asc"
+  ```
 - Merge the created PR on https://github.com/Blackjacx/homebrew-formulae
 - Post the following on Twitter
 
-```
-Assist (ASC, Push, Snap) release x.y.z 🎉
+  ```
+  Assist (ASC, Push, Snap) release x.y.z 🎉
 
-▸ 🚀  Tools asc, snap, push (x.y.z) successfully published
-▸ 📅  September 2nd
-▸ 🌎  https://swiftpackageindex.com/Blackjacx/Assist
-▸ 🌎  https://github.com/Blackjacx/Assist/releases/latest
-▸ 👍  Tell your friends!
+  ▸ 🚀  Tools asc, snap, push (x.y.z) successfully published
+  ▸ 📅  September 2nd
+  ▸ 🌎  https://swiftpackageindex.com/Blackjacx/Assist
+  ▸ 🌎  https://github.com/Blackjacx/Assist/releases/latest
+  ▸ 👍  Tell your friends!
 
-#SPM #Automated #Snapshots #Push #Firebase #APNS #ASC #AppStoreConnectAPI
-```
+  #SPM #Automated #Snapshots #Push #Firebase #APNS #ASC #AppStoreConnectAPI
+  ```
 
 ## Contribution
 
