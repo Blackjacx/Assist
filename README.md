@@ -257,9 +257,12 @@ To release this Swift package the following steps have to be taken:
 bash <(curl -H -s https://raw.githubusercontent.com/Blackjacx/Scripts/master/frameworks/bootstrap.sh)
 ``` 
 - Run `bundle update` to update all Ruby gems
-- Commit all changes on `develop`
-- Run commadn below to release the new version:
+- Commit all changes on `develop` with the message below:
 ```
+Release version `x.y.z`
+```
+- Run command below to release the new version:
+```shell
 bundle exec fastlane release framework:"Assist" version:"x.y.z" formula:"blackjacx/formulae/asc"
 ```
 - Merge the created PR on https://github.com/Blackjacx/homebrew-formulae
