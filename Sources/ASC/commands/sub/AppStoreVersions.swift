@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import TabularData
 import ASCKit
 import ArgumentParser
 
@@ -44,15 +45,46 @@ extension ASC.AppStoreVersions {
         var attribute: String?
 
         func run() async throws {
-            let result = try await ASCService.listAppStoreVersions(appIds: appIds, filters: filters, limit: limit)
-            for item in result {
-                if let readyForSaleVersion = item.versions.filter({ $0.attributes.appStoreState == .readyForSale }).first {
-                    print("\(item.app.name.padding(toLength: 30, withPad: " ", startingAt: 0)): \(readyForSaleVersion.attributes.versionString)")
-                } else {
-                    print("\(item.app.name.padding(toLength: 30, withPad: " ", startingAt: 0)): NOT FOR SALE")
-                }
-            }
-            //            result.flatMap{ $0.versions }.out(attribute)
+            let result = try await ASCService.listAppStoreVersions(
+                appIds: appIds,
+                filters: filters,
+                limit: limit
+            )
+
+            let outModel: [OutModel] = result.map {
+                OutModel(
+                    // Trimming removed invisible characters in some apps names
+                    // and makes the table look smooth.
+                    name: $0.app.name.trimmingCharacters(in: .alphanumerics.inverted),
+                    version: $0.versions.first?.attributes.versionString,
+                    storeState: $0.versions.first?.attributes.appStoreState.rawValue
+                )
+            }.sorted()
+            let data = try JSONEncoder().encode(outModel)
+
+            // Create the DataFrame from .json data
+            let dataFrame = try DataFrame(jsonData: data)
+
+            // Beautiful print
+            let options = FormattingOptions(
+                maximumLineWidth: 1000,
+                maximumCellWidth: 200,
+                maximumRowCount: 1000000,
+                includesColumnTypes: false
+            )
+            let groupedFrame = dataFrame.grouped(by: "version").counts(order: .ascending)
+            print(dataFrame.description(options: options))
+            print(groupedFrame.description(options: options))
         }
     }
+}
+
+private struct OutModel: Codable, Comparable {
+    static func < (lhs: OutModel, rhs: OutModel) -> Bool {
+        lhs.name.caseInsensitiveCompare(rhs.name) == .orderedAscending
+    }
+
+    var name: String
+    var version: String?
+    var storeState: String?
 }
