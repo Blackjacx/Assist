@@ -257,6 +257,7 @@ To release this Swift package the following steps have to be taken:
   bash <(curl -H -s https://raw.githubusercontent.com/Blackjacx/Scripts/master/frameworks/bootstrap.sh)
   ``` 
 - Run `bundle update` to update all Ruby gems
+- Run `swift package update` to update all SPM dependencies
 - Commit all changes on `develop` with the message below:
 ```
 Release version `x.y.z`
