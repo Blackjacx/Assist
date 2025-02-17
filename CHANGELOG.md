@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+## [0.6.0] - 2025-02-17Z
+* [#68](https://github.com/blackjacx/assist/pull/68): Implement Zero-Dependency JWT Generation - [@Blackjacx](https://github.com/blackjacx).
+
 ## [0.5.2] - 2025-02-16Z
 * [#67](https://github.com/blackjacx/assist/pull/67): Using TabularData for AppStoreVersions - [@Blackjacx](https://github.com/blackjacx).
 

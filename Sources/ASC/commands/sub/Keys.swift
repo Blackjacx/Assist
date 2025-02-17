@@ -95,14 +95,14 @@ extension ASC.Keys {
     }
 
     /// Generate a token from a locally stored App Store Connect API keys.
-    struct Token: ParsableCommand {
-        static var configuration = CommandConfiguration(abstract: "Generate a token from a locally stored App Store Connect API keys.")
+    struct Token: AsyncParsableCommand {
+        static var configuration = CommandConfiguration(abstract: "Generate a token from locally stored App Store Connect API keys.")
 
         @OptionGroup()
         var options: ApiKeyOptions
 
-        func run() throws {
-            let token = try ASCService.createAccessToken(keyId: options.keyId)
+        func run() async throws {
+            let token = try await ASCService.createAccessToken(keyId: options.keyId)
             print(token)
         }
     }
