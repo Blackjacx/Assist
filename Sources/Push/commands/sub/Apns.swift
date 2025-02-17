@@ -46,7 +46,7 @@ extension Push {
         @Option(name: .shortAndLong, help: "The endpoint to use. `sandbox` or `production`")
         var endpoint: Endpoint
         
-        @Option(name: .shortAndLong, help: "The topic. User your bundle id of the app you want to push to.")
+        @Option(name: .shortAndLong, help: "The topic. Use your bundle id of the app you want to push to.")
         var topic: String
         
         func run() async throws {

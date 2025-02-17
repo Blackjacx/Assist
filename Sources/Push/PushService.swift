@@ -36,7 +36,7 @@ struct PushService {
                            serviceAccountJsonPath: String) async throws -> EmptyResponse {
 
         guard let data = FileManager.default.contents(atPath: serviceAccountJsonPath) else {
-          throw JSONWebToken.Error.googleServiceAccountJsonNotFound(path: serviceAccountJsonPath)
+            throw JWT.Error.googleServiceAccountJsonNotFound(path: serviceAccountJsonPath)
         }
 
         let credentials = try Json.decoder.decode(JWTFcmCredentials.self, from: data)

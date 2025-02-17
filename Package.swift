@@ -16,17 +16,17 @@ let package = Package(
         .executable(name: "snap", targets: ["Snap"])
     ],
     dependencies: [
-        .package(url: "https://github.com/blackjacx/Engine", from: "0.0.3"),
-        .package(url: "https://github.com/blackjacx/ASCKit", from: "0.2.2"),
+        .package(url: "https://github.com/blackjacx/Engine", from: "0.1.0"),
+//        .package(path: "../Engine"),
+        .package(url: "https://github.com/blackjacx/ASCKit", from: "0.3.0"),
+//        .package(path: "../ASCKit"),
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.2"),
-        .package(url: "https://github.com/vapor/jwt-kit.git", from: "4.1.0"),
         .package(url: "https://github.com/kareman/SwiftShell", from: "5.1.0")
     ],
     targets: [
         .target(
             name: "Core", 
             dependencies: [
-              .product(name: "JWTKit", package: "jwt-kit"),
               "SwiftShell",
               "Engine",
             ]
