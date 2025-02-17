@@ -8,5 +8,5 @@
 import Foundation
 
 public struct Constants {
-    public static let version = "0.5.2"
+    public static let version = "0.6.0"
 }
