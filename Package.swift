@@ -18,7 +18,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/blackjacx/Engine", from: "0.1.0"),
 //        .package(path: "../Engine"),
-        .package(url: "https://github.com/blackjacx/ASCKit", from: "0.3.0"),
+        .package(url: "https://github.com/blackjacx/ASCKit", from: "0.4.0"),
 //        .package(path: "../ASCKit"),
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.2"),
         .package(url: "https://github.com/kareman/SwiftShell", from: "5.1.0")
