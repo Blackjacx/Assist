@@ -38,6 +38,9 @@ extension ASC.AppStoreVersions {
         @Option(name: .shortAndLong, parsing: .upToNextOption, help: "The IDs of the apps you want to get the versions from.")
         var appIds: [String] = []
 
+        @Option(name: .shortAndLong, help: "The type of output you would like to see.")
+        var outputType: OutputType = .standard
+
         @Option(name: .shortAndLong, help: "Number of resources to return.")
         var limit: UInt?
 
@@ -51,8 +54,8 @@ extension ASC.AppStoreVersions {
                 limit: limit
             )
 
-            let outModel: [OutModel] = result.map {
-                OutModel(
+            let outModel: [OutputModel] = result.map {
+                OutputModel(
                     // Trimming removed invisible characters in some apps names
                     // and makes the table look smooth.
                     name: $0.app.name.trimmingCharacters(in: .alphanumerics.inverted),
@@ -64,27 +67,44 @@ extension ASC.AppStoreVersions {
 
             // Create the DataFrame from .json data
             let dataFrame = try DataFrame(jsonData: data)
-
-            // Beautiful print
             let options = FormattingOptions(
                 maximumLineWidth: 1000,
                 maximumCellWidth: 200,
                 maximumRowCount: 1000000,
                 includesColumnTypes: false
             )
-            let groupedFrame = dataFrame.grouped(by: "version").counts(order: .ascending)
-            print(dataFrame.description(options: options))
-            print(groupedFrame.description(options: options))
+
+            let output = switch outputType {
+            case .standard:
+                dataFrame.description(options: options)
+            case .groupedByVersion:
+                dataFrame
+                    .grouped(by: "version")
+                    .counts(order: .ascending)
+                    .description(options: options)
+            case .groupedByState:
+                dataFrame
+                    .grouped(by: "storeState")
+                    .counts(order: .ascending)
+                    .description(options: options)
+            }
+            print(output)
         }
     }
-}
 
-private struct OutModel: Codable, Comparable {
-    static func < (lhs: OutModel, rhs: OutModel) -> Bool {
-        lhs.name.caseInsensitiveCompare(rhs.name) == .orderedAscending
+    private struct OutputModel: Codable, Comparable {
+        static func < (lhs: OutputModel, rhs: OutputModel) -> Bool {
+            lhs.name.caseInsensitiveCompare(rhs.name) == .orderedAscending
+        }
+
+        var name: String
+        var version: String?
+        var storeState: String?
     }
 
-    var name: String
-    var version: String?
-    var storeState: String?
+    enum OutputType: String, CaseIterable, ExpressibleByArgument {
+        case standard
+        case groupedByVersion
+        case groupedByState
+    }
 }
