@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.7.0] - 2025-03-19Z
 * [#70](https://github.com/dbdrive/beiwagen/pull/70): Implement output parameter for sub command app-store-versions - [@blackjacx](https://github.com/blackjacx). 
 
 ## [0.6.0] - 2025-02-17Z
