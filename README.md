@@ -259,16 +259,15 @@ To release this Swift package the following steps have to be taken:
 - Run `bundle update` to update all Ruby gems
 - Run `swift package update` to update all SPM dependencies
 - Commit all changes on `develop` with the message:
-```
-Release version `x.y.z`
-```
+  ```
+  Release version `x.y.z`
+  ```
 - Release the new version:
   ```shell
   bundle exec fastlane release framework:"Assist" version:"x.y.z" formula:"blackjacx/formulae/asc"
   ```
 - Create and merge the PR from the just created branch for the [Homebrew formula](https://github.com/Blackjacx/homebrew-formulae)
 - Post the following on Twitter:
-
   ```
   Assist (ASC, Push, Snap) release x.y.z 🎉
 
