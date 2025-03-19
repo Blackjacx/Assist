@@ -1,6 +1,7 @@
 # Changelog
 
 ## [Unreleased]
+* [#70](https://github.com/dbdrive/beiwagen/pull/70): Implement output parameter for sub command app-store-versions - [@blackjacx](https://github.com/blackjacx). 
 
 ## [0.6.0] - 2025-02-17Z
 * [#68](https://github.com/blackjacx/assist/pull/68): Implement Zero-Dependency JWT Generation - [@Blackjacx](https://github.com/blackjacx).
