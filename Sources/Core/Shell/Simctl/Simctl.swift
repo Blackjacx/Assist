@@ -1,12 +1,5 @@
-//
-//  Simctl.swift
-//  
-//
-//  Created by Stefan Herold on 24.09.20.
-//
-
-import Foundation
 import Engine
+import Foundation
 import SwiftShell
 
 public struct Simctl {}
@@ -49,7 +42,7 @@ public extension Simctl {
     static func deviceIdsFor(deviceNames: [String], runtime: Runtime) throws -> [String] {
         var deviceIDs: [String] = []
 
-        try deviceNames.forEach { (name) in
+        try deviceNames.forEach { name in
             guard let deviceID = try devicesForRuntime(runtime).first(where: { $0.name == name }) else {
                 // Create device if it is not yet available
                 let deviceID = try createDevice(name: name, id: name, runtime: runtime)
@@ -103,7 +96,6 @@ public extension Simctl {
                      deviceIds: [String],
                      outUrl: URL,
                      zipFileName: String) throws {
-
         let fileManager = FileManager.default
 
         for style in styles {
@@ -124,33 +116,72 @@ public extension Simctl {
                 let currentUrl = outUrl.appendingPathComponent(scheme).appendingPathComponent(style.rawValue)
                 let screensUrl = currentUrl.appendingPathComponent("screens")
                 let resultsBundleUrl = currentUrl.appendingPathComponent("result_bundle.xcresult")
-                let xcTestRunFile = derivedDataUrl.appending(components: "Build", "Products", "\(scheme)_\(testPlanName)_\(platform)\(runtime)-\(arch).xctestrun")
+                let xcTestRunFileList: [URL]
+
+                let buildProductsUrl = derivedDataUrl.appending(
+                    components: "Build",
+                    "Products"
+                )
+
+                do {
+                    // Get all file URLs in the directory
+                    xcTestRunFileList = try fileManager.contentsOfDirectory(
+                        at: buildProductsUrl,
+                        includingPropertiesForKeys: nil
+                    )
+                } catch {
+                    // No files found
+                    throw Error.xcTestRunUnexpectedFilesFound(fileNames: [])
+                }
+
+                // Filter files by extension (case insensitive) and
+                // test-plan name, assuming this directory contains exactly one
+                // file for the test plan)
+                let filteredFiles = xcTestRunFileList.filter {
+                    $0.pathExtension.lowercased() == "xctestrun".lowercased()
+                        && $0.lastPathComponent.contains(testPlanName)
+                }
+
+                guard let xcTestRunFile = filteredFiles.first, filteredFiles.count == 1 else {
+                    throw Error.xcTestRunUnexpectedFilesFound(
+                        fileNames: filteredFiles.map(\.lastPathComponent)
+                    )
+                }
 
                 guard fileManager.fileExists(atPath: xcTestRunFile.path()) else {
-                    throw Error.xcTestResultsFileNotFound(path: xcTestRunFile.path())
+                    throw Error.xcTestRunFileNotFound(path: xcTestRunFile.path())
                 }
 
                 Logger.shared.info("""
-                    Running test plan '\(testPlanName) (\(testPlanConfigs.isEmpty ? "all configs" : ListFormatter.localizedString(byJoining: testPlanConfigs)))' for:
-                        style '\(style)'
-                        scheme '\(scheme)'
-                        runtime: '\(runtime)'
-                        platform: '\(platform)'
-                        architecture: '\(arch)'
-                    """, inset: 1)
+                Running test plan '\(testPlanName) (\(testPlanConfigs.isEmpty ? "all configs" : ListFormatter
+                    .localizedString(byJoining: testPlanConfigs)))' for:
+                    style '\(style)'
+                    scheme '\(scheme)'
+                    runtime: '\(runtime)'
+                    platform: '\(platform)'
+                    architecture: '\(arch)'
+                    xctestrun: '\(xcTestRunFile.path())'
+                """, inset: 1)
 
                 // This command just needs the binaries and the path to the
                 // xctestrun file created before the actual testing. Then
                 // everything can be configured to run the tests without
                 // needing the source code, i.e. the tests could be performed
                 // on different machines.
-                try Xcodebuild.execute(subcommand: .testWithoutBuilding(xcTestRunFile: xcTestRunFile,
-                                                                        resultsBundleURL: resultsBundleUrl,
-                                                                        testPlanConfigs: testPlanConfigs),
-                                       deviceIds: deviceIds,
-                                       derivedDataUrl: derivedDataUrl)
+                try Xcodebuild.execute(
+                    subcommand: .testWithoutBuilding(
+                        xcTestRunFile: xcTestRunFile,
+                        resultsBundleURL: resultsBundleUrl,
+                        testPlanConfigs: testPlanConfigs
+                    ),
+                    deviceIds: deviceIds,
+                    derivedDataUrl: derivedDataUrl
+                )
 
-                Logger.shared.info("Extracting screenshots from xcresult bundle '\(resultsBundleUrl.path())' for scheme '\(scheme)' and style '\(style)'", inset: 1)
+                Logger.shared.info(
+                    "Extracting screenshots from xcresult bundle '\(resultsBundleUrl.path())' for scheme '\(scheme)' and style '\(style)'",
+                    inset: 1
+                )
 
                 try fileManager.createDirectory(at: screensUrl, withIntermediateDirectories: true, attributes: nil)
                 try Mint.screenshots(resultsBundleURL: resultsBundleUrl, screensURL: screensUrl)
@@ -187,7 +218,8 @@ public extension Simctl {
         case deviceIdNotFoundInDevices(id: String)
         case createDeviceFailed(deviceName: String, runtimeID: String)
         case createDeviceFailedInvalidRuntime(deviceName: String, runtimeID: String)
-        case xcTestResultsFileNotFound(path: String)
+        case xcTestRunFileNotFound(path: String)
+        case xcTestRunUnexpectedFilesFound(fileNames: [String])
     }
 
     enum Style: String, CaseIterable {
@@ -207,27 +239,45 @@ public extension Simctl {
     }
 
     enum WifiMode: String {
-        case active, searching, failed
+        case active
+        case searching
+        case failed
     }
 
     enum WifiBars: Int {
-        case zero, one, two, three
+        case zero
+        case one
+        case two
+        case three
     }
 
     enum CellularMode: String {
-        case notSupported, active, searching, failed
+        case notSupported
+        case active
+        case searching
+        case failed
     }
 
     enum CellularBars: Int {
-        case zero, one, two, three, four
+        case zero
+        case one
+        case two
+        case three
+        case four
     }
 
     enum BatteryState: String {
-        case charged, charging, discharging
+        case charged
+        case charging
+        case discharging
     }
 
     enum BatteryLevel: Int {
-        case empty = 0, quater = 25, fifty = 50, threeQuater = 75, full = 100
+        case empty = 0
+        case quater = 25
+        case fifty = 50
+        case threeQuater = 75
+        case full = 100
     }
 }
 
@@ -304,15 +354,15 @@ private extension Simctl {
     }
 
     static func _updateStatusBar(deviceId: String,
-                                time: String = "09:41",
-                                dataNetwork: DataNetwork = .wifi,
-                                wifiMode: WifiMode = .active,
-                                wifiBars: WifiBars = .three,
-                                cellularMode: CellularMode = .active,
-                                cellularBars: CellularBars = .four,
-                                operatorName: String = "T-Mobile",
-                                batteryState: BatteryState = .charged,
-                                batteryLevel: BatteryLevel = .full) throws {
+                                 time: String = "09:41",
+                                 dataNetwork: DataNetwork = .wifi,
+                                 wifiMode: WifiMode = .active,
+                                 wifiBars: WifiBars = .three,
+                                 cellularMode: CellularMode = .active,
+                                 cellularBars: CellularBars = .four,
+                                 operatorName: String = "T-Mobile",
+                                 batteryState: BatteryState = .charged,
+                                 batteryLevel: BatteryLevel = .full) throws {
         let args: [Any] = [
             "simctl", "status_bar", deviceId, "override",
             "--time", time,
