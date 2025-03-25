@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.8.0] - 2025-03-25Z
 * [#71](https://github.com/dbdrive/beiwagen/pull/71): Fix XCTestRun File Detection - [@blackjacx](https://github.com/blackjacx).
 
 ## [0.7.0] - 2025-03-19Z
