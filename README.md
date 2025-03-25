@@ -252,23 +252,22 @@ The code documentation for [ASC](https://swiftpackageindex.com/Blackjacx/Assist/
 To release this Swift package the following steps have to be taken:
 
 - Increment the version in `Core.Constants.version`
-- Run command below to update to the latest shared development files:
+- Update to the latest shared development files:
   ```shell
   bash <(curl -H -s https://raw.githubusercontent.com/Blackjacx/Scripts/master/frameworks/bootstrap.sh)
   ``` 
 - Run `bundle update` to update all Ruby gems
 - Run `swift package update` to update all SPM dependencies
-- Commit all changes on `develop` with the message below:
-```
-Release version `x.y.z`
-```
-- Run command below to release the new version:
+- Commit all changes on `develop` with the message:
+  ```
+  Release version `x.y.z`
+  ```
+- Release the new version:
   ```shell
   bundle exec fastlane release framework:"Assist" version:"x.y.z" formula:"blackjacx/formulae/asc"
   ```
-- Merge the created PR on https://github.com/Blackjacx/homebrew-formulae
-- Post the following on Twitter
-
+- Create and merge the PR from the just created branch for the [Homebrew formula](https://github.com/Blackjacx/homebrew-formulae)
+- Post the following on Twitter:
   ```
   Assist (ASC, Push, Snap) release x.y.z 🎉
 
@@ -289,7 +288,7 @@ Release version `x.y.z`
 
 ## Author
 
-[Stefan Herold](mailto:stefan.herold@gmail.com) • 🐦 [@Blackjacxxx](https://twitter.com/Blackjacxxx)
+[Stefan Herold](mailto:stefan.herold@gmail.com) • [X](https://twitter.com/Blackjacxxx) • [Bluesky](https://bsky.app/profile/blackjacx.bsky.social) • [Mastodon](https://mastodon.social/@blackjacx)
 
 ## Contributors
 
