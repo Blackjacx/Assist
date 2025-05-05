@@ -5,15 +5,16 @@ let package = Package(
     name: "Assist",
 //    platforms: [.macOS(.v10_15), .macCatalyst(.v13), .iOS(.v13), .tvOS(.v13), .watchOS(.v6)],
     platforms: [
-      .macOS(.v13)
+        .macOS(.v13)
 //        .iOS(.v11),
 //        .watchOS(.v5),
-//        .tvOS(.v11)
+//        .tvOS(.v11),
     ],
     products: [
         .executable(name: "asc", targets: ["ASC"]),
         .executable(name: "push", targets: ["Push"]),
-        .executable(name: "snap", targets: ["Snap"])
+        .executable(name: "snap", targets: ["Snap"]),
+        .executable(name: "playground", targets: ["Playground"])
     ],
     dependencies: [
         .package(url: "https://github.com/blackjacx/Engine", from: "0.1.0"),
@@ -25,10 +26,10 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "Core", 
+            name: "Core",
             dependencies: [
-              "SwiftShell",
-              "Engine",
+                "SwiftShell",
+                "Engine"
             ]
         ),
 
@@ -37,14 +38,13 @@ let package = Package(
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 "Core",
-                "ASCKit",
+                "ASCKit"
             ]
         ),
         .testTarget(
             name: "ASCTests",
             dependencies: ["ASC"]
         ),
-
 
         .executableTarget(
             name: "Push",
@@ -58,7 +58,6 @@ let package = Package(
             dependencies: ["Push"]
         ),
 
-
         .executableTarget(
             name: "Snap",
             dependencies: [
@@ -70,5 +69,17 @@ let package = Package(
             name: "SnapTests",
             dependencies: ["Snap"]
         ),
+
+        .executableTarget(
+            name: "Playground",
+            dependencies: [
+                "Core",
+                .product(name: "ArgumentParser", package: "swift-argument-parser")
+            ]
+        ),
+        .testTarget(
+            name: "PlaygroundTests",
+            dependencies: ["Playground"]
+        )
     ]
 )
