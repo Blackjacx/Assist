@@ -24,6 +24,19 @@ asc app-store-versions list -k <key_id_2> \
 asc app-store-versions list -k <key_id_3>
 ```
 
+You want to know what's possible? Clone the repo and execute the following commands to view the man pages of all included tools:
+
+```shell
+# Generate manpages
+swift package plugin generate-manual
+
+# copy man page of e.g. asc to a folder where `man`can find it
+cp .build/plugins/GenerateManual/outputs/asc/asc.1 /usr/local/share/man/man1/
+
+# view the man page
+man asc
+```
+
 ## Installation
 
 ### Via [Homebrew](http://brew.sh/)
@@ -60,7 +73,7 @@ swift run asc -h
 Authentication is handled by the tool itself. The only thing needed is your private API key. Generate one at [App Store Connect account](https://appstoreconnect.apple.com/access/api) and execute the following command which will just store the exact parameters you provide in the user defaults.
 
 ```sh
-asc api-keys register -n "name" -k "key-id" -i "issuer-id" -p "path-to-private-key-file"
+asc keys register -n "name" -k "key-id" -i "issuer-id" -p "path-to-private-key-file"
 ```
 
 > ⚠️ No key generation performed here. The JWT is just generated on demand when using this tool. If you have multiple keys registered the tool will ask you which one you want to use.
