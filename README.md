@@ -30,7 +30,7 @@ You want to know what's possible? Clone the repo and execute the following comma
 # Generate manpages
 swift package plugin generate-manual
 
-# copy man page of e.g. asc to a folder where `man`can find it
+# copy man page of e.g. asc to a folder where `man` can find it
 cp .build/plugins/GenerateManual/outputs/asc/asc.1 /usr/local/share/man/man1/
 
 # view the man page
