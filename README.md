@@ -284,8 +284,8 @@ To release this Swift package the following steps have to be taken:
   ```
   Assist (ASC, Push, Snap) release x.y.z 🎉
 
-  ▸ 🚀  Tools asc, snap, push (x.y.z) successfully published
-  ▸ 📅  September 2nd
+  ▸ 🚀  Tools asc, snap, push successfully published
+  ▸ 📅  Sep 2nd
   ▸ 🌎  https://swiftpackageindex.com/Blackjacx/Assist
   ▸ 🌎  https://github.com/Blackjacx/Assist/releases/latest
   ▸ 👍  Tell your friends!
