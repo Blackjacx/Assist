@@ -8,11 +8,13 @@ updates:
     directory: "/.github/workflows"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 20 # Limit the number of open PRs
     assignees:
       - "blackjacx"
+    open-pull-requests-limit: 20 # Limit the number of open PRs
   - package-ecosystem: "swift"
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+    assignees:
+      - "blackjacx"
     open-pull-requests-limit: 20 # Limit the number of open PRs
