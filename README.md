@@ -13,7 +13,7 @@
 [![License](https://img.shields.io/github/license/blackjacx/assist.svg)](https://github.com/blackjacx/assist/blob/master/LICENSE)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg?logo=paypal&style=for-the-badge)](https://www.paypal.me/STHEROLD)
 
-# App Store Connect API • CLI
+# Intro
 
 App Store Connect API access using your private API key. The great power of this tool is that it can operate on all apps of one or multiple teams (is you wish to), e.g. it is super easy to print the live versions of all of your apps, even across multiple teams:
 
@@ -23,7 +23,13 @@ asc app-store-versions list -k <key_id_2> \
 asc app-store-versions list -k <key_id_3>
 ```
 
-You want to know what's possible? Clone the repo and execute the following commands to view the man pages of all included tools:
+## Features
+
+- **Take control over Apple's App Store Connect API** on the command line, e.g. invite new beta testers, update beta groups, list app versions and much more
+- **Generate screenshots from your app** by selecting desired language, device, appearance, and more. All of this works by leveraging your existing test suite
+- **Send push notifications** to your user's devices using Apple Push Notification Service or Firebase Cloud Messaging
+
+If you want to see the full potential of the provided tools, you can generate and view the man pages with ease. To do so, please clone the repo and execute the following commands to view the man pages of all included tools (asc, snap, and push):
 
 ```shell
 # Generate manpages
@@ -67,7 +73,9 @@ cd AppStoreConnect
 swift run asc -h
 ```
 
-## Authentication
+## Documentation ASC (App Store Connect API CLI)
+
+### Authentication
 
 Authentication is handled by the tool itself. The only thing needed is your private API key. Generate one at [App Store Connect account](https://appstoreconnect.apple.com/access/api) and execute the following command which will just store the exact parameters you provide in the user defaults.
 
@@ -77,7 +85,7 @@ asc keys register -n "name" -k "key-id" -i "issuer-id" -p "path-to-private-key-f
 
 > ⚠️ No key generation performed here. The JWT is just generated on demand when using this tool. If you have multiple keys registered the tool will ask you which one you want to use.
 
-## Sub Commands
+### Sub Commands
 
 Executing one of the following sub commands is as easy as appending it with its parameters to the base command:
 
@@ -259,7 +267,19 @@ SUBCOMMANDS:
 
 The code documentation for [ASC](https://swiftpackageindex.com/Blackjacx/Assist/develop/documentation/asc), [Push](https://swiftpackageindex.com/Blackjacx/Assist/develop/documentation/push) and [Snap](https://swiftpackageindex.com/Blackjacx/Assist/develop/documentation/snap) is generated and hosted by [Swift Package Index](https://swiftpackageindex.com/) (powered by [DocC](https://developer.apple.com/documentation/docc))
 
-## Release
+## Contribution
+
+- If you found a **bug**, please open an **issue**.
+- If you have a **feature request**, please open an **issue**.
+- If you want to **contribute**, please submit a **pull request**.
+
+Thanks to all of you who are part of this:
+
+<a href="https://github.com/blackjacx/Assist/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=blackjacx/Assist" />
+</a>
+
+### Release
 
 To release this Swift package the following steps have to be taken:
 
@@ -293,23 +313,9 @@ To release this Swift package the following steps have to be taken:
   #SPM #Automated #Snapshots #Push #Firebase #APNS #ASC #AppStoreConnectAPI
   ```
 
-## Contribution
-
-- If you found a **bug**, please open an **issue**.
-- If you have a **feature request**, please open an **issue**.
-- If you want to **contribute**, please submit a **pull request**.
-
 ## Author
 
 [Stefan Herold](mailto:stefan.herold@gmail.com) • [X](https://twitter.com/Blackjacxxx) • [Bluesky](https://bsky.app/profile/blackjacx.bsky.social) • [Mastodon](https://mastodon.social/@blackjacx)
-
-## Contributors
-
-Thanks to all of you who are part of this:
-
-<a href="https://github.com/blackjacx/Assist/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=blackjacx/Assist" />
-</a>
 
 ## License
 
