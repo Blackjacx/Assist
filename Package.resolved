@@ -1,13 +1,13 @@
 {
-  "originHash" : "2ab8bf06192503de8d3f99b5212de3cc18d680ab680ac5ce89f040f13422e3fb",
+  "originHash" : "4e8adcf4f6428fe1f44400337a2516ff0657f32c046a0e7399c8a0da999e7f8e",
   "pins" : [
     {
       "identity" : "asckit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/blackjacx/ASCKit",
       "state" : {
-        "revision" : "1e0dcb842c6d179566cacdc6869d2d8584b36959",
-        "version" : "0.4.0"
+        "revision" : "8ec0f50ccbb2f4ca0682eba955d4a55bbdb10029",
+        "version" : "0.4.1"
       }
     },
     {
@@ -15,8 +15,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/blackjacx/Engine",
       "state" : {
-        "revision" : "9797968aec667217cdd83a4e3b45972d4bf5a861",
-        "version" : "0.1.0"
+        "revision" : "bcef89ba00b09552c8e0eb369d6892ce3ef338f6",
+        "version" : "0.2.0"
+      }
+    },
+    {
+      "identity" : "keychainaccess",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kishikawakatsumi/KeychainAccess",
+      "state" : {
+        "revision" : "84e546727d66f1adc5439debad16270d0fdd04e7",
+        "version" : "4.2.2"
       }
     },
     {
@@ -24,17 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-argument-parser",
       "state" : {
-        "revision" : "41982a3656a71c768319979febd796c6fd111d5c",
-        "version" : "1.5.0"
-      }
-    },
-    {
-      "identity" : "swiftkeychainwrapper",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/jrendel/SwiftKeychainWrapper",
-      "state" : {
-        "revision" : "185a3165346a03767101c4f62e9a545a0fe0530f",
-        "version" : "4.0.1"
+        "revision" : "309a47b2b1d9b5e991f36961c983ecec72275be3",
+        "version" : "1.6.1"
       }
     },
     {

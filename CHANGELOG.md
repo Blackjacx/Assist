@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+## [0.8.1] - 2025-09-15Z
+* [#75](https://github.com/dbdrive/beiwagen/pull/75): Bump Engine v0.2.0 - [@blackjacx](https://github.com/blackjacx).
+
 ## [0.8.0] - 2025-03-25Z
 * [#71](https://github.com/dbdrive/beiwagen/pull/71): Fix XCTestRun File Detection - [@blackjacx](https://github.com/blackjacx).
 
