@@ -15,7 +15,7 @@ extension ASC {
         static var configuration = CommandConfiguration(
             abstract: "Manage people who can install and test prerelease builds.",
             subcommands: [List.self, Invite.self, Add.self, Delete.self],
-            defaultSubcommand: List.self)
+        )
     }
 }
 

@@ -14,8 +14,8 @@ extension ASC {
     struct Apps: AsyncParsableCommand {
         static var configuration = CommandConfiguration(
             abstract: "Manage your apps in App Store Connect.",
-            subcommands: [List.self],
-            defaultSubcommand: List.self)
+            subcommands: [List.self]
+        )
     }
 }
 

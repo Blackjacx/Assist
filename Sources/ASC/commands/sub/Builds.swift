@@ -15,7 +15,7 @@ extension ASC {
         static var configuration = CommandConfiguration(
             abstract: "Manage builds for testers and submit builds for review.",
             subcommands: [List.self, Expire.self],
-            defaultSubcommand: List.self)
+        )
     }
 }
 
