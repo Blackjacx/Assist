@@ -27,6 +27,7 @@ public final class ASC: AsyncParsableCommand {
 
         subcommands: [Keys.self,
                       BetaGroups.self,
+                      AccessibilityDeclarations.self,
                       Apps.self,
                       AppStoreVersions.self,
                       BetaTesters.self,
@@ -52,8 +53,9 @@ struct Options: ParsableArguments {
     }
 }
 
-/// Here you can specify parameters valid for all sub commands. Only this one includes the API key since specifying
-/// this key is not suitable for every command, e.g. the Keys command itself.
+/// Here you can specify parameters valid for all sub commands. Only this one
+/// includes the API key since specifying this key is not suitable for every
+/// command, e.g. the Keys command itself.
 struct ApiKeyOptions: ParsableArguments {
 
     @Flag(name: .shortAndLong, help: "Activate verbose logging.")
