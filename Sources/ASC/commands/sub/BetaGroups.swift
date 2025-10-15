@@ -15,7 +15,7 @@ extension ASC {
         static var configuration = CommandConfiguration(
             abstract: "Manage groups of beta testers that have access to one or more builds.",
             subcommands: [List.self],
-            defaultSubcommand: List.self)
+        )
     }
 }
 

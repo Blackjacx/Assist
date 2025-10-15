@@ -17,8 +17,14 @@ extension ASC {
 
         static var configuration = CommandConfiguration(
             abstract: "Lists, registers and deletes App Store Connect API keys on your Mac.",
-            subcommands: [List.self, Activate.self, Register.self, Delete.self, Token.self],
-            defaultSubcommand: List.self)
+            subcommands: [
+                List.self,
+                Activate.self,
+                Register.self,
+                Delete.self,
+                Token.self
+            ],
+        )
     }
 }
 
