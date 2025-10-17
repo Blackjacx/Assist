@@ -68,7 +68,7 @@ extension ASC.Keys {
         @Option(name: .shortAndLong, help: "The key's id.")
         var keyId: String
 
-        @Option(name: .shortAndLong, help: "The key's name you. You can choose freely.")
+        @Option(name: .shortAndLong, help: "The key's name. You can choose freely.")
         var name: String
 
         @Option(name: .shortAndLong, help: "The absolute path to the p8 key file.")
