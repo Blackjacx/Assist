@@ -14,11 +14,11 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/blackjacx/Engine", from: "0.3.0"),
-//        .package(path: "../Engine"),
+        // .package(path: "../Engine"),
 
-        .package(url: "https://github.com/blackjacx/ASCKit", from: "0.6.0"),
-//        .package(url: "https://github.com/blackjacx/ASCKit", branch: "accessibility-declaration-management"),
-//        .package(path: "../ASCKit"),
+         .package(url: "https://github.com/blackjacx/ASCKit", from: "0.7.1"),
+        // .package(url: "https://github.com/blackjacx/ASCKit", branch: "develop"),
+//         .package(path: "../ASCKit"),
 
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.6.1"),
         .package(url: "https://github.com/kareman/SwiftShell", from: "5.1.0")
