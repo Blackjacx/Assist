@@ -37,12 +37,12 @@ extension ASC.Builds {
         @Option(name: .shortAndLong, help: "Number of resources to return.")
         var limit: UInt?
 
-        @Argument(help: "The attribute you want to get [expired, minOsVersion, processingState, version, usesNonExemptEncryption, uploadedDate, expirationDate] (default: id).")
-        var attribute: String?
-
         func run() async throws {
-            let list: [Build] = try await ASCService.list(filters: filters, limit: limit)
-            list.out(attribute)
+            let _: [Build] = try await ASCService.list(
+                filters: filters,
+                limit: limit,
+                outputType: options.outputType,
+            )
         }
     }
 
@@ -59,12 +59,11 @@ extension ASC.Builds {
         @Option(name: .shortAndLong, help: "Ids if the builds you with to expire.")
         var ids: [String] = []
 
-        @Argument(help: "The attribute you want to get [expired, minOsVersion, processingState, version, usesNonExemptEncryption, uploadedDate, expirationDate] (default: id).")
-        var attribute: String?
-
         func run() async throws {
-            let expiredBuilds: [Build] = try await ASCService.expireBuilds(ids: ids)
-            expiredBuilds.out(attribute)
+            let _: [Build] = try await ASCService.expireBuilds(
+                ids: ids,
+                outputType: options.outputType,
+            )
         }
     }
 }

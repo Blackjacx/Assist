@@ -14,33 +14,55 @@ struct PushService {
     // MARK: - APNS
 
     @discardableResult
-    static func pushViaApns(credentials: JWTApnsCredentials,
-                            endpoint: Push.Apns.Endpoint, 
-                            deviceToken: String, 
-                            topic: String, 
-                            message: String) async throws -> EmptyResponse {
-
-        let endpoint = PushEndpoint.pushViaApns(credentials: credentials,
-                                                endpoint: endpoint,
-                                                deviceToken: deviceToken,
-                                                topic: topic,
-                                                message: message)
-        return try await Network.shared.request(endpoint: endpoint)
+    static func pushViaApns(
+        credentials: JWTApnsCredentials,
+        endpoint: Push.Apns.Endpoint,
+        deviceToken: String,
+        topic: String,
+        message: String,
+        outputType: OutputType,
+    ) async throws -> EmptyResponse {
+        let endpoint = PushEndpoint.pushViaApns(
+            credentials: credentials,
+            endpoint: endpoint,
+            deviceToken: deviceToken,
+            topic: topic,
+            message: message
+        )
+        return try await Network.shared.request(
+            endpoint: endpoint,
+            outputType: outputType,
+        )
     }
 
     // MARK: - FCM
 
     @discardableResult
-    static func pushViaFcm(deviceToken: String,
-                           message: String, 
-                           serviceAccountJsonPath: String) async throws -> EmptyResponse {
+    static func pushViaFcm(
+        deviceToken: String,
+        message: String,
+        serviceAccountJsonPath: String,
+        outputType: OutputType,
+    ) async throws -> EmptyResponse {
 
         guard let data = FileManager.default.contents(atPath: serviceAccountJsonPath) else {
-            throw JWT.Error.googleServiceAccountJsonNotFound(path: serviceAccountJsonPath)
+            throw JWT.Error.googleServiceAccountJsonNotFound(
+                path: serviceAccountJsonPath
+            )
         }
 
-        let credentials = try Json.decoder.decode(JWTFcmCredentials.self, from: data)
-        let endpoint = PushEndpoint.pushViaFcm(deviceToken: deviceToken, message: message, credentials: credentials)
-        return try await Network.shared.request(endpoint: endpoint)
+        let credentials = try Json.decoder.decode(
+            JWTFcmCredentials.self,
+            from: data
+        )
+        let endpoint = PushEndpoint.pushViaFcm(
+            deviceToken: deviceToken,
+            message: message,
+            credentials: credentials
+        )
+        return try await Network.shared.request(
+            endpoint: endpoint,
+            outputType: outputType,
+        )
     }
 }

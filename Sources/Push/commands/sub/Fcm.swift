@@ -26,9 +26,12 @@ extension Push {
         var serviceAccountJsonPath: String
 
         func run() async throws {
-            try await PushService.pushViaFcm(deviceToken: options.deviceToken,
-                                             message: options.message,
-                                             serviceAccountJsonPath: serviceAccountJsonPath)
+            try await PushService.pushViaFcm(
+                deviceToken: options.deviceToken,
+                message: options.message,
+                serviceAccountJsonPath: serviceAccountJsonPath,
+                outputType: options.outputType,
+            )
         }
     }
 }

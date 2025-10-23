@@ -36,13 +36,13 @@ extension ASC.Apps {
 
         @Option(name: .shortAndLong, help: "Number of resources to return.")
         var limit: UInt?
-        
-        @Argument(help: "The attribute you want to get. [name | bundleId | locale | attributes] (default: id).")
-        var attribute: String?
 
         func run() async throws {
-            let list: [App] = try await ASCService.list(filters: filters, limit: limit)
-            list.out(attribute)
+            let _: [App] = try await ASCService.list(
+                filters: filters,
+                limit: limit,
+                outputType: options.outputType
+            )
         }
     }
 }

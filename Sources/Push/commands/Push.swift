@@ -42,6 +42,9 @@ struct Options: ParsableArguments {
     @Option(name: .shortAndLong, help: "The token of the device you want to push to.")
     var deviceToken: String
 
+    @Option(name: .shortAndLong, help: "The ID of the key to use.")
+    var outputType: OutputType = .raw
+
     @Option(name: .shortAndLong, help: "The message you want to send.")
     var message: String
 
@@ -51,3 +54,4 @@ struct Options: ParsableArguments {
     }
 }
 
+extension OutputType: ExpressibleByArgument { }
