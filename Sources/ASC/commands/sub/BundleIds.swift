@@ -37,12 +37,12 @@ extension ASC.BundleIds {
         @Option(name: .shortAndLong, help: "Number of resources to return.")
         var limit: UInt?
 
-        @Argument(help: "The attribute you want to get. [identifier | name | platform | seedId] (default: id).")
-        var attribute: String?
-
         func run() async throws {
-            let list: [BundleId] = try await ASCService.list(filters: filters, limit: limit)
-            list.out(attribute)
+            let _: [BundleId] = try await ASCService.list(
+                filters: filters,
+                limit: limit,
+                outputType: options.outputType,
+            )
         }
     }
 
@@ -69,12 +69,14 @@ extension ASC.BundleIds {
         @Option(name: .shortAndLong, help: "A custom prefix for the bundleId")
         var seedId: String?
 
-        @Argument(help: "The attribute you want to get. [identifier | name | platform | seedId] (default: id).")
-        var attribute: String?
-
         func run() async throws {
-            let bundleId: BundleId = try await ASCService.registerBundleId(identifier, name: name, platform: platform, seedId: seedId)
-            [bundleId].out(attribute)
+            try await ASCService.registerBundleId(
+                identifier,
+                name: name,
+                platform: platform,
+                seedId: seedId,
+                outputType: options.outputType,
+            )
         }
     }
 
@@ -94,13 +96,14 @@ extension ASC.BundleIds {
         var identifiers: [String]
 
         func run() async throws {
-
             var errors: [Error] = []
 
             for id in identifiers {
                 do {
-                    let deletedId = try await ASCService.deleteBundleId(id)
-                    print("Successfully removed \(deletedId)")
+                    try await ASCService.deleteBundleId(
+                        id,
+                        outputType: options.outputType,
+                    )
                 } catch {
                     errors.append(error)
                 }

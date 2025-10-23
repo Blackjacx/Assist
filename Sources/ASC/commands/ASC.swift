@@ -64,11 +64,16 @@ struct ApiKeyOptions: ParsableArguments {
     @Option(name: .shortAndLong, help: "The ID of the key to use.")
     var keyId: String?
 
+    @Option(name: .shortAndLong, help: "The ID of the key to use.")
+    var outputType: OutputType = .raw
+
     mutating func validate() throws {
-        // Misusing validate to set the received flag globally
+        // Making desired verbosity level visible to the network layer.
         Network.verbosityLevel = verbose
 
         // Set the api key ID passed as parameter
         ASCService.specifiedKeyId = keyId
     }
 }
+
+extension OutputType: ExpressibleByArgument { }

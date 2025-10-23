@@ -39,19 +39,17 @@ extension ASC.AppStoreVersions {
         var appIds: [String] = []
 
         @Option(name: .shortAndLong, help: "The type of output you would like to see.")
-        var outputType: OutputType = .standard
+        var outputFormat: OutputFormat = .standard
 
         @Option(name: .shortAndLong, help: "Number of resources to return.")
         var limit: UInt?
-
-        @Argument(help: "The attribute you are interested in. [attributes] (default: id).")
-        var attribute: String?
-
+        
         func run() async throws {
             let result = try await ASCService.listAppStoreVersions(
                 appIds: appIds,
                 filters: filters,
-                limit: limit
+                limit: limit,
+                outputType: .none, // ignoring `options.outputType` parameter
             )
 
             let outModel: [OutputModel] = result.map {
@@ -74,7 +72,7 @@ extension ASC.AppStoreVersions {
                 includesColumnTypes: false
             )
 
-            let output = switch outputType {
+            let output = switch outputFormat {
             case .standard:
                 dataFrame.description(options: options)
             case .groupedByVersion:
@@ -102,7 +100,7 @@ extension ASC.AppStoreVersions {
         var storeState: String?
     }
 
-    enum OutputType: String, CaseIterable, ExpressibleByArgument {
+    enum OutputFormat: String, CaseIterable, ExpressibleByArgument {
         case standard
         case groupedByVersion
         case groupedByState

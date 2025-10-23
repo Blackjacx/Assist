@@ -36,13 +36,13 @@ extension ASC.BetaTesters {
 
         @Option(name: .shortAndLong, help: "Number of resources to return.")
         var limit: UInt?
-        
-        @Argument(help: "The attribute you are interested in. [firstName | lastName | email | attributes] (default: id).")
-        var attribute: String?
 
         func run() async throws {
-            let list: [BetaTester] = try await ASCService.list(filters: filters, limit: limit)
-            list.out(attribute)
+            let _: [BetaTester] = try await ASCService.list(
+                filters: filters,
+                limit: limit,
+                outputType: options.outputType,
+            )
         }
     }
 
@@ -63,7 +63,11 @@ extension ASC.BetaTesters {
         var email: String
 
         func run() async throws {
-            try await ASCService.inviteBetaTester(email: email, appIds: appIds)
+            try await ASCService.inviteBetaTester(
+                email: email,
+                appIds: appIds,
+                outputType: options.outputType,
+            )
         }
     }
 
@@ -90,7 +94,13 @@ extension ASC.BetaTesters {
         var groupNames: [String]
 
         func run() async throws {
-            try await ASCService.addBetaTester(email: email, first: firstName, last: lastName, groupNames: groupNames)
+            try await ASCService.addBetaTester(
+                email: email,
+                first: firstName,
+                last: lastName,
+                groupNames: groupNames,
+                outputType: options.outputType,
+            )
         }
     }
 
@@ -108,17 +118,10 @@ extension ASC.BetaTesters {
         var filters: [Filter] = []
 
         func run() async throws {
-            let deletedTesters = try await ASCService.deleteBetaTesters(filters: filters)
-
-            guard !deletedTesters.isEmpty else {
-                print("No testers found…")
-                return
-            }
-
-            print("Successfully removed the following testers:")
-            deletedTesters.forEach {
-                dump($0)
-            }
+            try await ASCService.deleteBetaTesters(
+                filters: filters,
+                outputType: options.outputType,
+            )
         }
     }
 }

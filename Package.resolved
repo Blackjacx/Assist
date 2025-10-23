@@ -1,13 +1,13 @@
 {
-  "originHash" : "44b8a5e270da7fa5fc7f8f2c53f6630101864bd48cb69474c2779f17911a7ffa",
+  "originHash" : "e2c862d3b15863d1ca163f4469af3e9456d4f51f09918d217b4e1200597231d3",
   "pins" : [
     {
       "identity" : "asckit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/blackjacx/ASCKit",
       "state" : {
-        "revision" : "0787451d31881c7ce33ffdb44f5274536193f4e7",
-        "version" : "0.5.0"
+        "revision" : "acff9d38741fc61e3740434dab151281ea67b64d",
+        "version" : "0.6.0"
       }
     },
     {
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/blackjacx/Engine",
       "state" : {
-        "revision" : "bcef89ba00b09552c8e0eb369d6892ce3ef338f6",
-        "version" : "0.2.0"
+        "revision" : "4ad8dc574e88b8dbcd02ad31e4eaae63b21c64ec",
+        "version" : "0.3.0"
       }
     },
     {

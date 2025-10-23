@@ -37,12 +37,12 @@ extension ASC.BetaGroups {
         @Option(name: .shortAndLong, help: "Number of resources to return.")
         var limit: UInt?
 
-        @Argument(help: "The attribute you are interested in. [firstName | lastName | email | attributes] (default: id).")
-        var attribute: String?
-
         func run() async throws {
-            let list: [BetaGroup] = try await ASCService.list(filters: filters, limit: limit)
-            list.out(attribute)
+            let _: [BetaGroup] = try await ASCService.list(
+                filters: filters,
+                limit: limit,
+                outputType: options.outputType,
+            )
         }
     }
 }
