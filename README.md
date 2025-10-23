@@ -283,6 +283,11 @@ Thanks to all of you who are part of this:
 
 To release this Swift package the following steps have to be taken:
 
+- Make sure all features / PRs are merged to `develop`
+- Checkout develop and pull:
+  ```shell
+  git checkout develop && git pull
+  ```
 - Increment the version in `Core.Constants.version`
 - Update to the latest shared development files:
   ```shell
@@ -290,9 +295,9 @@ To release this Swift package the following steps have to be taken:
   ```
 - Run `bundle update` to update all Ruby gems
 - Run `swift package update` to update all SPM dependencies
-- Commit all changes on `develop` with the message:
+- Commit all changes on `develop` using:
   ```
-  Release version `x.y.z`
+  git commit -am "Release version 'x.y.z'"
   ```
 - Release the new version:
   ```shell
