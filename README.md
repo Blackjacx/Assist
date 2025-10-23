@@ -13,17 +13,23 @@
 [![License](https://img.shields.io/github/license/blackjacx/assist.svg)](https://github.com/blackjacx/assist/blob/master/LICENSE)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg?logo=paypal&style=for-the-badge)](https://www.paypal.me/STHEROLD)
 
-# App Store Connect API • CLI
+# Intro
 
 App Store Connect API access using your private API key. The great power of this tool is that it can operate on all apps of one or multiple teams (is you wish to), e.g. it is super easy to print the live versions of all of your apps, even across multiple teams:
 
-```sh
-asc app-store-versions list -k <key_id_1> \
-asc app-store-versions list -k <key_id_2> \
-asc app-store-versions list -k <key_id_3>
+```shell
+for asc_api_key_id in key_id_1 key_id_2 key_id_3; do
+  asc app-store-versions list -k "$asc_api_key_id"
+done
 ```
 
-You want to know what's possible? Clone the repo and execute the following commands to view the man pages of all included tools:
+## Features
+
+- **Take control over Apple's App Store Connect API** on the command line, e.g. invite new beta testers, update beta groups, list app versions and much more
+- **Generate screenshots from your app** by selecting desired language, device, appearance, and more. All of this works by leveraging your existing test suite
+- **Send push notifications** to your user's devices using Apple Push Notification Service or Firebase Cloud Messaging
+
+If you want to see the full potential of the provided tools, you can generate and view the man pages with ease. To do so, please clone the repo and execute the following commands to view the man pages of all included tools (asc, snap, and push):
 
 ```shell
 # Generate manpages
@@ -40,7 +46,7 @@ man asc
 
 ### Via [Homebrew](http://brew.sh/)
 
-```sh
+```shell
 brew tap Blackjacx/asc
 brew install asc
 ```
@@ -49,39 +55,41 @@ brew install asc
 
 Just install Mint using with [Homebrew](https://brew.sh/) via `brew install mint`.
 
-```sh
+```shell
 mint install Blackjacx/Assist
 ```
 
 You can also run command line tools with mint without installing them first. Mint will automatically clone and install it.
 
-```sh
+```shell
 mint run git@github.com:Blackjacx/Assist.git asc apps
 ```
 
 ### Via Command Line
 
-```sh
+```shell
 git clone https://github.com/blackjacx/assist.git AppStoreConnect
 cd AppStoreConnect
 swift run asc -h
 ```
 
-## Authentication
+## Documentation ASC (App Store Connect API CLI)
+
+### Authentication
 
 Authentication is handled by the tool itself. The only thing needed is your private API key. Generate one at [App Store Connect account](https://appstoreconnect.apple.com/access/api) and execute the following command which will just store the exact parameters you provide in the user defaults.
 
-```sh
+```shell
 asc keys register -n "name" -k "key-id" -i "issuer-id" -p "path-to-private-key-file"
 ```
 
-> ⚠️ No key generation performed here. The JWT is just generated on demand when using this tool. If you have multiple keys registered the tool will ask you which one you want to use.
+> ⚠️ No key generation performed here. The JWT is just generated on demand when using this tool. If you have multiple keys registered, the activated key is automatically used (see `asc keys activate`). For each command you can also use the `-k` option to specify the ID of a prevously registered key.
 
-## Sub Commands
+### Sub Commands
 
-Executing one of the following sub commands is as easy as appending it with its parameters to the base command:
+Here are some examples of what the tool can do for you:
 
-```sh
+```shell
 # list all registered API keys
 asc api-keys list
 
@@ -123,146 +131,37 @@ asc beta-testers delete -e "john@doe.com"
 asc app-store-versions
 ```
 
-### `api-keys`
+> [!tip]
+> If you want a complete list, of all commands, just call `asc -h` you can call for help for every sub command, e.g. `asc builds -h` or `asc builds list -h`. 
+>
+> If you'd like to see a documentation of all commands with all sub commands, please run the following to generate and install the man page for `asc` as mentioned under [Features](#Features) 👍
 
-```sh
-OVERVIEW: Lists, registers and deletes App Store Connect API keys on your Mac.
-
-USAGE: asc api-keys <subcommand>
-
-OPTIONS:
---version               Show the version.
--h, --help              Show help information.
-
-SUBCOMMANDS:
-list (default)          List locally stored App Store Connect API keys keys.
-register                Registers App Store Connect API keys locally.
-delete                  Delete locally stored App Store Connect API keys.
-
-See 'asc help api-keys <subcommand>' for detailed help.
-```
-
-### `beta-groups`
-
-```sh
-OVERVIEW: Manage groups of beta testers that have access to one or more builds.
-
-USAGE: asc beta-groups <subcommand>
-
-OPTIONS:
---version               Show the version.
--h, --help              Show help information.
-
-SUBCOMMANDS:
-list (default)          Find and list beta testers for all apps, builds, and beta groups.
-
-See 'asc help beta-groups <subcommand>' for detailed help.
-```
-
-### `beta-testers`
-
-```sh
-OVERVIEW: Manage people who can install and test prerelease builds.
-
-USAGE: asc beta-testers <subcommand>
-
-OPTIONS:
---version               Show the version.
--h, --help              Show help information.
-
-SUBCOMMANDS:
-list (default)          Find and list beta testers for all apps, builds, and
-beta groups.
-invite                  Send or resend an invitation to a beta tester to test
-specified apps.
-add                     Create a beta tester assigned to a group, a build, or
-an app.
-delete                  Remove a beta tester's ability to test all or
-specific apps.
-
-See 'asc help beta-testers <subcommand>' for detailed help.
-```
-
-### `apps`
-
-```sh
-OVERVIEW: Manage your apps in App Store Connect.
-
-USAGE: asc apps <subcommand>
-
-OPTIONS:
---version               Show the version.
--h, --help              Show help information.
-
-SUBCOMMANDS:
-list (default)          Find and list apps added in App Store Connect.
-
-See 'asc help apps <subcommand>' for detailed help.
-```
-
-### `app-store-versions`
-
-```sh
-OVERVIEW: Manage versions of your app that are available in App Store.
-
-USAGE: asc app-store-versions <subcommand>
-
-OPTIONS:
---version               Show the version.
--h, --help              Show help information.
-
-SUBCOMMANDS:
-list (default)          Get a list of all App Store versions of an app across
-all platforms.
-
-See 'asc help app-store-versions <subcommand>' for detailed help.
-```
-
-### `builds`
-
-```sh
-OVERVIEW: Manage builds for testers and submit builds for review.
-
-USAGE: asc builds <subcommand>
-
-OPTIONS:
---version               Show the version.
--h, --help              Show help information.
-
-SUBCOMMANDS:
-list (default)          Find and list builds for all apps in App Store Connect.
-
-See 'asc help builds <subcommand>' for detailed help.
-```
-
-### `bundle-ids`
-
-```sh
-OVERVIEW: Manage the bundle IDs that uniquely identify your apps.
-
-USAGE: asc bundle-ids <subcommand>
-
-OPTIONS:
-  --version               Show the version.
-  -h, --help              Show help information.
-
-SUBCOMMANDS:
-  list (default)          Find and list bundle IDs that are registered to your
-                          team.
-  register                Register a new bundle ID for app development.
-
-  See 'asc help bundle-ids <subcommand>' for detailed help.
-
-```
 
 ## Code Documentation
 
 The code documentation for [ASC](https://swiftpackageindex.com/Blackjacx/Assist/develop/documentation/asc), [Push](https://swiftpackageindex.com/Blackjacx/Assist/develop/documentation/push) and [Snap](https://swiftpackageindex.com/Blackjacx/Assist/develop/documentation/snap) is generated and hosted by [Swift Package Index](https://swiftpackageindex.com/) (powered by [DocC](https://developer.apple.com/documentation/docc))
 
-## Release
+## Contribution
+
+- If you found a **bug**, please open an **issue**.
+- If you have a **feature request**, please open an **issue**.
+- If you want to **contribute**, please submit a **pull request**.
+
+Thanks to all of you who are part of this:
+
+<a href="https://github.com/blackjacx/Assist/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=blackjacx/Assist" />
+</a>
+
+### Release
 
 To release this Swift package the following steps have to be taken:
 
+- Make sure all features / PRs are merged to `develop`
+- Checkout develop and pull:
+  ```shell
+  git checkout develop && git pull
+  ```
 - Increment the version in `Core.Constants.version`
 - Update to the latest shared development files:
   ```shell
@@ -270,9 +169,9 @@ To release this Swift package the following steps have to be taken:
   ```
 - Run `bundle update` to update all Ruby gems
 - Run `swift package update` to update all SPM dependencies
-- Commit all changes on `develop` with the message:
+- Commit all changes on `develop` using:
   ```
-  Release version `x.y.z`
+  git commit -am "Release version 'x.y.z'"
   ```
 - Release the new version:
   ```shell
@@ -284,8 +183,8 @@ To release this Swift package the following steps have to be taken:
   ```
   Assist (ASC, Push, Snap) release x.y.z 🎉
 
-  ▸ 🚀  Tools asc, snap, push (x.y.z) successfully published
-  ▸ 📅  September 2nd
+  ▸ 🚀  Tools asc, snap, push successfully published
+  ▸ 📅  Sep 2nd
   ▸ 🌎  https://swiftpackageindex.com/Blackjacx/Assist
   ▸ 🌎  https://github.com/Blackjacx/Assist/releases/latest
   ▸ 👍  Tell your friends!
@@ -293,23 +192,9 @@ To release this Swift package the following steps have to be taken:
   #SPM #Automated #Snapshots #Push #Firebase #APNS #ASC #AppStoreConnectAPI
   ```
 
-## Contribution
-
-- If you found a **bug**, please open an **issue**.
-- If you have a **feature request**, please open an **issue**.
-- If you want to **contribute**, please submit a **pull request**.
-
 ## Author
 
 [Stefan Herold](mailto:stefan.herold@gmail.com) • [X](https://twitter.com/Blackjacxxx) • [Bluesky](https://bsky.app/profile/blackjacx.bsky.social) • [Mastodon](https://mastodon.social/@blackjacx)
-
-## Contributors
-
-Thanks to all of you who are part of this:
-
-<a href="https://github.com/blackjacx/Assist/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=blackjacx/Assist" />
-</a>
 
 ## License
 

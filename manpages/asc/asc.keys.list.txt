@@ -1,9 +1,0 @@
-OVERVIEW: List locally stored App Store Connect API keys.
-
-USAGE: asc keys list [--verbose ...]
-
-OPTIONS:
-  -v, --verbose           Activate verbose logging.
-  --version               Show the version.
-  -h, --help              Show help information.
-

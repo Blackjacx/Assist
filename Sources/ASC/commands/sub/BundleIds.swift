@@ -15,7 +15,7 @@ extension ASC {
         static var configuration = CommandConfiguration(
             abstract: "Manage the bundle IDs that uniquely identify your apps.",
             subcommands: [List.self, Register.self, Delete.self],
-            defaultSubcommand: List.self)
+        )
     }
 }
 

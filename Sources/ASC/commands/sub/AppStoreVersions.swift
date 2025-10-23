@@ -16,7 +16,7 @@ extension ASC {
         static var configuration = CommandConfiguration(
             abstract: "Manage versions of your app that are available in App Store.",
             subcommands: [List.self],
-            defaultSubcommand: List.self)
+        )
     }
 }
 

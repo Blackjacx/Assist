@@ -17,8 +17,14 @@ extension ASC {
 
         static var configuration = CommandConfiguration(
             abstract: "Lists, registers and deletes App Store Connect API keys on your Mac.",
-            subcommands: [List.self, Activate.self, Register.self, Delete.self, Token.self],
-            defaultSubcommand: List.self)
+            subcommands: [
+                List.self,
+                Activate.self,
+                Register.self,
+                Delete.self,
+                Token.self
+            ],
+        )
     }
 }
 
@@ -62,7 +68,7 @@ extension ASC.Keys {
         @Option(name: .shortAndLong, help: "The key's id.")
         var keyId: String
 
-        @Option(name: .shortAndLong, help: "The key's name you. You can choose freely.")
+        @Option(name: .shortAndLong, help: "The key's name. You can choose freely.")
         var name: String
 
         @Option(name: .shortAndLong, help: "The absolute path to the p8 key file.")
