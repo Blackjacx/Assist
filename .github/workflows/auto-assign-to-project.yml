@@ -12,7 +12,7 @@ jobs:
     name: Assign to "Backlog" Project
     steps:
     - name: Assign NEW issues and NEW pull requests to global project "Backlog" (1)
-      uses: actions/add-to-project@main
+      uses: actions/add-to-project@v1.0.2
       with:
         project-url: https://github.com/users/Blackjacx/projects/1
         github-token: ${{ secrets.ACCESS_TOKEN }}
