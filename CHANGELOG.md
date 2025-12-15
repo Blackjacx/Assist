@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [0.10.0] - 2025-12-15Z
+
+- [#83](https://github.com/dbdrive/beiwagen/pull/83): Support request output types - [@blackjacx](https://github.com/blackjacx).
+- [#84](https://github.com/dbdrive/beiwagen/pull/84): Support Age Ratings - [@blackjacx](https://github.com/blackjacx).
+
 ## [0.9.0] - 2025-10-23Z
 
 - [#82](https://github.com/dbdrive/beiwagen/pull/82): Add support for Accessibility Declaration management - [@blackjacx](https://github.com/blackjacx).

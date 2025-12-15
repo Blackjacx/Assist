@@ -51,11 +51,14 @@ extension Push {
         
         func run() async throws {
             let credentials = JWTApnsCredentials(keyPath: keyPath, keyId: keyId, issuerId: issuerId)
-            try await PushService.pushViaApns(credentials: credentials,
-                                              endpoint: endpoint,
-                                              deviceToken: options.deviceToken,
-                                              topic: topic,
-                                              message: options.message)
+            try await PushService.pushViaApns(
+                credentials: credentials,
+                endpoint: endpoint,
+                deviceToken: options.deviceToken,
+                topic: topic,
+                message: options.message,
+                outputType: options.outputType,
+            )
         }
     }
 }

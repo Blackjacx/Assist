@@ -25,18 +25,19 @@ public final class ASC: AsyncParsableCommand {
         // Commands can define a version for automatic '--version' support.
         version: Constants.version,
 
-        subcommands: [Keys.self,
-                      BetaGroups.self,
-                      AccessibilityDeclarations.self,
-                      Apps.self,
-                      AppStoreVersions.self,
-                      BetaTesters.self,
-                      Builds.self,
-                      BundleIds.self],
-
-        // A default subcommand, when provided, is automatically selected if a
-        // subcommand is not given on the command line.
-        defaultSubcommand: BetaGroups.self)
+        subcommands: [
+            Keys.self,
+            BetaGroups.self,
+            AccessibilityDeclarations.self,
+            Apps.self,
+            AppInfo.self,
+            AgeRatingDeclarations.self,
+            AppStoreVersions.self,
+            BetaTesters.self,
+            Builds.self,
+            BundleIds.self
+        ]
+    )
 
     public init() {}
 }
@@ -64,11 +65,16 @@ struct ApiKeyOptions: ParsableArguments {
     @Option(name: .shortAndLong, help: "The ID of the key to use.")
     var keyId: String?
 
+    @Option(name: .shortAndLong, help: "The ID of the key to use.")
+    var outputType: OutputType = .raw
+
     mutating func validate() throws {
-        // Misusing validate to set the received flag globally
+        // Making desired verbosity level visible to the network layer.
         Network.verbosityLevel = verbose
 
         // Set the api key ID passed as parameter
         ASCService.specifiedKeyId = keyId
     }
 }
+
+extension OutputType: ExpressibleByArgument { }

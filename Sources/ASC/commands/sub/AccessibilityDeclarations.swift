@@ -54,16 +54,13 @@ extension ASC.AccessibilityDeclarations {
         @Option(name: .shortAndLong, help: "Number of resources to return.")
         var limit: UInt?
 
-        @Argument(help: "The attribute you are interested in. [firstName | lastName | email | attributes] (default: id).")
-        var attribute: String?
-
         func run() async throws {
-            let declarations = try await ASCService.listAccessibilityDeclarations(
+            try await ASCService.listAccessibilityDeclarations(
                 appId: appId,
                 filters: filters,
-                limit: limit
+                limit: limit,
+                outputType: options.outputType,
             )
-            declarations.out(attribute)
         }
     }
 
@@ -95,13 +92,12 @@ extension ASC.AccessibilityDeclarations {
         var parameters: String
 
         func run() async throws {
-            let declaration = try await ASCService.createAccessibilityDeclaration(
+            try await ASCService.createAccessibilityDeclaration(
                 appId: appId,
                 deviceFamily: deviceFamily,
                 parameters: parameters,
+                outputType: options.outputType,
             )
-
-            [declaration].out(nil)
         }
     }
 
@@ -130,6 +126,7 @@ extension ASC.AccessibilityDeclarations {
             try await ASCService.updateAccessibilityDeclaration(
                 id: id,
                 parameters: parameters,
+                outputType: options.outputType,
             )
         }
     }
@@ -150,7 +147,10 @@ extension ASC.AccessibilityDeclarations {
         var id: String
 
         func run() async throws {
-            try await ASCService.deleteAccessibilityDeclaration(id: id)
+            try await ASCService.deleteAccessibilityDeclaration(
+                id: id,
+                outputType: options.outputType,
+            )
         }
     }
 
@@ -171,7 +171,8 @@ extension ASC.AccessibilityDeclarations {
 
         func run() async throws {
             try await ASCService.publishAccessibilityDeclaration(
-                id: id
+                id: id,
+                outputType: options.outputType,
             )
         }
     }
@@ -216,6 +217,7 @@ extension ASC.AccessibilityDeclarations {
                 appId: appId,
                 deviceFamily: deviceFamily,
                 parameters: parameters,
+                outputType: options.outputType,
             )
         }
     }
