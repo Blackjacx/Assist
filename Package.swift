@@ -16,7 +16,7 @@ let package = Package(
         .package(url: "https://github.com/blackjacx/Engine", from: "0.3.0"),
         // .package(path: "../Engine"),
 
-         .package(url: "https://github.com/blackjacx/ASCKit", from: "0.7.1"),
+         .package(url: "https://github.com/blackjacx/ASCKit", from: "0.7.2"),
         // .package(url: "https://github.com/blackjacx/ASCKit", branch: "develop"),
 //         .package(path: "../ASCKit"),
 
