@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- [#88](https://github.com/dbdrive/beiwagen/pull/88): Generate shell completions - [@blackjacx](https://github.com/blackjacx).
+
 ## [0.10.0] - 2025-12-15Z
 
 - [#83](https://github.com/dbdrive/beiwagen/pull/83): Support request output types - [@blackjacx](https://github.com/blackjacx).
