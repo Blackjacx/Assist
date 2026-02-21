@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- [#89](https://github.com/Blackjacx/Assist/pull/89): Fix Snap shell completion - [@blackjacx](https://github.com/blackjacx).
 - [#88](https://github.com/dbdrive/beiwagen/pull/88): Generate shell completions - [@blackjacx](https://github.com/blackjacx).
 
 ## [0.10.0] - 2025-12-15Z
