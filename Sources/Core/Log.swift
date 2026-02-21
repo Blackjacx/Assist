@@ -8,14 +8,23 @@
 import Foundation
 import os
 
-public struct Logger {
+public struct Log {
 
-    public static let shared = Logger()
+    private static let subsystem = "com.blackjacx.assist"
 
-    private let osLog = os.Logger(
-        subsystem: "com.blackjacx.assist",
-        category: "default",
-    )
+    public static let simctl = Log(category: "simctl")
+    public static let xcodebuild = Log(category: "xcodebuild")
+    public static let mint = Log(category: "mint")
+    public static let zip = Log(category: "zip")
+    public static let snap = Log(category: "snap")
+    public static let asc = Log(category: "asc")
+    public static let push = Log(category: "push")
+
+    private let osLog: os.Logger
+
+    private init(category: String) {
+        osLog = os.Logger(subsystem: Self.subsystem, category: category)
+    }
 
     public func warn(
         _ closure: @autoclosure () -> Any?,
@@ -54,7 +63,7 @@ public struct Logger {
     }
 }
 
-public extension Logger {
+public extension Log {
 
     enum Level: Int {
         case warn
