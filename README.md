@@ -73,6 +73,46 @@ cd AppStoreConnect
 swift run asc -h
 ```
 
+## Shell Completions
+
+All tools (`asc`, `snap`, `push`) ship with built-in shell completion support via `swift-argument-parser`. Run `--generate-completion-script` to generate and install a script for your shell.
+
+### Zsh
+
+```shell
+# Native Zsh
+mkdir -p ~/.zsh/completion
+asc --generate-completion-script zsh > ~/.zsh/completion/_asc
+snap --generate-completion-script zsh > ~/.zsh/completion/_snap
+push --generate-completion-script zsh > ~/.zsh/completion/_push
+# Add to ~/.zshrc if not already present:
+# fpath=(~/.zsh/completion $fpath)
+# autoload -U compinit && compinit
+```
+
+```shell
+# oh-my-zsh
+asc --generate-completion-script zsh > ~/.oh-my-zsh/completions/_asc
+snap --generate-completion-script zsh > ~/.oh-my-zsh/completions/_snap
+push --generate-completion-script zsh > ~/.oh-my-zsh/completions/_push
+```
+
+### Bash
+
+```shell
+asc --generate-completion-script bash > /usr/local/etc/bash_completion.d/asc
+snap --generate-completion-script bash > /usr/local/etc/bash_completion.d/snap
+push --generate-completion-script bash > /usr/local/etc/bash_completion.d/push
+```
+
+### Fish
+
+```shell
+asc --generate-completion-script fish > ~/.config/fish/completions/asc.fish
+snap --generate-completion-script fish > ~/.config/fish/completions/snap.fish
+push --generate-completion-script fish > ~/.config/fish/completions/push.fish
+```
+
 ## Documentation ASC (App Store Connect API CLI)
 
 ### Authentication

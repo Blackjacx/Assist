@@ -51,7 +51,7 @@ public final class Snap: ParsableCommand {
     @OptionGroup()
     var options: Options
 
-    @Option(help: "The path to the workspace used to make the screenshots.")
+    @Option(help: "The path to the workspace used to make the screenshots.", completion: .file(extensions: ["xcworkspace"]))
     var workspace: String
 
     @Option(name: [.short, .customLong("scheme")], help: "A scheme to run the screenshot tests on. Can be specified multiple times to generate screenshots for multiple schemes.")
@@ -69,7 +69,7 @@ public final class Snap: ParsableCommand {
     @Option(parsing: .upToNextOption, help: "Devices you want to generate screenshots for (run `xcrun simctl list` to list all possible devices)")
     var devices: [String] = ["iPhone 14 Pro"]
 
-    @Option(help: "The destination directory where the screenshots and the zip archive should be stored.")
+    @Option(help: "The destination directory where the screenshots and the zip archive should be stored.", completion: .directory)
     var destinationDir: String?
 
     @Option(help: "The zip file name that should be used.")
