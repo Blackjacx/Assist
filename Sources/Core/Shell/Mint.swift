@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 import SwiftShell
 
 public struct Mint {
@@ -25,7 +26,7 @@ public extension Mint {
         let out = run("mint", args)
 
         if let error = out.error {
-            Log.mint.error("\(out.stderror)")
+            Log.mint.error("\(out.stderror, privacy: .public)")
             throw error
         }
     }
