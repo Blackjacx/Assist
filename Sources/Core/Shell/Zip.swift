@@ -26,7 +26,7 @@ public extension Zip {
         let out = run("zip", args)
 
         if let error = out.error {
-            Log.zip.error(out.stderror)
+            Log.zip.error("\(out.stderror)")
             throw error
         }
     }
