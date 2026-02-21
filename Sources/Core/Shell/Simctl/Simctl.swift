@@ -1,5 +1,6 @@
 import Engine
 import Foundation
+import os
 import SwiftShell
 
 public struct Simctl {}
@@ -63,13 +64,13 @@ public extension Simctl {
     }
 
     static func createDevice(name: String, id: String, runtime: Runtime) throws -> String {
-        Log.simctl.info("Create device \(id) with name \"\(name)\" and runtime \(runtime)")
+        Log.simctl.info("Create device \(id, privacy: .public) with name \"\(name, privacy: .public)\" and runtime \(runtime, privacy: .public)")
         return try Simctl._createDevice(name: name, id: id, runtime: runtime)
     }
 
     static func updateStyle(_ style: Style, deviceIds: [String]) throws {
         try deviceIds.forEach {
-            Log.simctl.info("Set style \(style.rawValue) for device \($0)")
+            Log.simctl.info("Set style \(style.rawValue, privacy: .public) for device \($0, privacy: .public)")
             try _boot(deviceId: $0)
             try _setAppearance(for: $0, style: style)
         }
@@ -77,7 +78,7 @@ public extension Simctl {
 
     static func updateStatusBar(deviceIds: [String]) throws {
         try deviceIds.forEach {
-            Log.simctl.info("Set statusbar for device \($0)")
+            Log.simctl.info("Set statusbar for device \($0, privacy: .public)")
 
             try _boot(deviceId: $0)
             try _updateStatusBar(deviceId: $0)
@@ -153,13 +154,13 @@ public extension Simctl {
                 }
 
                 Log.simctl.info("""
-                Running test plan '\(testPlanName) (\(testPlanConfigs.isEmpty ? "all configs" : ListFormatter.localizedString(byJoining: testPlanConfigs)))' for:
-                    style '\(style.rawValue)'
-                    scheme '\(scheme)'
-                    runtime: '\(runtime)'
-                    platform: '\(platform)'
-                    architecture: '\(arch)'
-                    xctestrun: '\(xcTestRunFile.path())'
+                Running test plan '\(testPlanName, privacy: .public) (\(testPlanConfigs.isEmpty ? "all configs" : ListFormatter.localizedString(byJoining: testPlanConfigs), privacy: .public))' for:
+                    style '\(style.rawValue, privacy: .public)'
+                    scheme '\(scheme, privacy: .public)'
+                    runtime: '\(runtime, privacy: .public)'
+                    platform: '\(platform, privacy: .public)'
+                    architecture: '\(arch, privacy: .public)'
+                    xctestrun: '\(xcTestRunFile.path(), privacy: .public)'
                 """)
 
                 // This command just needs the binaries and the path to the
@@ -178,7 +179,7 @@ public extension Simctl {
                 )
 
                 Log.simctl.info(
-                    "Extracting screenshots from xcresult bundle '\(resultsBundleUrl.path())' for scheme '\(scheme)' and style '\(style.rawValue)'"
+                    "Extracting screenshots from xcresult bundle '\(resultsBundleUrl.path(), privacy: .public)' for scheme '\(scheme, privacy: .public)' and style '\(style.rawValue, privacy: .public)'"
                 )
 
                 try fileManager.createDirectory(at: screensUrl, withIntermediateDirectories: true, attributes: nil)
@@ -187,7 +188,7 @@ public extension Simctl {
         }
 
         for scheme in schemes {
-            Log.simctl.info("Package files into one ZIP for scheme '\(scheme)'")
+            Log.simctl.info("Package files into one ZIP for scheme '\(scheme, privacy: .public)'")
 
             let originalDirectoryPath = fileManager.currentDirectoryPath
 
@@ -287,7 +288,7 @@ private extension Simctl {
         let out = run(bash: "xcrun simctl list --json")
 
         if let error = out.error {
-            Log.simctl.error("\(out.stderror)")
+            Log.simctl.error("\(out.stderror, privacy: .public)")
             throw error
         }
 
@@ -306,13 +307,13 @@ private extension Simctl {
     }
 
     static func _boot(deviceId: String) throws {
-        Log.simctl.info("Boot device \(deviceId)")
+        Log.simctl.info("Boot device \(deviceId, privacy: .public)")
 
         // Wait while the simulator is booting (https://stackoverflow.com/a/56267933/971329)
         let out = run(bash: "xcrun simctl bootstatus '\(deviceId)' -b")
 
         if let error = out.error {
-            Log.simctl.error("\(out.stderror)")
+            Log.simctl.error("\(out.stderror, privacy: .public)")
             throw error
         }
     }
@@ -321,7 +322,7 @@ private extension Simctl {
         let out = run(bash: "xcrun simctl shutdown '\(deviceId)'")
 
         if let error = out.error {
-            Log.simctl.error("\(out.stderror)")
+            Log.simctl.error("\(out.stderror, privacy: .public)")
             throw error
         }
     }
@@ -330,7 +331,7 @@ private extension Simctl {
         let out = run(bash: "xcrun simctl ui '\(deviceId)' appearance '\(style.rawValue)'")
 
         if let error = out.error {
-            Log.simctl.error("\(out.stderror)")
+            Log.simctl.error("\(out.stderror, privacy: .public)")
             throw error
         }
     }
@@ -345,7 +346,7 @@ private extension Simctl {
         let out = run(bash: "xcrun simctl create '\(name)' '\(id)' '\(runtime.identifier)'")
 
         if let error = out.error {
-            Log.simctl.error("\(out.stderror)")
+            Log.simctl.error("\(out.stderror, privacy: .public)")
             throw error
         }
         return out.stdout
@@ -376,7 +377,7 @@ private extension Simctl {
         let out = run("xcrun", args)
 
         if let error = out.error {
-            Log.simctl.error("\(out.stderror)")
+            Log.simctl.error("\(out.stderror, privacy: .public)")
             throw error
         }
     }
