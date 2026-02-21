@@ -65,7 +65,7 @@ struct ApiKeyOptions: ParsableArguments {
     @Option(name: .shortAndLong, help: "The ID of the key to use.")
     var keyId: String?
 
-    @Option(name: .shortAndLong, help: "The ID of the key to use.")
+    @Option(name: .shortAndLong, help: "The ID of the key to use.", completion: .list(["raw", "none"]))
     var outputType: OutputType = .raw
 
     mutating func validate() throws {
