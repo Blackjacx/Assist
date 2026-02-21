@@ -69,7 +69,7 @@ public extension Simctl {
 
     static func updateStyle(_ style: Style, deviceIds: [String]) throws {
         try deviceIds.forEach {
-            Log.simctl.info("Set style \(style) for device \($0)")
+            Log.simctl.info("Set style \(style.rawValue) for device \($0)")
             try _boot(deviceId: $0)
             try _setAppearance(for: $0, style: style)
         }
@@ -153,9 +153,8 @@ public extension Simctl {
                 }
 
                 Log.simctl.info("""
-                Running test plan '\(testPlanName) (\(testPlanConfigs.isEmpty ? "all configs" : ListFormatter
-                    .localizedString(byJoining: testPlanConfigs)))' for:
-                    style '\(style)'
+                Running test plan '\(testPlanName) (\(testPlanConfigs.isEmpty ? "all configs" : ListFormatter.localizedString(byJoining: testPlanConfigs)))' for:
+                    style '\(style.rawValue)'
                     scheme '\(scheme)'
                     runtime: '\(runtime)'
                     platform: '\(platform)'
@@ -179,7 +178,7 @@ public extension Simctl {
                 )
 
                 Log.simctl.info(
-                    "Extracting screenshots from xcresult bundle '\(resultsBundleUrl.path())' for scheme '\(scheme)' and style '\(style)'"
+                    "Extracting screenshots from xcresult bundle '\(resultsBundleUrl.path())' for scheme '\(scheme)' and style '\(style.rawValue)'"
                 )
 
                 try fileManager.createDirectory(at: screensUrl, withIntermediateDirectories: true, attributes: nil)
@@ -288,7 +287,7 @@ private extension Simctl {
         let out = run(bash: "xcrun simctl list --json")
 
         if let error = out.error {
-            Log.simctl.error(out.stderror)
+            Log.simctl.error("\(out.stderror)")
             throw error
         }
 
@@ -313,7 +312,7 @@ private extension Simctl {
         let out = run(bash: "xcrun simctl bootstatus '\(deviceId)' -b")
 
         if let error = out.error {
-            Log.simctl.error(out.stderror)
+            Log.simctl.error("\(out.stderror)")
             throw error
         }
     }
@@ -322,7 +321,7 @@ private extension Simctl {
         let out = run(bash: "xcrun simctl shutdown '\(deviceId)'")
 
         if let error = out.error {
-            Log.simctl.error(out.stderror)
+            Log.simctl.error("\(out.stderror)")
             throw error
         }
     }
@@ -331,7 +330,7 @@ private extension Simctl {
         let out = run(bash: "xcrun simctl ui '\(deviceId)' appearance '\(style.rawValue)'")
 
         if let error = out.error {
-            Log.simctl.error(out.stderror)
+            Log.simctl.error("\(out.stderror)")
             throw error
         }
     }
@@ -346,7 +345,7 @@ private extension Simctl {
         let out = run(bash: "xcrun simctl create '\(name)' '\(id)' '\(runtime.identifier)'")
 
         if let error = out.error {
-            Log.simctl.error(out.stderror)
+            Log.simctl.error("\(out.stderror)")
             throw error
         }
         return out.stdout
@@ -377,7 +376,7 @@ private extension Simctl {
         let out = run("xcrun", args)
 
         if let error = out.error {
-            Log.simctl.error(out.stderror)
+            Log.simctl.error("\(out.stderror)")
             throw error
         }
     }

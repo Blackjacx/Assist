@@ -138,7 +138,7 @@ extension Snap {
                     test plan: \(testPlanName) (\(testPlanConfigs.isEmpty ? "all configs" : ListFormatter.localizedString(byJoining: testPlanConfigs)))
                     destination: \(outURL.path.appendPathComponent(zipFileName))
                 """
-                Log.snap.info(configMessage)
+                Log.snap.info("\(configMessage)")
 
                 Simctl.killAllSimulators()
 

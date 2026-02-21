@@ -7,7 +7,10 @@
 
 import Foundation
 
-public struct Runtime: Codable {
+public struct Runtime: Codable, CustomStringConvertible {
+
+    public var description: String { "ID: \(identifier), Name: \(name)" }
+
 
     enum CodingKeys: String, CodingKey {
         case buildVersion = "buildversion"
