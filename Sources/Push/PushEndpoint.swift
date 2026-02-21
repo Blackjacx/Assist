@@ -8,7 +8,6 @@
 import Core
 import Engine
 import Foundation
-import os
 
 enum PushEndpoint {
     case pushViaApns(credentials: JWTApnsCredentials, endpoint: Push.Apns.Endpoint, deviceToken: String, topic: String, message: String)
@@ -82,7 +81,7 @@ extension PushEndpoint: Endpoint {
                 let token = try await JSONWebToken.token(for: .apns(credentials: credentials))
                 headers["Authorization"] = "Bearer \(token)"
             } catch {
-                Log.push.error("Error generating token: \(error, privacy: .public)")
+                Log.push.error("Error generating token: \(error)")
             }
 
         case let .pushViaFcm(_, _, credentials):
@@ -90,7 +89,7 @@ extension PushEndpoint: Endpoint {
                 let token = try await JSONWebToken.token(for: .fcm(credentials: credentials))
                 headers["Authorization"] = "Bearer \(token)"
             } catch {
-                Log.push.error("Error generating token: \(error, privacy: .public)")
+                Log.push.error("Error generating token: \(error)")
             }
         }
 

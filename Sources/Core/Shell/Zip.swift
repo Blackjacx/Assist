@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import os
 import SwiftShell
 
 public struct Zip {
@@ -27,7 +26,7 @@ public extension Zip {
         let out = run("zip", args)
 
         if let error = out.error {
-            Log.zip.error("\(out.stderror, privacy: .public)")
+            Log.zip.error("\(out.stderror)")
             throw error
         }
     }

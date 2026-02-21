@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import os
 import SwiftShell
 
 public struct Xcodebuild {
@@ -64,7 +63,7 @@ public struct Xcodebuild {
             let out = run("xcrun", arguments)
 
             if let error = out.error {
-                Log.xcodebuild.error("\(out.stderror, privacy: .public)")
+                Log.xcodebuild.error("\(out.stderror)")
                 throw error
             }
         }
