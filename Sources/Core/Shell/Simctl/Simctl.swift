@@ -54,8 +54,8 @@ public extension Simctl {
         return deviceIDs
     }
 
-    static func killAllSimulators(logInset: Int = 0) {
-        Logger.shared.info("Killing all open simulators", inset: logInset)
+    static func killAllSimulators() {
+        Logger.shared.info("Killing all open simulators")
 
         try? runAndPrint(bash: "killall Simulator")
         try? runAndPrint(bash: "killall iPhone Simulator")
@@ -63,23 +63,23 @@ public extension Simctl {
     }
 
     static func createDevice(name: String, id: String, runtime: Runtime) throws -> String {
-        Logger.shared.info("Create device \(id) with name \"\(name)\" and runtime \(runtime)", inset: 1)
+        Logger.shared.info("Create device \(id) with name \"\(name)\" and runtime \(runtime)")
         return try Simctl._createDevice(name: name, id: id, runtime: runtime)
     }
 
     static func updateStyle(_ style: Style, deviceIds: [String]) throws {
         try deviceIds.forEach {
-            Logger.shared.info("Set style \(style) for device \($0)", inset: 1)
-            try _boot(deviceId: $0, logInset: 1)
+            Logger.shared.info("Set style \(style) for device \($0)")
+            try _boot(deviceId: $0)
             try _setAppearance(for: $0, style: style)
         }
     }
 
     static func updateStatusBar(deviceIds: [String]) throws {
         try deviceIds.forEach {
-            Logger.shared.info("Set statusbar for device \($0)", inset: 1)
+            Logger.shared.info("Set statusbar for device \($0)")
 
-            try _boot(deviceId: $0, logInset: 1)
+            try _boot(deviceId: $0)
             try _updateStatusBar(deviceId: $0)
         }
     }
@@ -161,7 +161,7 @@ public extension Simctl {
                     platform: '\(platform)'
                     architecture: '\(arch)'
                     xctestrun: '\(xcTestRunFile.path())'
-                """, inset: 1)
+                """)
 
                 // This command just needs the binaries and the path to the
                 // xctestrun file created before the actual testing. Then
@@ -179,8 +179,7 @@ public extension Simctl {
                 )
 
                 Logger.shared.info(
-                    "Extracting screenshots from xcresult bundle '\(resultsBundleUrl.path())' for scheme '\(scheme)' and style '\(style)'",
-                    inset: 1
+                    "Extracting screenshots from xcresult bundle '\(resultsBundleUrl.path())' for scheme '\(scheme)' and style '\(style)'"
                 )
 
                 try fileManager.createDirectory(at: screensUrl, withIntermediateDirectories: true, attributes: nil)
@@ -189,7 +188,7 @@ public extension Simctl {
         }
 
         for scheme in schemes {
-            Logger.shared.info("Package files into one ZIP for scheme '\(scheme)'", inset: 1)
+            Logger.shared.info("Package files into one ZIP for scheme '\(scheme)'")
 
             let originalDirectoryPath = fileManager.currentDirectoryPath
 
@@ -307,8 +306,8 @@ private extension Simctl {
         return id
     }
 
-    static func _boot(deviceId: String, logInset: Int = 0) throws {
-        Logger.shared.info("Boot device \(deviceId)", inset: logInset)
+    static func _boot(deviceId: String) throws {
+        Logger.shared.info("Boot device \(deviceId)")
 
         // Wait while the simulator is booting (https://stackoverflow.com/a/56267933/971329)
         let out = run(bash: "xcrun simctl bootstatus '\(deviceId)' -b")
