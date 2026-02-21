@@ -138,26 +138,26 @@ extension Snap {
                     test plan: \(testPlanName) (\(testPlanConfigs.isEmpty ? "all configs" : ListFormatter.localizedString(byJoining: testPlanConfigs)))
                     destination: \(outURL.path.appendPathComponent(zipFileName))
                 """
-                Logger.shared.info(configMessage)
+                Log.snap.info(configMessage)
 
                 Simctl.killAllSimulators()
 
-                Logger.shared.info("Finding runtime for platform \(runtimeName)")
+                Log.snap.info("Finding runtime for platform \(runtimeName)")
                 let runtime = try Simctl.runtime(for: runtimeName)
-                Logger.shared.info("Runtime found \(runtime)")
+                Log.snap.info("Runtime found \(runtime)")
 
-                Logger.shared.info("Find IDs of preferred devices")
+                Log.snap.info("Find IDs of preferred devices")
                 let deviceIds = try Simctl.deviceIdsFor(deviceNames: devices, runtime: runtime)
-                Logger.shared.info("Device IDs Found: \(deviceIds)")
+                Log.snap.info("Device IDs Found: \(deviceIds)")
 
-                Logger.shared.info("Building all requested schemes for testing")
+                Log.snap.info("Building all requested schemes for testing")
                 try Xcodebuild.execute(
                     subcommand: .buildForTesting(workspace: workspace, schemes: schemes),
                     deviceIds: deviceIds,
                     derivedDataUrl: derivedDataUrl,
                 )
 
-                Logger.shared.info("Taking screenshots for all requested configurations")
+                Log.snap.info("Taking screenshots for all requested configurations")
                 try Simctl.snap(
                     styles: appearances,
                     workspace: workspace,
@@ -174,7 +174,7 @@ extension Snap {
                     zipFileName: zipFileName,
                 )
 
-                Logger.shared.info("Find your screens in \(outURL.path)")
+                Log.snap.info("Find your screens in \(outURL.path)")
 
             } catch {
                 // Do not remove the destination directory when it came from outside.

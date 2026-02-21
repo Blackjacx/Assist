@@ -55,7 +55,7 @@ public extension Simctl {
     }
 
     static func killAllSimulators() {
-        Logger.shared.info("Killing all open simulators")
+        Log.simctl.info("Killing all open simulators")
 
         try? runAndPrint(bash: "killall Simulator")
         try? runAndPrint(bash: "killall iPhone Simulator")
@@ -63,13 +63,13 @@ public extension Simctl {
     }
 
     static func createDevice(name: String, id: String, runtime: Runtime) throws -> String {
-        Logger.shared.info("Create device \(id) with name \"\(name)\" and runtime \(runtime)")
+        Log.simctl.info("Create device \(id) with name \"\(name)\" and runtime \(runtime)")
         return try Simctl._createDevice(name: name, id: id, runtime: runtime)
     }
 
     static func updateStyle(_ style: Style, deviceIds: [String]) throws {
         try deviceIds.forEach {
-            Logger.shared.info("Set style \(style) for device \($0)")
+            Log.simctl.info("Set style \(style) for device \($0)")
             try _boot(deviceId: $0)
             try _setAppearance(for: $0, style: style)
         }
@@ -77,7 +77,7 @@ public extension Simctl {
 
     static func updateStatusBar(deviceIds: [String]) throws {
         try deviceIds.forEach {
-            Logger.shared.info("Set statusbar for device \($0)")
+            Log.simctl.info("Set statusbar for device \($0)")
 
             try _boot(deviceId: $0)
             try _updateStatusBar(deviceId: $0)
@@ -100,12 +100,12 @@ public extension Simctl {
 
         for style in styles {
             // The following generates a long log of all devices (Useful on a CI for debugging)
-//            Logger.shared.info("Found devices:", inset: 1)
+//            Log.simctl.info("Found devices:", inset: 1)
 //            let devicesForRT = try _list().devices
 //            devicesForRT.keys.forEach({ runtime in
-//                Logger.shared.info("Runtime \(runtime)", inset: 2)
+//                Log.simctl.info("Runtime \(runtime)", inset: 2)
 //                devicesForRT[runtime]!.forEach({ device in
-//                    Logger.shared.info(device, inset: 3)
+//                    Log.simctl.info(device, inset: 3)
 //                })
 //            })
 
@@ -152,7 +152,7 @@ public extension Simctl {
                     throw Error.xcTestRunFileNotFound(path: xcTestRunFile.path())
                 }
 
-                Logger.shared.info("""
+                Log.simctl.info("""
                 Running test plan '\(testPlanName) (\(testPlanConfigs.isEmpty ? "all configs" : ListFormatter
                     .localizedString(byJoining: testPlanConfigs)))' for:
                     style '\(style)'
@@ -178,7 +178,7 @@ public extension Simctl {
                     derivedDataUrl: derivedDataUrl
                 )
 
-                Logger.shared.info(
+                Log.simctl.info(
                     "Extracting screenshots from xcresult bundle '\(resultsBundleUrl.path())' for scheme '\(scheme)' and style '\(style)'"
                 )
 
@@ -188,7 +188,7 @@ public extension Simctl {
         }
 
         for scheme in schemes {
-            Logger.shared.info("Package files into one ZIP for scheme '\(scheme)'")
+            Log.simctl.info("Package files into one ZIP for scheme '\(scheme)'")
 
             let originalDirectoryPath = fileManager.currentDirectoryPath
 
@@ -288,7 +288,7 @@ private extension Simctl {
         let out = run(bash: "xcrun simctl list --json")
 
         if let error = out.error {
-            Logger.shared.error(out.stderror)
+            Log.simctl.error(out.stderror)
             throw error
         }
 
@@ -307,13 +307,13 @@ private extension Simctl {
     }
 
     static func _boot(deviceId: String) throws {
-        Logger.shared.info("Boot device \(deviceId)")
+        Log.simctl.info("Boot device \(deviceId)")
 
         // Wait while the simulator is booting (https://stackoverflow.com/a/56267933/971329)
         let out = run(bash: "xcrun simctl bootstatus '\(deviceId)' -b")
 
         if let error = out.error {
-            Logger.shared.error(out.stderror)
+            Log.simctl.error(out.stderror)
             throw error
         }
     }
@@ -322,7 +322,7 @@ private extension Simctl {
         let out = run(bash: "xcrun simctl shutdown '\(deviceId)'")
 
         if let error = out.error {
-            Logger.shared.error(out.stderror)
+            Log.simctl.error(out.stderror)
             throw error
         }
     }
@@ -331,7 +331,7 @@ private extension Simctl {
         let out = run(bash: "xcrun simctl ui '\(deviceId)' appearance '\(style.rawValue)'")
 
         if let error = out.error {
-            Logger.shared.error(out.stderror)
+            Log.simctl.error(out.stderror)
             throw error
         }
     }
@@ -346,7 +346,7 @@ private extension Simctl {
         let out = run(bash: "xcrun simctl create '\(name)' '\(id)' '\(runtime.identifier)'")
 
         if let error = out.error {
-            Logger.shared.error(out.stderror)
+            Log.simctl.error(out.stderror)
             throw error
         }
         return out.stdout
@@ -377,7 +377,7 @@ private extension Simctl {
         let out = run("xcrun", args)
 
         if let error = out.error {
-            Logger.shared.error(out.stderror)
+            Log.simctl.error(out.stderror)
             throw error
         }
     }
