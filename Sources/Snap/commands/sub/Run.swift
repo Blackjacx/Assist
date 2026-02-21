@@ -2,7 +2,6 @@ import ArgumentParser
 import Core
 import Engine
 import Foundation
-import os
 
 extension Snap {
 
@@ -139,17 +138,17 @@ extension Snap {
                     test plan: \(testPlanName) (\(testPlanConfigs.isEmpty ? "all configs" : ListFormatter.localizedString(byJoining: testPlanConfigs)))
                     destination: \(outURL.path.appendPathComponent(zipFileName))
                 """
-                Log.snap.info("\(configMessage, privacy: .public)")
+                Log.snap.info("\(configMessage)")
 
                 Simctl.killAllSimulators()
 
-                Log.snap.info("Finding runtime for platform \(runtimeName, privacy: .public)")
+                Log.snap.info("Finding runtime for platform \(runtimeName)")
                 let runtime = try Simctl.runtime(for: runtimeName)
-                Log.snap.info("Runtime found \(runtime, privacy: .public)")
+                Log.snap.info("Runtime found \(runtime)")
 
                 Log.snap.info("Find IDs of preferred devices")
                 let deviceIds = try Simctl.deviceIdsFor(deviceNames: devices, runtime: runtime)
-                Log.snap.info("Device IDs Found: \(deviceIds, privacy: .public)")
+                Log.snap.info("Device IDs Found: \(deviceIds)")
 
                 Log.snap.info("Building all requested schemes for testing")
                 try Xcodebuild.execute(
@@ -175,7 +174,7 @@ extension Snap {
                     zipFileName: zipFileName,
                 )
 
-                Log.snap.info("Find your screens in \(outURL.path, privacy: .public)")
+                Log.snap.info("Find your screens in \(outURL.path)")
 
             } catch {
                 // Do not remove the destination directory when it came from outside.

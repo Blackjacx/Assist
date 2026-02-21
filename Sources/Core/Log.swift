@@ -7,29 +7,51 @@
 
 import os
 
-/// Namespace providing per-tool `os.Logger` instances for structured,
-/// category-filtered logging via the unified logging system.
+/// A logging category that writes to both the unified logging system
+/// (Console.app / `log stream`) and the terminal (stdout/stderr).
 ///
-/// Use the appropriate category for each tool so log output can be filtered
-/// independently in Console.app or via `log stream`:
-/// ```
-/// log stream --predicate 'process == "snap" AND category == "simctl"'
-/// ```
-///
-/// Privacy is controlled per log statement at the call site:
+/// Access via the static instances on `Log`:
 /// ```swift
-/// Log.snap.info("Finding runtime for platform \(runtimeName, privacy: .public)")
-/// Log.simctl.error("\(out.stderror, privacy: .public)")
+/// Log.snap.info("Finding runtime for platform \(runtimeName)")
+/// Log.simctl.error(out.stderror)
 /// ```
-public enum Log {
+///
+/// Filter by subsystem/category in the terminal:
+/// ```shell
+/// log stream --predicate 'process == "snap" AND category == "simctl"' --level debug
+/// ```
+public struct Log {
+
+    public static let simctl    = Log(category: "simctl")
+    public static let xcodebuild = Log(category: "xcodebuild")
+    public static let mint      = Log(category: "mint")
+    public static let zip       = Log(category: "zip")
+    public static let snap      = Log(category: "snap")
+    public static let asc       = Log(category: "asc")
+    public static let push      = Log(category: "push")
 
     private static let subsystem = "com.blackjacx.assist"
+    private let logger: os.Logger
 
-    public static let simctl = os.Logger(subsystem: subsystem, category: "simctl")
-    public static let xcodebuild = os.Logger(subsystem: subsystem, category: "xcodebuild")
-    public static let mint = os.Logger(subsystem: subsystem, category: "mint")
-    public static let zip = os.Logger(subsystem: subsystem, category: "zip")
-    public static let snap = os.Logger(subsystem: subsystem, category: "snap")
-    public static let asc = os.Logger(subsystem: subsystem, category: "asc")
-    public static let push = os.Logger(subsystem: subsystem, category: "push")
+    private init(category: String) {
+        logger = os.Logger(subsystem: Self.subsystem, category: category)
+    }
+
+    public func info(_ message: @autoclosure () -> String) {
+        let msg = message()
+        logger.info("\(msg, privacy: .public)")
+        print(msg)
+    }
+
+    public func warning(_ message: @autoclosure () -> String) {
+        let msg = message()
+        logger.warning("\(msg, privacy: .public)")
+        fputs("Warning: \(msg)\n", stderr)
+    }
+
+    public func error(_ message: @autoclosure () -> String) {
+        let msg = message()
+        logger.error("\(msg, privacy: .public)")
+        fputs("Error: \(msg)\n", stderr)
+    }
 }
