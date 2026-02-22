@@ -81,6 +81,9 @@ extension ASC.Keys {
             guard !ASCService.listApiKeys().contains(where: { $0.id == keyId }) else {
                 throw ValidationError("A key with id '\(keyId)' is already registered.")
             }
+            guard FileManager.default.fileExists(atPath: path) else {
+                throw ValidationError("No file found at '\(path)'.")
+            }
         }
 
         func run() throws {
