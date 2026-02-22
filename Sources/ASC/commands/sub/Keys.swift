@@ -77,6 +77,12 @@ extension ASC.Keys {
         @Option(name: [.long, .customShort("s")], help: "The id of the key issuer.")
         var issuerId: String
 
+        func validate() throws {
+            guard !ASCService.listApiKeys().contains(where: { $0.id == keyId }) else {
+                throw ValidationError("A key with id '\(keyId)' is already registered.")
+            }
+        }
+
         func run() throws {
             let key = ApiKey(id: keyId, name: name, source: .localFilePath(path: path), issuerId: issuerId)
             let registeredKey = try ASCService.registerApiKey(key: key)
