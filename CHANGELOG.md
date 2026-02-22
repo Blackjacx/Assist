@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- [#92](https://github.com/Blackjacx/Assist/pull/92): fix(asc): prevent registering a key with a duplicate ID - [@blackjacx](https://github.com/blackjacx).
 - [#91](https://github.com/Blackjacx/Assist/pull/91): feat(core): replace custom Logger with OSLog.Logger - [@blackjacx](https://github.com/blackjacx).
 - [#90](https://github.com/Blackjacx/Assist/pull/90): Add AGENTS.md and CLAUDE.md files - [@blackjacx](https://github.com/blackjacx).
 - [#89](https://github.com/Blackjacx/Assist/pull/89): Fix Snap shell completion - [@blackjacx](https://github.com/blackjacx).
