@@ -194,12 +194,14 @@ public extension Simctl {
             // Switch into folder to prevent storage of absolute paths
             fileManager.changeCurrentDirectoryPath(outUrl.path)
 
+            defer {
+                // Switch back to the original directory
+                fileManager.changeCurrentDirectoryPath(originalDirectoryPath)
+            }
+
             try Zip.zip(outFile: zipFileName,
                         relativeTargetFolder: scheme,
                         excludePattern: "*.xcresult*")
-
-            // Switch back to the original directory
-            fileManager.changeCurrentDirectoryPath(originalDirectoryPath)
         }
     }
 }
