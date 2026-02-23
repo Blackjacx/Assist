@@ -272,9 +272,9 @@ public extension Simctl {
 
     enum BatteryLevel: Int {
         case empty = 0
-        case quater = 25
+        case quarter = 25
         case fifty = 50
-        case threeQuater = 75
+        case threeQuarter = 75
         case full = 100
     }
 }
