@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- [#100](https://github.com/Blackjacx/Assist/pull/100): refactor(snap): remove redundant CodingKeys raw values in Runtime - [@blackjacx](https://github.com/blackjacx).
 - [#98](https://github.com/Blackjacx/Assist/pull/98): refactor(core): remove redundant delegate: nil parameter from URLSession data call - [@blackjacx](https://github.com/blackjacx).
 - [#96](https://github.com/Blackjacx/Assist/pull/96): refactor(asc): simplify Filter argument parsing by removing redundant guards - [@blackjacx](https://github.com/blackjacx).
 - [#95](https://github.com/Blackjacx/Assist/pull/95): fix(core): remove force unwrap when constructing FCM token URL - [@blackjacx](https://github.com/blackjacx).
