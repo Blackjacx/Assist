@@ -13,7 +13,7 @@ let package = Package(
         .executable(name: "playground", targets: ["Playground"])
     ],
     dependencies: [
-        .package(url: "https://github.com/blackjacx/Engine", from: "0.3.0"),
+        .package(url: "https://github.com/blackjacx/Engine", from: "0.3.1"),
         // .package(path: "../Engine"),
 
          .package(url: "https://github.com/blackjacx/ASCKit", from: "0.7.2"),
