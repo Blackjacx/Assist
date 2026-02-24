@@ -14,4 +14,8 @@
 
 ## Pull request guidelines
 
+- Always create a pull request for changes instead of committing to develop.
+- You can create multiple commits on the Pull request during a session.
+- Always add a changelog entry in CHANGELOG.md with the same title as the pull request
+
 ## Deployment steps
