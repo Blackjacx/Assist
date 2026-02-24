@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- [#94](https://github.com/Blackjacx/Assist/pull/94): fix(snap): restore working directory via defer to guarantee cleanup on error - [@blackjacx](https://github.com/blackjacx).
 - [#93](https://github.com/Blackjacx/Assist/pull/93): fix(asc): validate key file path exists before registering - [@blackjacx](https://github.com/blackjacx).
 - [#92](https://github.com/Blackjacx/Assist/pull/92): fix(asc): prevent registering a key with a duplicate ID - [@blackjacx](https://github.com/blackjacx).
 - [#91](https://github.com/Blackjacx/Assist/pull/91): feat(core): replace custom Logger with OSLog.Logger - [@blackjacx](https://github.com/blackjacx).
