@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- [#95](https://github.com/Blackjacx/Assist/pull/95): fix(core): remove force unwrap when constructing FCM token URL - [@blackjacx](https://github.com/blackjacx).
 - [#94](https://github.com/Blackjacx/Assist/pull/94): fix(snap): restore working directory via defer to guarantee cleanup on error - [@blackjacx](https://github.com/blackjacx).
 - [#93](https://github.com/Blackjacx/Assist/pull/93): fix(asc): validate key file path exists before registering - [@blackjacx](https://github.com/blackjacx).
 - [#92](https://github.com/Blackjacx/Assist/pull/92): fix(asc): prevent registering a key with a duplicate ID - [@blackjacx](https://github.com/blackjacx).
