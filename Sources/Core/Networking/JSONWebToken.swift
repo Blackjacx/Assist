@@ -53,7 +53,10 @@ public enum JSONWebToken {
             "assertion": jwt
         ])
 
-        var urlRequest = URLRequest(url: URL(string: credentials.tokenUrl)!)
+        guard let tokenUrl = URL(string: credentials.tokenUrl) else {
+            throw JWT.Error.malformedUrl(credentials.tokenUrl)
+        }
+        var urlRequest = URLRequest(url: tokenUrl)
         urlRequest.httpMethod = "POST"
         urlRequest.httpBody = jsonData
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
