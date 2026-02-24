@@ -62,7 +62,7 @@ public enum JSONWebToken {
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let session = URLSession(configuration: .default)
-        let (data, response) = try await session.data(for: urlRequest, delegate: nil)
+        let (data, response) = try await session.data(for: urlRequest)
 
         guard let httpResponse = response as? HTTPURLResponse, (200...399).contains(httpResponse.statusCode) else {
             throw JWT.Error.invalidResonse(response: response)

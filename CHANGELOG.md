@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- [#98](https://github.com/Blackjacx/Assist/pull/98): refactor(core): remove redundant delegate: nil parameter from URLSession data call - [@blackjacx](https://github.com/blackjacx).
 - [#96](https://github.com/Blackjacx/Assist/pull/96): refactor(asc): simplify Filter argument parsing by removing redundant guards - [@blackjacx](https://github.com/blackjacx).
 - [#95](https://github.com/Blackjacx/Assist/pull/95): fix(core): remove force unwrap when constructing FCM token URL - [@blackjacx](https://github.com/blackjacx).
 - [#94](https://github.com/Blackjacx/Assist/pull/94): fix(snap): restore working directory via defer to guarantee cleanup on error - [@blackjacx](https://github.com/blackjacx).
