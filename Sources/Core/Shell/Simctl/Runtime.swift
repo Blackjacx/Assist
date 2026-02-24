@@ -11,13 +11,12 @@ public struct Runtime: Codable, CustomStringConvertible {
 
     public var description: String { "ID: \(identifier), Name: \(name)" }
 
-
     enum CodingKeys: String, CodingKey {
         case buildVersion = "buildversion"
-        case identifier = "identifier"
-        case version = "version"
-        case isAvailable = "isAvailable"
-        case name = "name"
+        case identifier
+        case version
+        case isAvailable
+        case name
     }
 
     public var buildVersion: String
