@@ -19,3 +19,7 @@
 - Always add a changelog entry in CHANGELOG.md with the same title as the pull request
 
 ## Deployment steps
+
+## Misc
+
+- When you need to download content from the, always create a new temporary directory using `mktemp -d` and use it to download content to.
