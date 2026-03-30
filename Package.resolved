@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kareman/SwiftShell",
       "state" : {
-        "revision" : "99680b2efc7c7dbcace1da0b3979d266f02e213c",
-        "version" : "5.1.0"
+        "revision" : "5b2207cd7177567e4efd9366d554c384037ef42f",
+        "version" : "5.1.1"
       }
     }
   ],
