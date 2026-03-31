@@ -22,4 +22,4 @@
 
 ## Misc
 
-- When you need to download content from the, always create a new temporary directory using `mktemp -d` and use it to download content to.
+- When you need to download content from the internet OR to create temporary files, always create a new temporary directory using `mktemp -d` and perform the task there.
