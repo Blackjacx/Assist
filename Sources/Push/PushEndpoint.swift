@@ -5,9 +5,9 @@
 //  Created by Stefan Herold on 11.08.20.
 //
 
-import Foundation
-import Engine
 import Core
+import Engine
+import Foundation
 
 enum PushEndpoint {
     case pushViaApns(credentials: JWTApnsCredentials, endpoint: Push.Apns.Endpoint, deviceToken: String, topic: String, message: String)
@@ -81,7 +81,7 @@ extension PushEndpoint: Endpoint {
                 let token = try await JSONWebToken.token(for: .apns(credentials: credentials))
                 headers["Authorization"] = "Bearer \(token)"
             } catch {
-                print("Error generating token: \(error)")
+                Log.push.error("Error generating token: \(error)")
             }
 
         case let .pushViaFcm(_, _, credentials):
@@ -89,7 +89,7 @@ extension PushEndpoint: Endpoint {
                 let token = try await JSONWebToken.token(for: .fcm(credentials: credentials))
                 headers["Authorization"] = "Bearer \(token)"
             } catch {
-                print("Error generating token: \(error)")
+                Log.push.error("Error generating token: \(error)")
             }
         }
 

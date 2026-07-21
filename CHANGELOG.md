@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-07-21Z
+
+- [#100](https://github.com/Blackjacx/Assist/pull/100): refactor(snap): remove redundant CodingKeys raw values in Runtime - [@blackjacx](https://github.com/blackjacx).
+- [#98](https://github.com/Blackjacx/Assist/pull/98): refactor(core): remove redundant delegate: nil parameter from URLSession data call - [@blackjacx](https://github.com/blackjacx).
+- [#96](https://github.com/Blackjacx/Assist/pull/96): refactor(asc): simplify Filter argument parsing by removing redundant guards - [@blackjacx](https://github.com/blackjacx).
+- [#95](https://github.com/Blackjacx/Assist/pull/95): fix(core): remove force unwrap when constructing FCM token URL - [@blackjacx](https://github.com/blackjacx).
+- [#94](https://github.com/Blackjacx/Assist/pull/94): fix(snap): restore working directory via defer to guarantee cleanup on error - [@blackjacx](https://github.com/blackjacx).
+- [#93](https://github.com/Blackjacx/Assist/pull/93): fix(asc): validate key file path exists before registering - [@blackjacx](https://github.com/blackjacx).
+- [#92](https://github.com/Blackjacx/Assist/pull/92): fix(asc): prevent registering a key with a duplicate ID - [@blackjacx](https://github.com/blackjacx).
+- [#91](https://github.com/Blackjacx/Assist/pull/91): feat(core): replace custom Logger with OSLog.Logger - [@blackjacx](https://github.com/blackjacx).
+- [#90](https://github.com/Blackjacx/Assist/pull/90): Add AGENTS.md and CLAUDE.md files - [@blackjacx](https://github.com/blackjacx).
+- [#89](https://github.com/Blackjacx/Assist/pull/89): Fix Snap shell completion - [@blackjacx](https://github.com/blackjacx).
+- [#88](https://github.com/dbdrive/beiwagen/pull/88): Generate shell completions - [@blackjacx](https://github.com/blackjacx).
+
 ## [0.10.0] - 2025-12-15Z
 
 - [#83](https://github.com/dbdrive/beiwagen/pull/83): Support request output types - [@blackjacx](https://github.com/blackjacx).

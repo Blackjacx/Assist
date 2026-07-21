@@ -14,8 +14,6 @@ extension Filter: ExpressibleByArgument {
     public init?(argument: String) {
         let splitted = argument.split(separator: "=")
         guard splitted.count == 2 else { return nil }
-        guard let key = splitted.first else { return nil }
-        guard let value = splitted.last else { return nil }
-        self = Filter(key: String(key), value: String(value))
+        self = Filter(key: String(splitted[0]), value: String(splitted[1]))
     }
 }

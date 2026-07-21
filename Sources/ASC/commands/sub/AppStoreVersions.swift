@@ -38,7 +38,7 @@ extension ASC.AppStoreVersions {
         @Option(name: .shortAndLong, parsing: .upToNextOption, help: "The IDs of the apps you want to get the versions from.")
         var appIds: [String] = []
 
-        @Option(name: .shortAndLong, help: "The type of output you would like to see.")
+        @Option(name: .long, help: "The type of output you would like to see.")
         var outputFormat: OutputFormat = .standard
 
         @Option(name: .shortAndLong, help: "Number of resources to return.")

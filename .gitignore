@@ -1,6 +1,10 @@
 # Xcode
 #
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
+#
+# Claude
+
+.claude/settings.local.json
 
 # macos
 **/.DS_Store

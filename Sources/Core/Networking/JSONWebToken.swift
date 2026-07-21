@@ -53,13 +53,16 @@ public enum JSONWebToken {
             "assertion": jwt
         ])
 
-        var urlRequest = URLRequest(url: URL(string: credentials.tokenUrl)!)
+        guard let tokenUrl = URL(string: credentials.tokenUrl) else {
+            throw JWT.Error.malformedUrl(credentials.tokenUrl)
+        }
+        var urlRequest = URLRequest(url: tokenUrl)
         urlRequest.httpMethod = "POST"
         urlRequest.httpBody = jsonData
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let session = URLSession(configuration: .default)
-        let (data, response) = try await session.data(for: urlRequest, delegate: nil)
+        let (data, response) = try await session.data(for: urlRequest)
 
         guard let httpResponse = response as? HTTPURLResponse, (200...399).contains(httpResponse.statusCode) else {
             throw JWT.Error.invalidResonse(response: response)
