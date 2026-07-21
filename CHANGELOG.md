@@ -2,8 +2,12 @@
 
 ## [Unreleased]
 
+## [0.11.1] - 2026-07-21Z
+- [#106](https://github.com/Blackjacx/Assist/pull/106): Print keys subcommands as JSON - [@blackjacx](https://github.com/blackjacx).
+
 ## [0.11.0] - 2026-07-21Z
 
+- Adopt social media rating questions via https://github.com/Blackjacx/ASCKit/pull/28 - [@blackjacx](https://github.com/blackjacx).
 - [#100](https://github.com/Blackjacx/Assist/pull/100): refactor(snap): remove redundant CodingKeys raw values in Runtime - [@blackjacx](https://github.com/blackjacx).
 - [#98](https://github.com/Blackjacx/Assist/pull/98): refactor(core): remove redundant delegate: nil parameter from URLSession data call - [@blackjacx](https://github.com/blackjacx).
 - [#96](https://github.com/Blackjacx/Assist/pull/96): refactor(asc): simplify Filter argument parsing by removing redundant guards - [@blackjacx](https://github.com/blackjacx).
@@ -14,28 +18,28 @@
 - [#91](https://github.com/Blackjacx/Assist/pull/91): feat(core): replace custom Logger with OSLog.Logger - [@blackjacx](https://github.com/blackjacx).
 - [#90](https://github.com/Blackjacx/Assist/pull/90): Add AGENTS.md and CLAUDE.md files - [@blackjacx](https://github.com/blackjacx).
 - [#89](https://github.com/Blackjacx/Assist/pull/89): Fix Snap shell completion - [@blackjacx](https://github.com/blackjacx).
-- [#88](https://github.com/dbdrive/beiwagen/pull/88): Generate shell completions - [@blackjacx](https://github.com/blackjacx).
+- [#88](https://github.com/Blackjacx/Assist/pull/88): Generate shell completions - [@blackjacx](https://github.com/blackjacx).
 
 ## [0.10.0] - 2025-12-15Z
 
-- [#83](https://github.com/dbdrive/beiwagen/pull/83): Support request output types - [@blackjacx](https://github.com/blackjacx).
-- [#84](https://github.com/dbdrive/beiwagen/pull/84): Support Age Ratings - [@blackjacx](https://github.com/blackjacx).
+- [#83](https://github.com/Blackjacx/Assist/pull/83): Support request output types - [@blackjacx](https://github.com/blackjacx).
+- [#84](https://github.com/Blackjacx/Assist/pull/84): Support Age Ratings - [@blackjacx](https://github.com/blackjacx).
 
 ## [0.9.0] - 2025-10-23Z
 
-- [#82](https://github.com/dbdrive/beiwagen/pull/82): Add support for Accessibility Declaration management - [@blackjacx](https://github.com/blackjacx).
+- [#82](https://github.com/Blackjacx/Assist/pull/82): Add support for Accessibility Declaration management - [@blackjacx](https://github.com/blackjacx).
 
 ## [0.8.1] - 2025-09-15Z
 
-- [#75](https://github.com/dbdrive/beiwagen/pull/75): Bump Engine v0.2.0 - [@blackjacx](https://github.com/blackjacx).
+- [#75](https://github.com/Blackjacx/Assist/pull/75): Bump Engine v0.2.0 - [@blackjacx](https://github.com/blackjacx).
 
 ## [0.8.0] - 2025-03-25Z
 
-- [#71](https://github.com/dbdrive/beiwagen/pull/71): Fix XCTestRun File Detection - [@blackjacx](https://github.com/blackjacx).
+- [#71](https://github.com/Blackjacx/Assist/pull/71): Fix XCTestRun File Detection - [@blackjacx](https://github.com/blackjacx).
 
 ## [0.7.0] - 2025-03-19Z
 
-- [#70](https://github.com/dbdrive/beiwagen/pull/70): Implement output parameter for sub command app-store-versions - [@blackjacx](https://github.com/blackjacx).
+- [#70](https://github.com/Blackjacx/Assist/pull/70): Implement output parameter for sub command app-store-versions - [@blackjacx](https://github.com/blackjacx).
 
 ## [0.6.0] - 2025-02-17Z
 

@@ -9,7 +9,7 @@
 [![Swift Package Manager Compatible](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
 [![Swift Versions](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FBlackjacx%2FAssist%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/Blackjacx/Assist)
 [![Platforms](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FBlackjacx%2FAssist%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/Blackjacx/Assist)
-[![Xcode 16+](https://img.shields.io/badge/Xcode-16%2B-blue.svg)](https://developer.apple.com/download/)
+[![Xcode 26+](https://img.shields.io/badge/Xcode-26%2B-blue.svg)](https://developer.apple.com/download/)
 [![License](https://img.shields.io/github/license/blackjacx/assist.svg)](https://github.com/blackjacx/assist/blob/master/LICENSE)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg?logo=paypal&style=for-the-badge)](https://www.paypal.me/STHEROLD)
 
@@ -172,10 +172,9 @@ asc app-store-versions
 ```
 
 > [!tip]
-> If you want a complete list, of all commands, just call `asc -h` you can call for help for every sub command, e.g. `asc builds -h` or `asc builds list -h`. 
+> If you want a complete list, of all commands, just call `asc -h` you can call for help for every sub command, e.g. `asc builds -h` or `asc builds list -h`.
 >
 > If you'd like to see a documentation of all commands with all sub commands, please run the following to generate and install the man page for `asc` as mentioned under [Features](#Features) 👍
-
 
 ## Code Documentation
 
@@ -219,6 +218,7 @@ To release this Swift package the following steps have to be taken:
   ```
 - Create and merge the PR from the just created branch for the [Homebrew formula](https://github.com/Blackjacx/homebrew-formulae)
 - Post the following on Twitter:
+
   ```
   Assist (ASC, Push, Snap) release x.y.z 🎉
 
