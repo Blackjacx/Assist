@@ -1,13 +1,13 @@
 {
-  "originHash" : "715188fb23db834ec0b35914b4c4af6b4ced6a908334d27acee4a7d05e214e75",
+  "originHash" : "27870c0eaff60bb75b7c1ec9c86c1c8bbefb3a26e6991ab96995c49d809ccc39",
   "pins" : [
     {
       "identity" : "asckit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/blackjacx/ASCKit",
       "state" : {
-        "revision" : "0244c33e553f3c09e3e0b7c94f504883c00c746c",
-        "version" : "0.7.2"
+        "revision" : "df449f90fc8acc1e2714594453d508bf4c592ac6",
+        "version" : "0.7.3"
       }
     },
     {
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/blackjacx/Engine",
       "state" : {
-        "revision" : "ddb6304b943a7af3033aaae3f11f2008b51bcee7",
-        "version" : "0.3.1"
+        "revision" : "d6c7703c3774475ac282842ddb0bf8b67d0eb387",
+        "version" : "0.3.2"
       }
     },
     {
@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-argument-parser",
       "state" : {
-        "revision" : "c5d11a805e765f52ba34ec7284bd4fcd6ba68615",
-        "version" : "1.7.0"
+        "revision" : "6a52f3251125d74daf04fcbd5e6f08a75d074382",
+        "version" : "1.8.2"
       }
     },
     {
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kareman/SwiftShell",
       "state" : {
-        "revision" : "99680b2efc7c7dbcace1da0b3979d266f02e213c",
-        "version" : "5.1.0"
+        "revision" : "5b2207cd7177567e4efd9366d554c384037ef42f",
+        "version" : "5.1.1"
       }
     }
   ],
