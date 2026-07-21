@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.11.1] - 2026-07-21Z
 - [#106](https://github.com/Blackjacx/Assist/pull/106): Print keys subcommands as JSON - [@blackjacx](https://github.com/blackjacx).
 
 ## [0.11.0] - 2026-07-21Z
